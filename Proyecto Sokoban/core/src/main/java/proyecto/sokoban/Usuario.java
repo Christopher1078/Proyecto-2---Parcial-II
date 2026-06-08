@@ -10,10 +10,11 @@ public class Usuario implements Serializable {
     private boolean[] nivelesDesbloqueados;
     private long tiempoJugado;
     private double tiempoPromedio;
-    private ArrayList<String> amigos;   
+    private ArrayList<Usuario> amigos;   
     private ArrayList<HistorialPartida> historial;
+    private static final long serialVersionUID=1L; 
 
-    public Usuario(String username, String password, String nombreCompleto, String avatar) {
+    public Usuario(String username, String password, String nombreCompleto) {
         this.username = username;
         this.password = password;
         this.nombreCompleto = nombreCompleto;
@@ -37,7 +38,7 @@ public class Usuario implements Serializable {
         puntos=0;
         ranking=0;
         
-        this.avatar=avatar;
+        this.avatar="Avatar";
         idioma=Idioma.ESPANOL;
         
         volumen=100;
@@ -48,6 +49,10 @@ public class Usuario implements Serializable {
         
         amigos=new ArrayList<>();
         historial=new ArrayList<>();
+    }
+
+    public String getUsername() {
+        return username;
     }
     
     
