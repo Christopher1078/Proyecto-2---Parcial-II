@@ -1,45 +1,100 @@
 package proyecto.sokoban;
 
+import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
-/** First screen of the application. Displayed after the application is created. */
 public class FirstScreen implements Screen {
+    
+    private final Game game;
+    private Stage stage;
+    private Skin skin;
+    private final GestorUsuarios gestor;
+
+    public FirstScreen(Game game, GestorUsuarios gestor) {
+        this.game = game;
+        this.gestor=gestor;
+    }
+    
     @Override
     public void show() {
-        // Prepare your screen here.
+        stage=new Stage(new ScreenViewport());
+        skin=new Skin(Gdx.files.internal("uiskin.json"));
+        
+        Table table=new Table();
+        table.setFillParent(true);
+        stage.addActor(table);
+        
+        Label titulo=new Label("Sokoban", skin);
+        
+        TextButton btnInicio=new TextButton("Inicio de Sesion",skin);
+        btnInicio.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                game.setScreen(new LoginScreen(game,gestor));
+            }
+        });
+        
+        TextButton btnRegistro=new TextButton("Registro",skin);
+        btnRegistro.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                game.setScreen(new SigninScreen(game,gestor));
+            }
+        });
+        
+        TextButton btnSalir=new TextButton("Salir",skin);
+        btnSalir.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                Gdx.app.exit();
+            }
+        });
+        
+        table.add(titulo).padBottom(40);
+        table.row();
+        table.add(btnInicio).width(250).height(40).padTop(20);
+        table.row();
+        table.add(btnRegistro).width(250).height(40).padTop(20);
+        table.row();
+        table.add(btnSalir).width(250).height(40).padTop(20);
+        table.row();
+        Gdx.input.setInputProcessor(stage);
     }
 
     @Override
     public void render(float delta) {
-        // Draw your screen here. "delta" is the time since last render in seconds.
+        ScreenUtils.clear(0,0,0,1);
+        stage.act(delta);
+        stage.draw();        
     }
 
     @Override
     public void resize(int width, int height) {
-        // If the window is minimized on a desktop (LWJGL3) platform, width and height are 0, which causes problems.
-        // In that case, we don't resize anything, and wait for the window to be a normal size before updating.
-        if(width <= 0 || height <= 0) return;
-
-        // Resize your screen here. The parameters represent the new window size.
     }
 
     @Override
     public void pause() {
-        // Invoked when your application is paused.
     }
 
     @Override
     public void resume() {
-        // Invoked when your application is resumed after pause.
     }
 
     @Override
     public void hide() {
-        // This method is called when another screen replaces this one.
     }
 
     @Override
-    public void dispose() {
-        // Destroy screen's assets here.
+    public void dispose() { 
     }
 }
