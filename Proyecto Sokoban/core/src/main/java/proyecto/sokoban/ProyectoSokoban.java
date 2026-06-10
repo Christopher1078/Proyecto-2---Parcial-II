@@ -6,6 +6,6 @@ import com.badlogic.gdx.Game;
 public class ProyectoSokoban extends Game {
     @Override
     public void create() {
-        setScreen(new LoginScreen(this));
+        setScreen(new FirstScreen(this, new GestorUsuarios()));
     }
 }
