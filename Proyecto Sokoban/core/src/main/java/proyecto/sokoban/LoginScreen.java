@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -12,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import java.io.IOException;
 
 public class LoginScreen implements Screen{
 
@@ -68,7 +70,39 @@ public class LoginScreen implements Screen{
             public void clicked(InputEvent event,float x, float y){
                 String usuario=txtUsuario.getText();
                 String password=txtPassword.getText();
-                game.setScreen(new MenuScreen(game,gestor));      
+                try{
+                    if(gestor.logIn(usuario, password))
+                        game.setScreen(new MenuScreen(game,gestor));
+                else{
+                        Dialog dialog;
+                        String mensaje;
+                        if(usuario.isBlank() || password.isBlank()){
+                            mensaje="Parametros en blanco";
+                        }
+                        else if(!gestor.existeUsuario(usuario)){
+                            mensaje="No existe este nombre de usuario";
+                        }
+                        else{
+                            mensaje="Password Incorrecto";
+                        }
+                        if(!mensaje.isBlank()){
+                            dialog=new Dialog(mensaje, skin){
+                                @Override
+                                protected void result(Object obj){
+                                    this.hide();
+                                }
+                            };
+                            dialog.show(stage);
+                            dialog.button("Ok", true);
+                            dialog.setSize(400, 200);
+                            dialog.invalidate();
+                            dialog.pack();
+                            dialog.setMovable(false);
+                        }
+                    }
+                }catch(IOException|ClassNotFoundException e){
+                    
+                } 
             }
             
         });

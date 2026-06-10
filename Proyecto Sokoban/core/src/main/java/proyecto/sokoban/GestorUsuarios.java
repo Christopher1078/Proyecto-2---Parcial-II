@@ -84,4 +84,10 @@ public class GestorUsuarios {
         
         return mayuscula && minuscula && numero;
     }
+    
+    public void logOut(){
+        logIn=null;
+    }
+    
+    
 }
