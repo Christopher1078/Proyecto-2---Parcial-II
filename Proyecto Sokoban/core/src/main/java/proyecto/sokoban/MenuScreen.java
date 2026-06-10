@@ -50,6 +50,13 @@ public class MenuScreen implements Screen{
         
         TextButton btnJugar=new TextButton("Jugar",skin);
         
+        btnJugar.addListener(new ClickListener(){
+            @Override
+            public void clicked (InputEvent event, float x, float y){
+                game.setScreen(new MapaScreen());
+            }
+        });
+        
         table.add(titulo).padBottom(40);
         table.row();
         table.add(btnJugar).width(250).height(40).padTop(20);

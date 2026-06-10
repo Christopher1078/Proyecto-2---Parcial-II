@@ -81,8 +81,6 @@ public class Usuario implements Serializable {
         this.partidasJugadas = partidasJugadas;
     }
     
-    
-    
     @Override
     public String toString(){
         return "Username: "+username
