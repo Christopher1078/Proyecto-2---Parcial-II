@@ -3,10 +3,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.time.LocalDate;
 public class Usuario implements Serializable {
-    private String username, password, nombreCompleto, avatar, arriba, abajo, izquierda, derecha;
+    private String username, password, nombreCompleto, avatar;
     private Idioma idioma;
     private LocalDate fechaRegistro, ultimaSesion;
-    private int nivelesCompletados, nivelActual, cantPartidas, partidasGanadas, movimientosTotales, ranking, puntos, volumen;
+    private int nivelesCompletados, nivelActual, partidasJugadas;
     private boolean[] nivelesDesbloqueados;
     private long tiempoJugado;
     private double tiempoPromedio;
@@ -31,21 +31,11 @@ public class Usuario implements Serializable {
             nivelesDesbloqueados[i]=false;
         }
         
-        cantPartidas=0;
-        partidasGanadas=0;
-        movimientosTotales=0;
+        partidasJugadas=0;
         tiempoJugado=0;
-        puntos=0;
-        ranking=0;
         
         this.avatar="Avatar";
         idioma=Idioma.ESPANOL;
-        
-        volumen=100;
-        arriba="W";
-        abajo="S";
-        izquierda="A";
-        derecha="D";
         
         amigos=new ArrayList<>();
         historial=new ArrayList<>();
@@ -57,6 +47,49 @@ public class Usuario implements Serializable {
 
     public String getPassword() {
         return password;
+    }
+
+    public String getNombreCompleto() {
+        return nombreCompleto;
+    }
+
+    public int getNivelActual() {
+        return nivelActual;
+    }
+
+    public int getPartidasJugadas() {
+        return partidasJugadas;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setNombreCompleto(String nombreCompleto) {
+        this.nombreCompleto = nombreCompleto;
+    }
+
+    public void setNivelActual(int nivelActual) {
+        this.nivelActual = nivelActual;
+    }
+
+    public void setPartidasJugadas(int partidasJugadas) {
+        this.partidasJugadas = partidasJugadas;
+    }
+    
+    
+    
+    @Override
+    public String toString(){
+        return "Username: "+username
+                +"\nNombre Completo: "+nombreCompleto
+                +"\nFecha de registro: "+fechaRegistro.toString()
+                +"\nNivel actual: "+nivelActual
+                +"\nPartidas jugadas: "+partidasJugadas;
     }
     
 }
