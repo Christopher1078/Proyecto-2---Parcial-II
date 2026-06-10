@@ -2,14 +2,17 @@ package proyecto.sokoban;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -31,7 +34,8 @@ public class LoginScreen implements Screen{
     @Override
     public void show() {
         stage=new Stage(new ScreenViewport());
-        skin=new Skin(Gdx.files.internal("uiskin.json"));        
+        skin=new Skin(Gdx.files.internal("uiskin.json"));       
+        CheckBox chkMostrar=new CheckBox("  Mostrar password",skin);        
         
         Table table=new Table();
         table.setFillParent(true);
@@ -58,6 +62,9 @@ public class LoginScreen implements Screen{
         
         table.add(txtPassword).width(250).height(40).padTop(10);
         table.row();   
+        
+        table.add(chkMostrar).left().padTop(5);
+        table.row();        
         
         table.add(btnLogin).width(250).height(40).padTop(20);
         table.row();
@@ -114,6 +121,16 @@ public class LoginScreen implements Screen{
                 
             }
         });
+        
+        chkMostrar.addListener(new ChangeListener(){
+            @Override
+            public void changed(ChangeListener.ChangeEvent event, Actor actor){
+                if(chkMostrar.isChecked())
+                    txtPassword.setPasswordMode(false);
+                else txtPassword.setPasswordMode(true);
+            }
+        });
+        
         Gdx.input.setInputProcessor(stage);
     }
 
