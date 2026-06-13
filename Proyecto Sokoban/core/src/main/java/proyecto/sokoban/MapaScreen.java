@@ -40,10 +40,10 @@ public class MapaScreen extends ScreenAdapter {
         objetivo = new Texture("imagenes/objetivo.png");
         cajaObjetivo = new Texture("imagenes/caja_objetivo.png");
 
-        personajeAbajo = new Texture("Avatar1_pos1.PNG");
-        personajeDerecha = new Texture("Avatar1_pos2.PNG");
-        personajeArriba = new Texture("Avatar1_pos3.PNG");
-        personajeIzquierda = new Texture("Avatar1_pos4.PNG");
+        personajeAbajo = new Texture("Avatares/Avatar1_pos1.PNG");
+        personajeDerecha = new Texture("Avatares/Avatar1_pos2.PNG");
+        personajeArriba = new Texture("Avatares/Avatar1_pos3.PNG");
+        personajeIzquierda = new Texture("Avatares/Avatar1_pos4.PNG");
 
         personajeActual = personajeAbajo;
 
