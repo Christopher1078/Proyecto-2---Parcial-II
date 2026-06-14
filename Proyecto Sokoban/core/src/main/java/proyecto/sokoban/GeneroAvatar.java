@@ -1,7 +1,7 @@
 package proyecto.sokoban;
 public enum GeneroAvatar {
-    MASCULINO("Avatar1_"),
-    FEMENINO("Avatar2_");
+    MASCULINO("Avatares/Avatar1_pos"),
+    FEMENINO("Avatares/Avatar2_pos");
 
     private GeneroAvatar(String ruta) {
         this.ruta = ruta;
