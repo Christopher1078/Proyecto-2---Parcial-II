@@ -88,6 +88,30 @@ public class Usuario implements Serializable {
     public void setGenero(GeneroAvatar genero) {
         this.genero = genero;
     }
+
+    public long getTiempoJugado() {
+        return tiempoJugado;
+    }
+    
+    public void setTiempoJugado(long tiempoJugado) {
+        this.tiempoJugado=tiempoJugado; 
+    }
+
+    public int getNivelesCompletados() {
+        return nivelesCompletados;
+    }
+    
+    public String getMejorTiempo(){
+        long mejor=Long.MAX_VALUE;
+        for(HistorialPartida h: historial){
+            if(h.isVictoria() && h.getTiempo()<mejor)
+                mejor=h.getTiempo();
+        }
+        if(mejor==Long.MAX_VALUE) return "N/A";
+        long m=mejor/60;
+        long s=mejor%60;
+        return m+"m "+s+"s";
+    }
     
     @Override
     public String toString(){

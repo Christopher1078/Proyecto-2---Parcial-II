@@ -57,6 +57,13 @@ public class MenuScreen implements Screen{
             }
         });
         
+        btnMiPerfil.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                game.setScreen(new MiPerfilScreen(game,gestor));
+            }
+        });
+        
         table.add(titulo).padBottom(40);
         table.row();
         table.add(btnJugar).width(250).height(40).padTop(20);

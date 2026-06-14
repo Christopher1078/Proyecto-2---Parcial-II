@@ -15,5 +15,27 @@ public class HistorialPartida implements Serializable {
         this.victoria = victoria;
         this.fecha=LocalDate.now();
     }
+
+    public LocalDate getFecha() {
+        return fecha;
+    }
+
+    public int getNivel() {
+        return nivel;
+    }
+
+    public int getMovimientos() {
+        return movimientos;
+    }
+
+    public long getTiempo() {
+        return tiempo;
+    }
+
+    public boolean isVictoria() {
+        return victoria;
+    }
+    
+    
     
 }
