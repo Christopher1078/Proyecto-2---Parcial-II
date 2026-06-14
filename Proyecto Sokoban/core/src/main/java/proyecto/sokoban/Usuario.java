@@ -3,8 +3,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.time.LocalDate;
 public class Usuario implements Serializable {
-    private String username, password, nombreCompleto, avatar;
+    private String username, password, nombreCompleto;
     private Idioma idioma;
+    private GeneroAvatar genero;
     private LocalDate fechaRegistro, ultimaSesion;
     private int nivelesCompletados, nivelActual, partidasJugadas;
     private boolean[] nivelesDesbloqueados;
@@ -33,8 +34,7 @@ public class Usuario implements Serializable {
         
         partidasJugadas=0;
         tiempoJugado=0;
-        
-        this.avatar="Avatar";
+        this.genero=GeneroAvatar.MASCULINO;
         idioma=Idioma.ESPANOL;
         
         amigos=new ArrayList<>();
@@ -79,6 +79,14 @@ public class Usuario implements Serializable {
 
     public void setPartidasJugadas(int partidasJugadas) {
         this.partidasJugadas = partidasJugadas;
+    }
+
+    public GeneroAvatar getGenero() {
+        return genero;
+    }
+
+    public void setGenero(GeneroAvatar genero) {
+        this.genero = genero;
     }
     
     @Override

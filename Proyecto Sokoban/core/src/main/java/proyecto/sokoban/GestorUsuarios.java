@@ -2,7 +2,7 @@ package proyecto.sokoban;
 import java.io.*;
 import java.util.ArrayList;
 public class GestorUsuarios {
-    private Usuario logIn;
+    private Usuario loggedIn;
     
     public void crearCarpetaUsuario(String username){
         File carpeta=new File("Usuarios/"+username);
@@ -54,7 +54,7 @@ public class GestorUsuarios {
         Usuario user=buscarUsuario(username);
         if(!user.getPassword().equals(password))
             return false;
-        logIn=user;
+        loggedIn=user;
         return true;
     }
     
@@ -62,7 +62,7 @@ public class GestorUsuarios {
         if(existeUsuario(username) || !passwordValido(password))
             return false;
         Usuario user=new Usuario(username,password,nombreCompleto);
-        logIn=user;
+        loggedIn=user;
         guardarUsuario(user);
         return true;
     }
@@ -86,8 +86,11 @@ public class GestorUsuarios {
     }
     
     public void logOut(){
-        logIn=null;
+        loggedIn=null;
     }
     
+    public Usuario getLoggedIn(){
+        return loggedIn;
+    }
     
 }
