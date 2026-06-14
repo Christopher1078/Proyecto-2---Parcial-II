@@ -17,8 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import com.badlogic.gdx.graphics.Color;
 public class SigninScreen implements Screen {
     
     private final Game game;
@@ -57,13 +56,17 @@ public class SigninScreen implements Screen {
         txtPassword.setPasswordMode(true);
         txtPassword.setPasswordCharacter('*');
         
-        lblLongitud=new Label("❌ Exactamente 5 caracteres",skin);
+        lblLongitud=new Label("Exactamente 5 caracteres",skin);
+        lblLongitud.setColor(Color.RED);
         
-        lblMayuscula=new Label("❌ Al menos una mayuscula",skin);
+        lblMayuscula=new Label("Al menos una mayuscula",skin);
+        lblMayuscula.setColor(Color.RED);
         
-        lblMinuscula=new Label("❌ Al menos una minuscula",skin);
+        lblMinuscula=new Label("Al menos una minuscula",skin);
+        lblMinuscula.setColor(Color.RED);
          
-        lblNumero=new Label("❌ Al menos un numero",skin);
+        lblNumero=new Label("Al menos un numero",skin);
+        lblNumero.setColor(Color.RED);
         
         TextButton btnSignIn=new TextButton("Registrarse",skin);
         
@@ -110,7 +113,7 @@ public class SigninScreen implements Screen {
                 String nombreCompleto=txtNombre.getText();
                 try {
                     if(gestor.signIn(usuario, password, nombreCompleto))
-                        game.setScreen(new MenuScreen(game,gestor));
+                    game.setScreen(new SeleccionarAvatarScreen(game,gestor));
                     else {
                         Dialog dialog;
                         String mensaje="";
@@ -187,20 +190,20 @@ public class SigninScreen implements Screen {
         }
 
         if(longitud)
-            lblLongitud.setText("✅ Exactamente 5 caracteres");
-        else lblLongitud.setText("❌ Exactamente 5 caracteres");
+            lblLongitud.setColor(Color.GREEN);
+        else lblLongitud.setColor(Color.RED);
         
         if(mayuscula)
-            lblMayuscula.setText("✅ Al menos una mayuscula");
-        else lblMayuscula.setText("❌ Al menos una mayuscula");
+            lblMayuscula.setColor(Color.GREEN);
+        else lblMayuscula.setColor(Color.RED);
         
         if(minuscula)
-            lblMinuscula.setText("✅ Al menos una minuscula");
-        else lblMinuscula.setText("❌ Al menos una minuscula");
+            lblMinuscula.setColor(Color.GREEN);
+        else lblMinuscula.setColor(Color.RED);
         
         if(numero)
-            lblNumero.setText("✅ Al menos un numero");
-        else lblNumero.setText("❌ Al menos un numero");
+            lblNumero.setColor(Color.GREEN);
+        else lblNumero.setColor(Color.RED);
 
     }
 
