@@ -11,16 +11,19 @@ public class Sokoban extends Juego {
     private int movimientosTotales;
     private int fallosNivel;
     private int fallosTotales;
-    private int vidas;
     private int reinicios;
     private boolean nivelCompletado;
     private String mensaje;
 
     public Sokoban() {
+        this(1);
+    }
+
+    public Sokoban(int nivelInicial) {
         niveles = Nivel.crearNiveles();
         hiloTiempo = new HiloTiempo();
         hiloTiempo.start();
-        cargarNivel(0);
+        cargarNivel(nivelInicial - 1);
     }
 
     @Override
@@ -33,7 +36,6 @@ public class Sokoban extends Juego {
         mapaActual = new Mapa(niveles.get(numeroNivel).getDiseno());
         movimientosNivel = 0;
         fallosNivel = 0;
-        vidas = 3;
         nivelCompletado = false;
         juegoTerminado = false;
         mensaje = "Ubica todas las cajas en los objetivos.";
@@ -69,15 +71,7 @@ public class Sokoban extends Juego {
     private void registrarFallo() {
         fallosNivel++;
         fallosTotales++;
-        vidas--;
-
-        if (vidas <= 0) {
-            reinicios++;
-            cargarNivel(nivelActual);
-            mensaje = "Te quedaste sin vidas. El nivel se reinicio.";
-        } else {
-            mensaje = "Movimiento bloqueado. Perdiste una vida.";
-        }
+        mensaje = "Movimiento bloqueado.";
     }
 
     @Override
@@ -133,7 +127,7 @@ public class Sokoban extends Juego {
     }
 
     public int getVidas() {
-        return vidas;
+        return 0;
     }
 
     public int getReinicios() {
@@ -150,6 +144,10 @@ public class Sokoban extends Juego {
 
     public String getNombreNivelActual() {
         return niveles.get(nivelActual).getNombre();
+    }
+
+    public int getSegundosNivel() {
+        return hiloTiempo.getSegundosNivel();
     }
 
     public String getTiempoNivelFormateado() {
