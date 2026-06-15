@@ -251,6 +251,8 @@ public class AmigosScreen implements Screen{
         
         for(String username: amigos){
             Label lbl=new Label(username,skin);
+            TextButton btnEstadisticas=new TextButton("Estadisticas",skin);
+            TextButton btnRetar=new TextButton("Retar",skin);
             TextButton btnEliminar=new TextButton("Eliminar",skin);
             
             btnEliminar.addListener(new ClickListener(){
@@ -260,8 +262,24 @@ public class AmigosScreen implements Screen{
                 }
             });
             
+            btnEstadisticas.addListener(new ClickListener(){
+                @Override
+                public void clicked(InputEvent event, float x, float y){
+                    verEstadisticas(username);
+                }
+            });
+            
+            btnRetar.addListener(new ClickListener(){
+                @Override
+                public void clicked(InputEvent event, float x, float y){
+                    
+                }
+            });
+            
             tablaAmigos.add(lbl).left().padRight(20).pad(5);
             tablaAmigos.add(btnEliminar).width(100).height(35).pad(5);
+            tablaAmigos.add(btnEstadisticas).width(110).height(35).padRight(10).pad(5);
+            tablaAmigos.add(btnRetar).width(90).height(35).padRight(10).pad(5);
             tablaAmigos.row();
         }
     }
@@ -273,6 +291,16 @@ public class AmigosScreen implements Screen{
             cargarAmigos();
         }catch(IOException | ClassNotFoundException e){
             Dialog dialog=new Dialog("Error al eliminar amigo: "+e.getMessage(),skin);
+            dialog.show(stage);
+        }
+    }
+    
+    private void verEstadisticas(String username){
+        try{
+            Usuario amigo=gestor.buscarUsuario(username);
+            game.setScreen(new EstadisticasAmigoScreen(game, gestor, amigo));
+        }catch(IOException | ClassNotFoundException e){
+            Dialog dialog=new Dialog("Error al ver estadisticas: "+e.getMessage(),skin);
             dialog.show(stage);
         }
     }

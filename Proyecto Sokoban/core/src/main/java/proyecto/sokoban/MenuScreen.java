@@ -15,8 +15,8 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 public class MenuScreen implements Screen {
 
-    private Game game;
-    private GestorUsuarios gestor;
+    private final Game game;
+    private final GestorUsuarios gestor;
     private Stage stage;
     private Skin skin;
 
@@ -58,7 +58,6 @@ public class MenuScreen implements Screen {
         btnConfi.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new SeleccionarAvatarScreen(game, gestor));
             }
         });
 
