@@ -47,7 +47,7 @@ public class MiPerfilScreen implements Screen{
         Table datosTable=new Table();
         Label lblUsuario=new Label("Username: "+usuario.getUsername(),skin);
         Label lblNombre=new Label("Nombre: "+usuario.getNombreCompleto(),skin);
-        Label lblAmigos=new Label("Amigos: 0",skin);
+        Label lblAmigos=new Label("Amigos: "+usuario.getAmigos().size(),skin);
         
         datosTable.add(lblUsuario).left();
         datosTable.row();
@@ -81,7 +81,7 @@ public class MiPerfilScreen implements Screen{
         btnVerAmigos.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y){
-                
+                game.setScreen(new AmigosScreen(game,gestor));
             }
         });
         

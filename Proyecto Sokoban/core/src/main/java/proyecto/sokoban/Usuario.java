@@ -11,7 +11,9 @@ public class Usuario implements Serializable {
     private boolean[] nivelesDesbloqueados;
     private long tiempoJugado;
     private double tiempoPromedio;
-    private ArrayList<Usuario> amigos;   
+    private ArrayList<String> amigos;
+    private ArrayList<String> solicitudesRecibidas;
+    private ArrayList<String> solicitudesEnviadas;
     private ArrayList<HistorialPartida> historial;
     private static final long serialVersionUID=1L; 
 
@@ -38,6 +40,8 @@ public class Usuario implements Serializable {
         idioma=Idioma.ESPANOL;
         
         amigos=new ArrayList<>();
+        solicitudesRecibidas=new ArrayList<>();
+        solicitudesEnviadas=new ArrayList<>();
         historial=new ArrayList<>();
     }
 
@@ -111,6 +115,57 @@ public class Usuario implements Serializable {
         long m=mejor/60;
         long s=mejor%60;
         return m+"m "+s+"s";
+    }
+
+    public ArrayList<String> getAmigos() {
+        return amigos;
+    }
+
+    public ArrayList<String> getSolicitudesRecibidas() {
+        return solicitudesRecibidas;
+    }
+
+    public ArrayList<String> getSolicitudesEnviadas() {
+        return solicitudesEnviadas;
+    }
+    
+    public boolean isAmigo(String username){
+        return amigos.contains(username);
+    }
+    
+    public boolean tieneSolicitudesRecibidasDe(String username){
+        return solicitudesRecibidas.contains(username);
+    }
+    
+    public boolean tieneSolicitudesEnviadasA(String username){
+        return solicitudesEnviadas.contains(username);
+    }
+    
+    public void agregarAmigo(String username){
+        if(!amigos.contains(username))
+            amigos.add(username);
+    }
+    
+    public void eliminarAmigo(String username){
+        amigos.remove(username);
+    }
+    
+    public void agregarSolicitudRecibida(String username){
+        if(!solicitudesRecibidas.contains(username))
+            solicitudesRecibidas.add(username);
+    }
+    
+    public void eliminarSolicitudRecibida(String username){
+        solicitudesRecibidas.remove(username);
+    }
+    
+    public void agregarSolicitudEnviada(String username){
+        if(!solicitudesEnviadas.contains(username))
+            solicitudesEnviadas.add(username);
+    }
+    
+    public void eliminarSolicitudEnviada(String username){
+        solicitudesEnviadas.remove(username);
     }
     
     @Override

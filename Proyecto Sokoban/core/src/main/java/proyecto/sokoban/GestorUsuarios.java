@@ -93,4 +93,88 @@ public class GestorUsuarios {
         return loggedIn;
     }
     
+    public String enviarSolicitudAmistad(String destinatario)throws IOException, ClassNotFoundException{
+        if(loggedIn.getUsername().equals(destinatario))
+            return "No puedes enviarte solicitudes a ti mismo";
+        
+        if(!existeUsuario(destinatario))
+            return "Este usuario no existe";
+        
+        if(loggedIn.isAmigo(destinatario))
+            return "Ya eres amigo de "+destinatario;
+        
+        if(loggedIn.tieneSolicitudesEnviadasA(destinatario))
+            return "Ya tienes una solicitud enviada a "+destinatario;
+        
+        if(loggedIn.tieneSolicitudesRecibidasDe(destinatario))
+            return "Ya tienes una solicitud recibida de "+destinatario;
+        
+        Usuario destino=buscarUsuario(destinatario);
+        loggedIn.agregarSolicitudEnviada(destinatario);
+        destino.agregarSolicitudRecibida(loggedIn.getUsername());
+        guardarUsuario(loggedIn);
+        guardarUsuario(destino);
+        return "Se envio la solicitud exitosamente";
+    }
+    
+    public boolean aceptarSolicitudAmistad(String remitente)throws IOException, ClassNotFoundException{
+        if(!loggedIn.tieneSolicitudesRecibidasDe(remitente) || !existeUsuario(remitente))
+            return false;
+        
+        Usuario otro=buscarUsuario(remitente);
+        
+        loggedIn.eliminarSolicitudRecibida(remitente);
+        loggedIn.agregarAmigo(remitente);
+        otro.eliminarSolicitudEnviada(loggedIn.getUsername());
+        otro.agregarAmigo(loggedIn.getUsername());
+        
+        guardarUsuario(loggedIn);
+        guardarUsuario(otro);
+        
+        return true;
+    }
+    
+    public boolean rechazarSolicitudAmistad(String remitente)throws IOException, ClassNotFoundException{
+        if(!loggedIn.tieneSolicitudesRecibidasDe(remitente))
+            return false;
+        
+        if(existeUsuario(remitente)){
+            Usuario otro=buscarUsuario(remitente);
+            otro.eliminarSolicitudEnviada(loggedIn.getUsername());
+            guardarUsuario(otro);        
+        }
+        
+        loggedIn.eliminarSolicitudRecibida(remitente);        
+        guardarUsuario(loggedIn);
+        return true;
+    }
+    
+    public boolean eliminarAmigo(String amigo)throws IOException, ClassNotFoundException{
+        if(!loggedIn.isAmigo(amigo))
+            return false;
+        
+        loggedIn.eliminarAmigo(amigo);
+        guardarUsuario(loggedIn);
+        
+        if(existeUsuario(amigo)){
+            Usuario otro=buscarUsuario(amigo);
+            otro.eliminarAmigo(loggedIn.getUsername());
+            guardarUsuario(otro);
+        }
+        
+        return true;
+    }
+    
+    public ArrayList<Usuario> buscarUsuarioPorNombre(String texto)throws IOException, ClassNotFoundException{
+        ArrayList<Usuario> resultado=new ArrayList<>();
+        String textoLower=texto.toLowerCase();
+        
+        for(Usuario u: getUsuarios()){
+            if(u.getUsername().equals(loggedIn.getUsername()))
+                continue;
+            if(u.getUsername().toLowerCase().contains(textoLower))
+                resultado.add(u);
+        }
+        return resultado;
+    }
 }
