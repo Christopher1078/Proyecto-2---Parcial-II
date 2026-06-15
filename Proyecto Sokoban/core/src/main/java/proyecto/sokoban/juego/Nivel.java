@@ -31,7 +31,7 @@ public class Nivel {
 
         niveles.add(new Nivel(
             1,
-            "Primeros pasos",
+            "Primer empuje",
             new String[] {
                 "#######",
                 "#  .  #",
@@ -44,7 +44,7 @@ public class Nivel {
 
         niveles.add(new Nivel(
             2,
-            "Dos cajas",
+            "Doble objetivo",
             new String[] {
                 "#########",
                 "# .   . #",
@@ -57,15 +57,15 @@ public class Nivel {
 
         niveles.add(new Nivel(
             3,
-            "Una pared en medio",
+            "Pasillo central",
             new String[] {
-                "#########",
-                "# .   . #",
-                "# $ # $ #",
-                "#   #   #",
-                "#   @   #",
-                "#       #",
-                "#########"
+                "###########",
+                "#   #     #",
+                "# . # .   #",
+                "# $   $   #",
+                "#   @     #",
+                "#         #",
+                "###########"
             }
         ));
 
@@ -73,24 +73,25 @@ public class Nivel {
             4,
             "Tres cajas",
             new String[] {
-                "###########",
-                "# .  .  . #",
-                "# $  $  $ #",
-                "#  #   #  #",
-                "#    @    #",
-                "#         #",
-                "###########"
+                "############",
+                "#  .   .   #",
+                "#  $ # $   #",
+                "#    #     #",
+                "#  $   .   #",
+                "#    @     #",
+                "############"
             }
         ));
 
         niveles.add(new Nivel(
             5,
-            "Ultimo desafio",
+            "Bodega final",
             new String[] {
                 "#############",
-                "# .   .   . #",
-                "# $   $   $ #",
-                "#   #   #   #",
+                "# .  .  . . #",
+                "# $  $  $ $ #",
+                "#     #     #",
+                "#  #     #  #",
                 "#     @     #",
                 "#           #",
                 "#############"

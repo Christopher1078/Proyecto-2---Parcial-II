@@ -1,5 +1,6 @@
 package proyecto.sokoban;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
@@ -12,6 +13,8 @@ import proyecto.sokoban.juego.Sokoban;
 
 public class MapaScreen extends ScreenAdapter {
 
+    private Game game;
+    private GestorUsuarios gestor;
     private SpriteBatch batch;
     private BitmapFont fuente;
     private Sokoban sokoban;
@@ -28,26 +31,59 @@ public class MapaScreen extends ScreenAdapter {
     private Texture personajeIzquierda;
 
     private Texture personajeActual;
+    private boolean partidaGuardada;
 
     public MapaScreen() {
+        this(null, null, 1);
+    }
+
+    public MapaScreen(Game game, GestorUsuarios gestor, int nivelInicial) {
+        this.game = game;
+        this.gestor = gestor;
+        this.partidaGuardada = false;
+
         batch = new SpriteBatch();
         fuente = new BitmapFont();
         fuente.getData().setScale(1.05f);
 
-        piso = new Texture("imagenes/piso.png");
-        pared = new Texture("imagenes/pared.png");
-        caja = new Texture("imagenes/caja.png");
-        objetivo = new Texture("imagenes/objetivo.png");
-        cajaObjetivo = new Texture("imagenes/caja_objetivo.png");
+        piso = cargarTextura("Imagenes/piso.png", "imagenes/piso.png");
+        pared = cargarTextura("Imagenes/pared.png", "imagenes/pared.png");
+        caja = cargarTextura("Imagenes/caja.png", "imagenes/caja.png");
+        objetivo = cargarTextura("Imagenes/objetivo.png", "imagenes/objetivo.png");
+        cajaObjetivo = cargarTextura("Imagenes/caja_objetivo.png", "imagenes/caja_objetivo.png");
 
-        personajeAbajo = new Texture("Avatares/Avatar1_pos1.PNG");
-        personajeDerecha = new Texture("Avatares/Avatar1_pos2.PNG");
-        personajeArriba = new Texture("Avatares/Avatar1_pos3.PNG");
-        personajeIzquierda = new Texture("Avatares/Avatar1_pos4.PNG");
+        GeneroAvatar genero = GeneroAvatar.MASCULINO;
+
+        if (gestor != null && gestor.getLoggedIn() != null) {
+            genero = gestor.getLoggedIn().getGenero();
+        }
+
+        personajeAbajo = cargarAvatar(genero, 1);
+        personajeDerecha = cargarAvatar(genero, 2);
+        personajeArriba = cargarAvatar(genero, 3);
+        personajeIzquierda = cargarAvatar(genero, 4);
 
         personajeActual = personajeAbajo;
 
-        sokoban = new Sokoban();
+        sokoban = new Sokoban(nivelInicial);
+    }
+
+    private Texture cargarTextura(String rutaPrincipal, String rutaSecundaria) {
+        if (Gdx.files.internal(rutaPrincipal).exists()) {
+            return new Texture(rutaPrincipal);
+        }
+
+        return new Texture(rutaSecundaria);
+    }
+
+    private Texture cargarAvatar(GeneroAvatar genero, int posicion) {
+        String ruta = genero.getRuta() + posicion + ".PNG";
+
+        if (Gdx.files.internal(ruta).exists()) {
+            return new Texture(ruta);
+        }
+
+        return new Texture("Avatares/Avatar1_pos" + posicion + ".PNG");
     }
 
     @Override
@@ -64,13 +100,29 @@ public class MapaScreen extends ScreenAdapter {
     }
 
     private void leerTeclado() {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+            guardarPartida(false);
+
+            if (game != null && gestor != null) {
+                game.setScreen(new MenuScreen(game, gestor));
+            }
+
+            return;
+        }
+
         if (sokoban.isJuegoTerminado()) {
             return;
         }
 
         if (sokoban.isNivelCompletado()) {
+            guardarPartida(true);
+
             if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
-                sokoban.avanzarNivel();
+                boolean avanzo = sokoban.avanzarNivel();
+
+                if (avanzo) {
+                    partidaGuardada = false;
+                }
             }
 
             return;
@@ -78,40 +130,60 @@ public class MapaScreen extends ScreenAdapter {
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.R)) {
             sokoban.reiniciarNivel();
+            partidaGuardada = false;
             return;
         }
 
-        if (
-            Gdx.input.isKeyJustPressed(Input.Keys.W)
-            || Gdx.input.isKeyJustPressed(Input.Keys.UP)
-        ) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.W)
+            || Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
+
             personajeActual = personajeArriba;
             sokoban.moverJugador(-1, 0);
         }
 
-        if (
-            Gdx.input.isKeyJustPressed(Input.Keys.S)
-            || Gdx.input.isKeyJustPressed(Input.Keys.DOWN)
-        ) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.S)
+            || Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) {
+
             personajeActual = personajeAbajo;
             sokoban.moverJugador(1, 0);
         }
 
-        if (
-            Gdx.input.isKeyJustPressed(Input.Keys.A)
-            || Gdx.input.isKeyJustPressed(Input.Keys.LEFT)
-        ) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.A)
+            || Gdx.input.isKeyJustPressed(Input.Keys.LEFT)) {
+
             personajeActual = personajeIzquierda;
             sokoban.moverJugador(0, -1);
         }
 
-        if (
-            Gdx.input.isKeyJustPressed(Input.Keys.D)
-            || Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)
-        ) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.D)
+            || Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)) {
+
             personajeActual = personajeDerecha;
             sokoban.moverJugador(0, 1);
         }
+    }
+
+    private void guardarPartida(boolean victoria) {
+        if (partidaGuardada) {
+            return;
+        }
+
+        if (gestor == null || gestor.getLoggedIn() == null) {
+            return;
+        }
+
+        Usuario usuario = gestor.getLoggedIn();
+        int nivel = sokoban.getNivelActual() + 1;
+
+        usuario.registrarPartida(
+            nivel,
+            sokoban.getMovimientosNivel(),
+            sokoban.getSegundosNivel(),
+            victoria
+        );
+
+        gestor.guardarUsuarioActual();
+        partidaGuardada = true;
     }
 
     private void dibujarMapa() {
@@ -166,17 +238,28 @@ public class MapaScreen extends ScreenAdapter {
                 break;
 
             case '@':
-                batch.draw(personajeActual, x, y, tamanoCelda, tamanoCelda);
+                dibujarPersonaje(x, y, tamanoCelda);
                 break;
 
             case '+':
                 batch.draw(objetivo, x, y, tamanoCelda, tamanoCelda);
-                batch.draw(personajeActual, x, y, tamanoCelda, tamanoCelda);
+                dibujarPersonaje(x, y, tamanoCelda);
                 break;
 
             default:
                 break;
         }
+    }
+
+    private void dibujarPersonaje(float x, float y, float tamanoCelda) {
+        float escala = 1.15f;
+        float ancho = tamanoCelda * escala;
+        float alto = tamanoCelda * escala;
+
+        float xDibujo = x + (tamanoCelda - ancho) / 2f;
+        float yDibujo = y + (tamanoCelda - alto) / 2f;
+
+        batch.draw(personajeActual, xDibujo, yDibujo, ancho, alto);
     }
 
     private void dibujarInformacion() {
@@ -198,8 +281,6 @@ public class MapaScreen extends ScreenAdapter {
                 + sokoban.getMovimientosNivel()
                 + " | Fallos: "
                 + sokoban.getFallosNivel()
-                + " | Vidas: "
-                + sokoban.getVidas()
                 + " | Reinicios: "
                 + sokoban.getReinicios(),
             20,
@@ -218,7 +299,7 @@ public class MapaScreen extends ScreenAdapter {
 
         fuente.draw(
             batch,
-            "Controles: WASD o flechas para moverse | R para reiniciar",
+            "Controles: WASD o flechas | R reiniciar | ESC menu",
             20,
             Gdx.graphics.getHeight() - 100
         );
@@ -233,6 +314,7 @@ public class MapaScreen extends ScreenAdapter {
 
     @Override
     public void hide() {
+        guardarPartida(false);
         sokoban.detener();
     }
 

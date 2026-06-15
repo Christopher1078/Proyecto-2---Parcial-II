@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -13,14 +14,14 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
-public class MenuScreen implements Screen {
+public class SeleccionNivelScreen implements Screen {
 
     private Game game;
     private GestorUsuarios gestor;
     private Stage stage;
     private Skin skin;
 
-    public MenuScreen(Game game, GestorUsuarios gestor) {
+    public SeleccionNivelScreen(Game game, GestorUsuarios gestor) {
         this.game = game;
         this.gestor = gestor;
     }
@@ -34,58 +35,66 @@ public class MenuScreen implements Screen {
         table.setFillParent(true);
         stage.addActor(table);
 
-        Label titulo = new Label("Menu Inicio", skin);
+        Label titulo = new Label("Seleccion de nivel", skin);
 
-        TextButton btnJugar = new TextButton("Jugar", skin);
-        TextButton btnMiPerfil = new TextButton("Mi Perfil", skin);
-        TextButton btnConfi = new TextButton("Configuracion", skin);
-        TextButton btnLogOut = new TextButton("Log Out", skin);
+        table.add(titulo).padBottom(25);
+        table.row();
 
-        btnJugar.addListener(new ClickListener() {
+        for (int nivel = 1; nivel <= 5; nivel++) {
+            crearBotonNivel(table, nivel);
+        }
+
+        TextButton btnRegresar = new TextButton("Regresar", skin);
+
+        btnRegresar.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new SeleccionNivelScreen(game, gestor));
+                game.setScreen(new MenuScreen(game, gestor));
             }
         });
 
-        btnMiPerfil.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new MiPerfilScreen(game, gestor));
-            }
-        });
-
-        btnConfi.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new SeleccionarAvatarScreen(game, gestor));
-            }
-        });
-
-        btnLogOut.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                gestor.logOut();
-                game.setScreen(new FirstScreen(game, gestor));
-            }
-        });
-
-        table.add(titulo).padBottom(40);
-        table.row();
-
-        table.add(btnJugar).width(250).height(40).padTop(20);
-        table.row();
-
-        table.add(btnMiPerfil).width(250).height(40).padTop(20);
-        table.row();
-
-        table.add(btnConfi).width(250).height(40).padTop(20);
-        table.row();
-
-        table.add(btnLogOut).width(250).height(40).padTop(20);
+        table.add(btnRegresar).width(260).height(40).padTop(25);
         table.row();
 
         Gdx.input.setInputProcessor(stage);
+    }
+
+    private void crearBotonNivel(Table table, int nivel) {
+        final int nivelSeleccionado = nivel;
+
+        String texto = "Nivel " + nivel;
+
+        if (gestor.getLoggedIn() != null) {
+            if (!gestor.getLoggedIn().nivelDesbloqueado(nivel)) {
+                texto += " - Bloqueado";
+            }
+        }
+
+        TextButton botonNivel = new TextButton(texto, skin);
+
+        botonNivel.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                intentarAbrirNivel(nivelSeleccionado);
+            }
+        });
+
+        table.add(botonNivel).width(260).height(40).padTop(10);
+        table.row();
+    }
+
+    private void intentarAbrirNivel(int nivel) {
+        Usuario usuario = gestor.getLoggedIn();
+
+        if (usuario != null && !usuario.nivelDesbloqueado(nivel)) {
+            Dialog dialog = new Dialog("Nivel bloqueado", skin);
+            dialog.text("Aun no has desbloqueado este nivel.");
+            dialog.button("Ok");
+            dialog.show(stage);
+            return;
+        }
+
+        game.setScreen(new MapaScreen(game, gestor, nivel));
     }
 
     @Override
