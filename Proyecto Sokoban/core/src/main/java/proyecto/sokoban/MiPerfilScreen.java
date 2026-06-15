@@ -107,9 +107,7 @@ public class MiPerfilScreen implements Screen{
         
         statsTable.add(new Label("Mejor tiempo: "+usuario.getMejorTiempo(),skin)).left().padTop(5);
         statsTable.row();
-        
-        statsTable.add(new Label("Nivel mas alto: "+usuario.getNivelActual(),skin)).left().padTop(5);
-        
+                
         table.add(statsTable).colspan(2);
         table.row();
         

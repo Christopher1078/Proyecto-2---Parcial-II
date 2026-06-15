@@ -76,8 +76,8 @@ public class SeleccionarAvatarScreen implements Screen {
         table.add(titulo).padBottom(40).colspan(2);
         table.row();
 
-        table.add(imgMasculino).size(120, 120).padRight(40);
-        table.add(imgFemenino).size(120, 120);
+        table.add(imgMasculino).size(120, 240).padRight(40);
+        table.add(imgFemenino).size(120, 240);
         table.row();
 
         table.add(btnMasculino).width(150).height(40).padTop(10).padRight(40);
