@@ -371,4 +371,59 @@ public class GestorUsuarios {
             System.out.println("No se pudo guardar el usuario actual con su historial");
         }
     }
+    
+    public String enviarRetoDuelo(String nombreRetado, int nivel)throws IOException, ClassNotFoundException{
+        if(loggedIn==null)
+            return "No hay sesion activa";
+        
+        if(loggedIn.getUsername().equals(nombreRetado))
+            return "No puedes retarte a ti mismo";
+        
+        if(!existeUsuario(nombreRetado))
+            return "El usuario no existe";
+        
+        if(!loggedIn.isAmigo(nombreRetado))
+            return "Solo puedes retar a tus amigos";
+        
+        SolicitudDuelo existente=loggedIn.buscarDuelo(loggedIn.getUsername(), nombreRetado, nivel);
+        
+        if(existente!=null && existente.getEstado()!=SolicitudDuelo.Estado.COMPLETADO)
+            return "Ya tienes un duelo activo en ese nivel con ese jugador";
+        
+        SolicitudDuelo duelo=new SolicitudDuelo(loggedIn.getUsername(), nombreRetado, nivel);
+        Usuario retado=buscarUsuario(nombreRetado);
+        loggedIn.agregarDuelo(duelo);
+        retado.agregarDuelo(duelo);
+        guardarUsuario(loggedIn);
+        guardarUsuario(retado);
+        return "OK";
+    }
+    
+    public void aceptarDuelo(SolicitudDuelo duelo, long tiempoRetado)throws IOException, ClassNotFoundException{
+        duelo.registrarTiempoRetado(tiempoRetado);
+        guardarUsuario(loggedIn);
+        
+        if(existeUsuario(duelo.getRetador())){
+            Usuario retador=buscarUsuario(duelo.getRetador());
+            SolicitudDuelo dueloEnRetador=retador.buscarDuelo(duelo.getRetador(), duelo.getRetado(), duelo.getNivel());
+            
+            if(dueloEnRetador!=null)
+                dueloEnRetador.registrarTiempoRetado(tiempoRetado);
+            guardarUsuario(retador);
+        }
+    }
+    
+    public void completarDuelo(SolicitudDuelo duelo, long TiempoRetador)throws IOException, ClassNotFoundException{
+        duelo.registrarTiempoRetador(TiempoRetador);
+        guardarUsuario(loggedIn);
+        
+        if(existeUsuario(duelo.getRetado())){
+            Usuario retado=buscarUsuario(duelo.getRetado());
+            SolicitudDuelo dueloEnRetado=retado.buscarDuelo(duelo.getRetador(), duelo.getRetado(), duelo.getNivel());
+            
+            if(dueloEnRetado!=null)
+                dueloEnRetado.registrarTiempoRetador(TiempoRetador);
+            guardarUsuario(retado);
+        }
+    }
 }

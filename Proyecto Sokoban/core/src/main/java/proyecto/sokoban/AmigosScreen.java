@@ -16,6 +16,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Random;
 public class AmigosScreen implements Screen{
     private final Game game;
     private final GestorUsuarios gestor;
@@ -272,7 +273,7 @@ public class AmigosScreen implements Screen{
                 btnRetar.addListener(new ClickListener(){
                     @Override
                     public void clicked(InputEvent event, float x, float y){
-                    
+                        mostrarDialogoNivel(username);
                     }
                 });
             
@@ -305,6 +306,61 @@ public class AmigosScreen implements Screen{
         }catch(IOException | ClassNotFoundException e){
             Dialog dialog=new Dialog("Error al ver estadisticas: "+e.getMessage(),skin);
             dialog.show(stage);
+        }
+    }
+    
+    private void mostrarDialogoNivel(String rivalUsername){
+        Dialog dialogo=new Dialog("Elegir nivel del duelo",skin){
+            @Override
+            protected void result(Object obj){
+                if(obj instanceof Integer)
+                    enviarReto(rivalUsername, (Integer) obj);
+            }
+        };
+        dialogo.getContentTable().add(new Label("En que nivel quieres retar a "+rivalUsername+"?",skin)).padTop(10).padBottom(10).padLeft(15).padRight(15);
+        dialogo.getContentTable().row();
+        
+        
+        Table botonesNivel=new Table();
+        for(int n=1;n<=5;n++){
+            final int nivel=n;
+            TextButton btn=new TextButton("Nivel "+n,skin);
+            btn.addListener(new ClickListener(){
+                public void clicked(InputEvent event, float x, float y){
+                    dialogo.hide();
+                    enviarReto(rivalUsername, nivel);
+                }
+            });
+            botonesNivel.add(btn).width(100).height(35).pad(5);
+        }
+        
+        TextButton btnAleatorio=new TextButton("Aleatorio",skin);
+        btnAleatorio.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                dialogo.hide();
+                int nivelAleatorio=new Random().nextInt(5)+1;
+                enviarReto(rivalUsername, nivelAleatorio);
+            }
+        });
+        botonesNivel.add(btnAleatorio).width(110).height(35).pad(5);
+        
+        dialogo.getContentTable().add(botonesNivel).padBottom(10);
+        dialogo.button("Cancelar");
+        dialogo.setMovable(false);
+        dialogo.show(stage);
+    }
+    
+    private void enviarReto(String rival, int nivel){
+        try{
+            String resultado=gestor.enviarRetoDuelo(rival, nivel);
+            
+            if(resultado.equals("OK"))
+                lblMensaje.setText("Reto enviado a "+rival+" en Nivel "+nivel);
+            else
+                lblMensaje.setText(resultado);
+        }catch(Exception e){
+            lblMensaje.setText("Error al enviar reto: "+e.getMessage());
         }
     }
 
