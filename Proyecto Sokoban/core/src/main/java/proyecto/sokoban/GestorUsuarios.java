@@ -426,4 +426,82 @@ public class GestorUsuarios {
             guardarUsuario(retado);
         }
     }
+    
+    public ArrayList<Usuario> getRankingGlobal()throws IOException, ClassNotFoundException{
+        ArrayList<Usuario>lista=new ArrayList<>();
+        
+        for(Usuario u:getUsuarios()){
+            if(!u.isCuentaDeshabilitada())
+                lista.add(u);
+        }
+        lista.sort((a,b)->{
+            if(b.getNivelesCompletados() != a.getNivelesCompletados())
+                return b.getNivelesCompletados()-a.getNivelesCompletados();
+            
+            long tA=getMejorTiempoSegundos(a);
+            long tB=getMejorTiempoSegundos(b);
+            
+            if(tA!=tB){
+                if(tA<0)
+                    return 1;
+                
+                if(tB<0)
+                    return -1;
+                return Long.compare(tA, tB);
+            }
+            
+            return b.getPartidasJugadas()-a.getPartidasJugadas();
+        });
+        return lista;
+    }
+    
+    public ArrayList<Usuario> getRankingAmigos()throws IOException, ClassNotFoundException{
+        ArrayList<String>  incluidos=new ArrayList<>();
+        incluidos.add(loggedIn.getUsername());
+        
+        for(String username: loggedIn.getAmigos()){
+            if(existeUsuario(username)){
+                Usuario amigo=buscarUsuario(username);
+                if(!amigo.isCuentaDeshabilitada())
+                    incluidos.add(username);
+            }
+        }
+        
+        ArrayList<Usuario> lista=new ArrayList<>();
+        
+        for(Usuario u: getUsuarios()){
+            if(incluidos.contains(u.getUsername()))
+                lista.add(u);
+        }
+        
+        lista.sort((a,b)->{
+            if(b.getNivelesCompletados()!=a.getNivelesCompletados())
+                return b.getNivelesCompletados()-a.getNivelesCompletados();
+            
+            long tA=getMejorTiempoSegundos(a);
+            long tB=getMejorTiempoSegundos(b);
+            
+            if(tA!=tB){
+                if(tA<0)
+                    return 1;
+                
+                if(tB<0)
+                    return -1;
+                
+                return Long.compare(tA, tB);
+            }
+            
+            return b.getPartidasJugadas()-a.getPartidasJugadas();
+        });
+        return lista;
+    }
+    
+    private long getMejorTiempoSegundos(Usuario u){
+        long mejor= Long.MAX_VALUE;
+        for(HistorialPartida p: u.getHistorial()){
+            if(p.isVictoria() && p.getTiempo()<mejor)
+                mejor=p.getTiempo();
+        }
+        return mejor==Long.MAX_VALUE? -1 : mejor;
+    }
 }

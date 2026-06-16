@@ -38,6 +38,7 @@ public class MenuScreen implements Screen {
 
         TextButton btnJugar = new TextButton("Jugar", skin);
         TextButton btnMiPerfil = new TextButton("Mi Perfil", skin);
+        TextButton btnRanking=new TextButton("Ranking",skin);
         TextButton btnConfi = new TextButton("Configuracion", skin);
         TextButton btnLogOut = new TextButton("Log Out", skin);
 
@@ -53,6 +54,13 @@ public class MenuScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 game.setScreen(new MiPerfilScreen(game, gestor));
             }
+        });
+        
+        btnRanking.addListener(new ClickListener(){
+           @Override
+           public void clicked(InputEvent event, float x, float y){
+               game.setScreen(new RankingScreen(game,gestor));
+           }
         });
 
         btnConfi.addListener(new ClickListener() {
@@ -76,6 +84,9 @@ public class MenuScreen implements Screen {
         table.row();
 
         table.add(btnMiPerfil).width(250).height(40).padTop(20);
+        table.row();
+        
+        table.add(btnRanking).width(250).height(40).padTop(20);
         table.row();
 
         table.add(btnConfi).width(250).height(40).padTop(20);
