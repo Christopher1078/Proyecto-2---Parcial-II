@@ -182,7 +182,7 @@ public class MapaScreen extends ScreenAdapter {
             victoria
         );
 
-        gestor.guardarUsuarioActual();
+        gestor.guardarUsuarioActualConHistorial();
         partidaGuardada = true;
     }
 

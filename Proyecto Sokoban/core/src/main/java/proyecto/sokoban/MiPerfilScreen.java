@@ -65,12 +65,16 @@ public class MiPerfilScreen implements Screen{
         
         TextButton btnCambiarAvatar=new TextButton("Cambiar Avatar",skin);
         TextButton btnVerAmigos=new TextButton("Ver Amigos",skin);
+        TextButton btnHistorial=new TextButton("Ver Historial",skin);
         
         Table botonesTable=new Table();
         botonesTable.add(btnCambiarAvatar).width(180).height(40).padRight(20);
-        botonesTable.add(btnVerAmigos).width(180).height(40);
+        botonesTable.add(btnVerAmigos).width(180).height(40).padRight(20);
         
-        table.add(botonesTable).padTop(20).padBottom(30).colspan(2);
+        table.add(botonesTable).padTop(5).padBottom(10).colspan(2);
+        table.row();
+        
+        table.add(btnHistorial).width(250).height(40).colspan(2);
         table.row();
         
         btnCambiarAvatar.addListener(new ClickListener(){
@@ -84,6 +88,13 @@ public class MiPerfilScreen implements Screen{
             @Override
             public void clicked(InputEvent event, float x, float y){
                 game.setScreen(new AmigosScreen(game,gestor));
+            }
+        });
+        
+        btnHistorial.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                game.setScreen(new HistoriaScreen(game,gestor));
             }
         });
         
