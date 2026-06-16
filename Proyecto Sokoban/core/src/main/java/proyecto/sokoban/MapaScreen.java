@@ -32,6 +32,7 @@ public class MapaScreen extends ScreenAdapter {
 
     private Texture personajeActual;
     private boolean partidaGuardada;
+    private boolean pantallaVictoriaAbierta;
 
     public MapaScreen() {
         this(null, null, 1);
@@ -41,6 +42,7 @@ public class MapaScreen extends ScreenAdapter {
         this.game = game;
         this.gestor = gestor;
         this.partidaGuardada = false;
+        this.pantallaVictoriaAbierta = false;
 
         batch = new SpriteBatch();
         fuente = new BitmapFont();
@@ -104,7 +106,7 @@ public class MapaScreen extends ScreenAdapter {
             guardarPartida(false);
 
             if (game != null && gestor != null) {
-                game.setScreen(new MenuScreen(game, gestor));
+                game.setScreen(new SeleccionNivelScreen(game, gestor));
             }
 
             return;
@@ -115,16 +117,7 @@ public class MapaScreen extends ScreenAdapter {
         }
 
         if (sokoban.isNivelCompletado()) {
-            guardarPartida(true);
-
-            if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
-                boolean avanzo = sokoban.avanzarNivel();
-
-                if (avanzo) {
-                    partidaGuardada = false;
-                }
-            }
-
+            abrirPantallaVictoria();
             return;
         }
 
@@ -163,6 +156,29 @@ public class MapaScreen extends ScreenAdapter {
         }
     }
 
+    private void abrirPantallaVictoria() {
+        if (pantallaVictoriaAbierta) {
+            return;
+        }
+
+        guardarPartida(true);
+        pantallaVictoriaAbierta = true;
+
+        if (game != null && gestor != null) {
+            game.setScreen(
+                new VictoriaScreen(
+                    game,
+                    gestor,
+                    sokoban.getNivelActual() + 1,
+                    sokoban.getCantidadNiveles(),
+                    sokoban.getMovimientosNivel(),
+                    sokoban.getSegundosNivel(),
+                    sokoban.getReinicios()
+                )
+            );
+        }
+    }
+
     private void guardarPartida(boolean victoria) {
         if (partidaGuardada) {
             return;
@@ -182,7 +198,7 @@ public class MapaScreen extends ScreenAdapter {
             victoria
         );
 
-        gestor.guardarUsuarioActualConHistorial();
+        gestor.guardarUsuarioActual();
         partidaGuardada = true;
     }
 
@@ -252,9 +268,8 @@ public class MapaScreen extends ScreenAdapter {
     }
 
     private void dibujarPersonaje(float x, float y, float tamanoCelda) {
-        float escala = 1.15f;
-        float ancho = tamanoCelda * escala;
-        float alto = tamanoCelda * escala;
+        float ancho = tamanoCelda * 0.90f;
+        float alto = tamanoCelda * 1.40f;
 
         float xDibujo = x + (tamanoCelda - ancho) / 2f;
         float yDibujo = y + (tamanoCelda - alto) / 2f;
@@ -299,7 +314,7 @@ public class MapaScreen extends ScreenAdapter {
 
         fuente.draw(
             batch,
-            "Controles: WASD o flechas | R reiniciar | ESC menu",
+            "Controles: WASD o flechas | R reiniciar | ESC menu de niveles",
             20,
             Gdx.graphics.getHeight() - 100
         );
@@ -314,7 +329,10 @@ public class MapaScreen extends ScreenAdapter {
 
     @Override
     public void hide() {
-        guardarPartida(false);
+        if (!pantallaVictoriaAbierta) {
+            guardarPartida(false);
+        }
+
         sokoban.detener();
     }
 

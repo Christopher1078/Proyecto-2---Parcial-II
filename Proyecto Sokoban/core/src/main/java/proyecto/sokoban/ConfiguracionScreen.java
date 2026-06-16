@@ -13,14 +13,15 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
-public class MenuScreen implements Screen {
+public class ConfiguracionScreen implements Screen {
 
     private Game game;
     private GestorUsuarios gestor;
     private Stage stage;
     private Skin skin;
+    private Label mensaje;
 
-    public MenuScreen(Game game, GestorUsuarios gestor) {
+    public ConfiguracionScreen(Game game, GestorUsuarios gestor) {
         this.game = game;
         this.gestor = gestor;
     }
@@ -34,58 +35,77 @@ public class MenuScreen implements Screen {
         table.setFillParent(true);
         stage.addActor(table);
 
-        Label titulo = new Label("Menu Inicio", skin);
+        Usuario usuario = gestor.getLoggedIn();
 
-        TextButton btnJugar = new TextButton("Jugar", skin);
-        TextButton btnMiPerfil = new TextButton("Mi Perfil", skin);
-        TextButton btnConfi = new TextButton("Configuracion", skin);
-        TextButton btnLogOut = new TextButton("Log Out", skin);
+        Label titulo = new Label("Configuracion", skin);
+        mensaje = new Label("", skin);
 
-        btnJugar.addListener(new ClickListener() {
+        String idiomaActual = "Espanol";
+
+        if (usuario != null && usuario.getIdioma() == Idioma.INGLES) {
+            idiomaActual = "Ingles";
+        }
+
+        Label lblIdioma = new Label("Idioma actual: " + idiomaActual, skin);
+
+        TextButton btnEspanol = new TextButton("Idioma Espanol", skin);
+        TextButton btnIngles = new TextButton("Idioma Ingles", skin);
+        TextButton btnRegresar = new TextButton("Regresar", skin);
+
+        btnEspanol.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new SeleccionNivelScreen(game, gestor));
+                cambiarIdioma(Idioma.ESPANOL);
             }
         });
 
-        btnMiPerfil.addListener(new ClickListener() {
+        btnIngles.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new MiPerfilScreen(game, gestor));
+                cambiarIdioma(Idioma.INGLES);
             }
         });
 
-        btnConfi.addListener(new ClickListener() {
+        btnRegresar.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new ConfiguracionScreen(game, gestor));
+                game.setScreen(new MenuScreen(game, gestor));
             }
         });
 
-        btnLogOut.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                gestor.logOut();
-                game.setScreen(new FirstScreen(game, gestor));
-            }
-        });
-
-        table.add(titulo).padBottom(40);
+        table.add(titulo).padBottom(30);
         table.row();
 
-        table.add(btnJugar).width(250).height(40).padTop(20);
+        table.add(lblIdioma).padBottom(15);
         table.row();
 
-        table.add(btnMiPerfil).width(250).height(40).padTop(20);
+        table.add(btnEspanol).width(260).height(40).padTop(10);
         table.row();
 
-        table.add(btnConfi).width(250).height(40).padTop(20);
+        table.add(btnIngles).width(260).height(40).padTop(10);
         table.row();
 
-        table.add(btnLogOut).width(250).height(40).padTop(20);
+        table.add(btnRegresar).width(260).height(40).padTop(25);
+        table.row();
+
+        table.add(mensaje).padTop(20);
         table.row();
 
         Gdx.input.setInputProcessor(stage);
+    }
+
+    private void cambiarIdioma(Idioma idioma) {
+        Usuario usuario = gestor.getLoggedIn();
+
+        if (usuario == null) {
+            mensaje.setText("No hay usuario activo.");
+            return;
+        }
+
+        usuario.setIdioma(idioma);
+        gestor.guardarUsuarioActual();
+
+        game.setScreen(new ConfiguracionScreen(game, gestor));
     }
 
     @Override

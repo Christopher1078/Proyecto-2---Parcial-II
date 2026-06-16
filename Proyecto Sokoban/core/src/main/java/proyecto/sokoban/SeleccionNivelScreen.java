@@ -64,10 +64,8 @@ public class SeleccionNivelScreen implements Screen {
 
         String texto = "Nivel " + nivel;
 
-        if (gestor.getLoggedIn() != null) {
-            if (!gestor.getLoggedIn().nivelDesbloqueado(nivel)) {
-                texto += " - Bloqueado";
-            }
+        if (gestor.getLoggedIn() != null && !gestor.getLoggedIn().nivelDesbloqueado(nivel)) {
+            texto += " - Bloqueado";
         }
 
         TextButton botonNivel = new TextButton(texto, skin);

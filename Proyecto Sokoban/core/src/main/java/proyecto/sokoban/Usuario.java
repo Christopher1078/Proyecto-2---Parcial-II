@@ -1,32 +1,39 @@
 package proyecto.sokoban;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 public class Usuario implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private String username;
     private String password;
     private String nombreCompleto;
+
     private Idioma idioma;
     private GeneroAvatar genero;
+
     private LocalDate fechaRegistro;
     private LocalDate ultimaSesion;
+
     private int nivelesCompletados;
     private int nivelActual;
     private int partidasJugadas;
+
     private boolean[] nivelesDesbloqueados;
-    private boolean cuentaDeshabilitada;
+
     private long tiempoJugado;
     private double tiempoPromedio;
+
+    private boolean cuentaDeshabilitada;
+
     private ArrayList<String> amigos;
     private ArrayList<String> solicitudesRecibidas;
     private ArrayList<String> solicitudesEnviadas;
     private ArrayList<HistorialPartida> historial;
     private ArrayList<SolicitudDuelo> duelos;
-
-    private static final long serialVersionUID = 1L;
 
     public Usuario(String username, String password, String nombreCompleto) {
         this.username = username;
@@ -36,24 +43,26 @@ public class Usuario implements Serializable {
         fechaRegistro = LocalDate.now();
         ultimaSesion = LocalDate.now();
 
-        nivelActual = 1;
+        idioma = Idioma.ESPANOL;
+        genero = GeneroAvatar.MASCULINO;
+
         nivelesCompletados = 0;
+        nivelActual = 1;
         partidasJugadas = 0;
-        tiempoJugado = 0;
-        tiempoPromedio = 0;
 
         nivelesDesbloqueados = new boolean[5];
         nivelesDesbloqueados[0] = true;
-        cuentaDeshabilitada=false;
 
-        genero = GeneroAvatar.MASCULINO;
-        idioma = Idioma.ESPANOL;
+        tiempoJugado = 0;
+        tiempoPromedio = 0;
+
+        cuentaDeshabilitada = false;
 
         amigos = new ArrayList<>();
         solicitudesRecibidas = new ArrayList<>();
         solicitudesEnviadas = new ArrayList<>();
         historial = new ArrayList<>();
-        duelos=new ArrayList<>();
+        duelos = new ArrayList<>();
     }
 
     private void revisarDatos() {
@@ -65,12 +74,12 @@ public class Usuario implements Serializable {
             ultimaSesion = LocalDate.now();
         }
 
-        if (genero == null) {
-            genero = GeneroAvatar.MASCULINO;
-        }
-
         if (idioma == null) {
             idioma = Idioma.ESPANOL;
+        }
+
+        if (genero == null) {
+            genero = GeneroAvatar.MASCULINO;
         }
 
         if (nivelesDesbloqueados == null || nivelesDesbloqueados.length < 5) {
@@ -105,9 +114,9 @@ public class Usuario implements Serializable {
         if (historial == null) {
             historial = new ArrayList<>();
         }
-        
-        if(duelos==null){
-            duelos=new ArrayList<>();
+
+        if (duelos == null) {
+            duelos = new ArrayList<>();
         }
     }
 
@@ -160,6 +169,102 @@ public class Usuario implements Serializable {
         }
     }
 
+    public boolean isCuentaDeshabilitada() {
+        revisarDatos();
+        return cuentaDeshabilitada;
+    }
+
+    public void deshabilitar() {
+        cuentaDeshabilitada = true;
+    }
+
+    public void habilitar() {
+        cuentaDeshabilitada = false;
+    }
+
+    public void agregarDuelo(SolicitudDuelo duelo) {
+        revisarDatos();
+
+        if (duelo == null) {
+            return;
+        }
+
+        SolicitudDuelo existente = buscarDuelo(
+            duelo.getRetador(),
+            duelo.getRetado(),
+            duelo.getNivel()
+        );
+
+        if (existente == null) {
+            duelos.add(duelo);
+        }
+    }
+
+    public SolicitudDuelo buscarDuelo(String retador, String retado, int nivel) {
+        revisarDatos();
+
+        for (SolicitudDuelo duelo : duelos) {
+            if (duelo.getRetador().equals(retador)
+                && duelo.getRetado().equals(retado)
+                && duelo.getNivel() == nivel) {
+
+                return duelo;
+            }
+        }
+
+        return null;
+    }
+
+    public ArrayList<SolicitudDuelo> getDuelosPendientesAceptar(String miNombre) {
+        revisarDatos();
+
+        ArrayList<SolicitudDuelo> resultado = new ArrayList<>();
+
+        for (SolicitudDuelo duelo : duelos) {
+            if (duelo.getRetado().equals(miNombre)) {
+                resultado.add(duelo);
+            }
+        }
+
+        return resultado;
+    }
+
+    public ArrayList<SolicitudDuelo> getDuelosPorJugar(String miNombre) {
+        revisarDatos();
+
+        ArrayList<SolicitudDuelo> resultado = new ArrayList<>();
+
+        for (SolicitudDuelo duelo : duelos) {
+            if (duelo.getRetador().equals(miNombre)
+                || duelo.getRetado().equals(miNombre)) {
+
+                resultado.add(duelo);
+            }
+        }
+
+        return resultado;
+    }
+
+    public ArrayList<SolicitudDuelo> getDuelosCompetados(String miNombre) {
+        revisarDatos();
+
+        ArrayList<SolicitudDuelo> resultado = new ArrayList<>();
+
+        for (SolicitudDuelo duelo : duelos) {
+            if (duelo.getRetador().equals(miNombre)
+                || duelo.getRetado().equals(miNombre)) {
+
+                resultado.add(duelo);
+            }
+        }
+
+        return resultado;
+    }
+
+    public ArrayList<SolicitudDuelo> getDuelosCompletados(String miNombre) {
+        return getDuelosCompetados(miNombre);
+    }
+
     public String getUsername() {
         revisarDatos();
         return username;
@@ -175,6 +280,31 @@ public class Usuario implements Serializable {
         return nombreCompleto;
     }
 
+    public Idioma getIdioma() {
+        revisarDatos();
+        return idioma;
+    }
+
+    public GeneroAvatar getGenero() {
+        revisarDatos();
+        return genero;
+    }
+
+    public LocalDate getFechaRegistro() {
+        revisarDatos();
+        return fechaRegistro;
+    }
+
+    public LocalDate getUltimaSesion() {
+        revisarDatos();
+        return ultimaSesion;
+    }
+
+    public int getNivelesCompletados() {
+        revisarDatos();
+        return nivelesCompletados;
+    }
+
     public int getNivelActual() {
         revisarDatos();
         return nivelActual;
@@ -185,19 +315,9 @@ public class Usuario implements Serializable {
         return partidasJugadas;
     }
 
-    public GeneroAvatar getGenero() {
-        revisarDatos();
-        return genero;
-    }
-
     public long getTiempoJugado() {
         revisarDatos();
         return tiempoJugado;
-    }
-
-    public int getNivelesCompletados() {
-        revisarDatos();
-        return nivelesCompletados;
     }
 
     public double getTiempoPromedio() {
@@ -205,9 +325,29 @@ public class Usuario implements Serializable {
         return tiempoPromedio;
     }
 
+    public ArrayList<String> getAmigos() {
+        revisarDatos();
+        return amigos;
+    }
+
+    public ArrayList<String> getSolicitudesRecibidas() {
+        revisarDatos();
+        return solicitudesRecibidas;
+    }
+
+    public ArrayList<String> getSolicitudesEnviadas() {
+        revisarDatos();
+        return solicitudesEnviadas;
+    }
+
     public ArrayList<HistorialPartida> getHistorial() {
         revisarDatos();
         return historial;
+    }
+
+    public ArrayList<SolicitudDuelo> getDuelos() {
+        revisarDatos();
+        return duelos;
     }
 
     public String getMejorTiempo() {
@@ -231,21 +371,6 @@ public class Usuario implements Serializable {
         return minutos + "m " + segundos + "s";
     }
 
-    public ArrayList<String> getAmigos() {
-        revisarDatos();
-        return amigos;
-    }
-
-    public ArrayList<String> getSolicitudesRecibidas() {
-        revisarDatos();
-        return solicitudesRecibidas;
-    }
-
-    public ArrayList<String> getSolicitudesEnviadas() {
-        revisarDatos();
-        return solicitudesEnviadas;
-    }
-
     public void setUsername(String username) {
         this.username = username;
     }
@@ -258,20 +383,32 @@ public class Usuario implements Serializable {
         this.nombreCompleto = nombreCompleto;
     }
 
-    public void setNivelActual(int nivelActual) {
-        this.nivelActual = nivelActual;
-    }
-
-    public void setPartidasJugadas(int partidasJugadas) {
-        this.partidasJugadas = partidasJugadas;
+    public void setIdioma(Idioma idioma) {
+        this.idioma = idioma;
     }
 
     public void setGenero(GeneroAvatar genero) {
         this.genero = genero;
     }
 
+    public void setNivelActual(int nivelActual) {
+        this.nivelActual = nivelActual;
+    }
+
+    public void setNivelesCompletados(int nivelesCompletados) {
+        this.nivelesCompletados = nivelesCompletados;
+    }
+
+    public void setPartidasJugadas(int partidasJugadas) {
+        this.partidasJugadas = partidasJugadas;
+    }
+
     public void setTiempoJugado(long tiempoJugado) {
         this.tiempoJugado = tiempoJugado;
+    }
+
+    public void setCuentaDeshabilitada(boolean cuentaDeshabilitada) {
+        this.cuentaDeshabilitada = cuentaDeshabilitada;
     }
 
     public boolean isAmigo(String username) {
@@ -326,75 +463,6 @@ public class Usuario implements Serializable {
     public void eliminarSolicitudEnviada(String username) {
         revisarDatos();
         solicitudesEnviadas.remove(username);
-    }
-    
-    public boolean isCuentaDeshabilitada(){
-        return cuentaDeshabilitada;
-    }
-    
-    public void deshabilitar(){
-        cuentaDeshabilitada=true;
-    }
-    
-    public void habilitar(){
-        cuentaDeshabilitada=false;
-    }
-
-    public ArrayList<SolicitudDuelo> getDuelos(){
-        revisarDatos();
-        return duelos;
-    }
-    
-    public void agregarDuelo(SolicitudDuelo duelo){
-        revisarDatos();
-        duelos.add(duelo);
-    }
-    
-    public SolicitudDuelo buscarDuelo(String retador, String retado, int nivel){
-        revisarDatos();
-        for(SolicitudDuelo d:duelos){
-            if(d.getRetador().equals(retador) && d.getRetado().equals(retado) && d.getNivel()==nivel )
-                return d;
-        }
-        return null;
-    }
-    
-    public ArrayList<SolicitudDuelo> getDuelosPendientesAceptar(String yo){
-        revisarDatos();
-        ArrayList<SolicitudDuelo> resultado=new ArrayList<>();
-        
-        for(SolicitudDuelo d: duelos){
-            if(d.eresElRetado(yo) && d.getEstado()==SolicitudDuelo.Estado.PENDIENTE)
-                resultado.add(d);
-        }
-        return resultado;
-    }
-    
-    public ArrayList<SolicitudDuelo> getDuelosPorJugar(String yo){
-        revisarDatos();
-        ArrayList<SolicitudDuelo> resultado=new ArrayList<>();
-        
-        for(SolicitudDuelo d: duelos){
-            boolean aceptadoOPendienteComoRetador=d.getEstado()==SolicitudDuelo.Estado.ACEPTADO || (d.getEstado()==SolicitudDuelo.Estado.PENDIENTE && d.getRetador().equals(yo));
-            if(!d.yaJugo(yo) && (d.getEstado()!=SolicitudDuelo.Estado.PENDIENTE || !d.eresElRetado(yo))){
-                if(d.getRetador().equals(yo) && d.getEstado()==SolicitudDuelo.Estado.ACEPTADO)
-                    resultado.add(d);
-            }
-        }
-        
-        return resultado;
-    }
-    
-    public ArrayList<SolicitudDuelo> getDuelosCompetados(String yo){
-        revisarDatos();
-        ArrayList<SolicitudDuelo> resultado=new ArrayList<>();
-        
-        for(SolicitudDuelo d:duelos){
-            if(d.getEstado()==SolicitudDuelo.Estado.COMPLETADO)
-                resultado.add(d);
-        }
-        
-        return resultado;
     }
 
     @Override

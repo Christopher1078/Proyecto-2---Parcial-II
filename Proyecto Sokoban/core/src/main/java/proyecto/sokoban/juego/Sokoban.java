@@ -59,7 +59,7 @@ public class Sokoban extends Juego {
             if (mapaActual.estaCompletado()) {
                 nivelCompletado = true;
                 hiloTiempo.pausarNivel();
-                mensaje = "Nivel completado. Presiona ENTER para continuar.";
+                mensaje = "Nivel completado.";
             }
         } else {
             registrarFallo();
@@ -124,10 +124,6 @@ public class Sokoban extends Juego {
 
     public int getFallosTotales() {
         return fallosTotales;
-    }
-
-    public int getVidas() {
-        return 0;
     }
 
     public int getReinicios() {
