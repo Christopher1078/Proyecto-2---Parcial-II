@@ -318,6 +318,8 @@ public class GestorUsuarios {
         
         File archivo=new File("Usuarios/"+username+"/usuario.skb");
         archivo.delete();
+        File historialArchivo=new File("Usuarios/"+username+"/historial.skb");
+        historialArchivo.delete();
         File carpeta=new File("Usuarios/"+username);
         carpeta.delete();
         loggedIn=null;
@@ -334,5 +336,39 @@ public class GestorUsuarios {
                 activos.add(username);
         }
         return activos;
+    }
+    
+    public void guardarHistorial(Usuario usuario)throws IOException{
+        crearCarpetaUsuario(usuario.getUsername());
+        File archivo=new File("Usuarios/"+usuario.getUsername()+"/historial.skb");
+        ObjectOutputStream salida=new ObjectOutputStream(new FileOutputStream(archivo));
+        salida.writeObject(usuario.getHistorial());
+        salida.close();
+    }
+    
+    @SuppressWarnings("unchecked")
+    public ArrayList<HistorialPartida> cargarHistorial(String username)throws IOException, ClassNotFoundException{
+        File archivo=new File("Usuarios/"+username+"/historial.skb");
+        
+        if(!archivo.exists())
+            return new ArrayList<>();
+        
+        ObjectInputStream entrada=new ObjectInputStream(new FileInputStream(archivo));
+        ArrayList<HistorialPartida> historial=(ArrayList<HistorialPartida>)entrada.readObject();
+        entrada.close();
+        return historial;
+    }
+    
+    public void guardarUsuarioConHistorial(Usuario usuario)throws IOException, ClassNotFoundException{
+        guardarUsuario(usuario);
+        guardarHistorial(usuario);
+    }
+    
+    public void guardarUsuarioActualConHistorial(){
+        try{
+            guardarUsuarioConHistorial(loggedIn);
+        }catch(IOException | ClassNotFoundException e){
+            System.out.println("No se pudo guardar el usuario actual con su historial");
+        }
     }
 }
