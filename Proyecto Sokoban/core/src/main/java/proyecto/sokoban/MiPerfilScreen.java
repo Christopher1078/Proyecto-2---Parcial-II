@@ -2,9 +2,11 @@ package proyecto.sokoban;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -111,6 +113,66 @@ public class MiPerfilScreen implements Screen{
         table.add(statsTable).colspan(2);
         table.row();
         
+        TextButton btnDeshabilitar=new TextButton("Deshabilitar cuenta",skin);
+        TextButton btnEliminar=new TextButton("Eliminar cuenta",skin);
+        
+        btnDeshabilitar.getLabel().setColor(Color.YELLOW);
+        btnEliminar.getLabel().setColor(Color.RED);
+        
+        btnDeshabilitar.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                Dialog dialogo=new Dialog("Deshabilitar cuenta",skin){
+                    @Override
+                    protected void result(Object obj){
+                        if((boolean)obj){
+                            try{
+                                gestor.deshabilitarCuenta();
+                                game.setScreen(new FirstScreen(game,gestor));
+                            }catch(Exception e){
+                                new Dialog("Error: "+e.getMessage(),skin).button("Ok").show(stage);
+                            }
+                        }
+                    }
+                };
+                dialogo.text("Confirma que quieres deshabilitar tu cuenta");
+                dialogo.button("Cancelar",false);
+                dialogo.button("Deshabilitar",true);
+                dialogo.setMovable(false);
+                dialogo.show(stage);
+            }
+        });
+        
+        btnEliminar.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                Dialog dialogo=new Dialog("Eliminar cuenta",skin){
+                    @Override
+                    protected void result(Object obj){
+                        if((boolean) obj){
+                            try{
+                                gestor.eliminarCuenta();
+                                game.setScreen(new FirstScreen(game,gestor));
+                            }catch(Exception e){
+                                new Dialog("Error: "+e.getMessage(),skin).button("Ok").show(stage);
+                            }
+                        }
+                    }
+                };
+                dialogo.text("Borrar tu cuenta es permanente, todos tus datos se perderan, estas seguro?");
+                dialogo.button("Cancelar",false);
+                dialogo.button("Eliminar",true);
+                dialogo.setMovable(false);
+                dialogo.show(stage);
+            }
+        });
+        
+        Table botonesGestion=new Table();
+        botonesGestion.add(btnDeshabilitar).width(220).height(40).padRight(15);
+        botonesGestion.add(btnEliminar).width(200).height(40);
+        table.add(botonesGestion).padTop(10).padBottom(10).colspan(2);
+        table.row();
+        
         TextButton btnVolver=new TextButton("Volver",skin);
         btnVolver.addListener(new ClickListener(){
             @Override
@@ -119,7 +181,7 @@ public class MiPerfilScreen implements Screen{
             }
         });
         
-        table.add(btnVolver).width(200).height(40).padTop(30).colspan(2);
+        table.add(btnVolver).width(200).height(40).padTop(5).colspan(2);
         
         Gdx.input.setInputProcessor(stage);
     }

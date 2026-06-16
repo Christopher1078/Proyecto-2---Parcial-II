@@ -23,7 +23,7 @@ public class LoginScreen implements Screen{
     private final Game game;
     private Stage stage;
     private Skin skin;
-    private GestorUsuarios gestor;
+    private final GestorUsuarios gestor;
 
     public LoginScreen(Game game, GestorUsuarios gestor) {
         this.game = game;
@@ -80,35 +80,89 @@ public class LoginScreen implements Screen{
                 try{
                     if(gestor.logIn(usuario, password))
                         game.setScreen(new MenuScreen(game,gestor));
-                else{
+                     else{
                         Dialog dialog;
                         String mensaje;
                         if(usuario.isBlank() || password.isBlank()){
                             mensaje="Parametros en blanco";
-                        }
-                        else if(!gestor.existeUsuario(usuario)){
-                            mensaje="No existe este nombre de usuario";
-                        }
-                        else{
-                            mensaje="Password Incorrecto";
-                        }
-                        if(!mensaje.isBlank()){
                             dialog=new Dialog(mensaje, skin){
                                 @Override
                                 protected void result(Object obj){
                                     this.hide();
                                 }
                             };
-                            dialog.show(stage);
-                            dialog.button("Ok", true);
-                            dialog.setSize(400, 200);
-                            dialog.invalidate();
-                            dialog.pack();
+                            dialog.button("Ok",true);
                             dialog.setMovable(false);
+                            dialog.pack();
+                            dialog.show(stage);
+                        }
+                        else if(!gestor.existeUsuario(usuario)){
+                            mensaje="No existe este nombre de usuario";
+                            dialog=new Dialog(mensaje,skin){
+                                @Override
+                                protected void result(Object obj){
+                                    this.hide();
+                                }
+                            };
+                            dialog.button("Ok",true);
+                            dialog.setMovable(false);
+                            dialog.pack();
+                            dialog.show(stage);
+                        }
+                        else{
+                            try{
+                                Usuario u=gestor.buscarUsuario(usuario);
+                                if(u.isCuentaDeshabilitada() && u.getPassword().equals(password)){
+                                    Dialog dialogReactivar=new Dialog("Cuenta Deshabilitada",skin){
+                                        @Override
+                                        protected void result(Object obj){
+                                            if((boolean)obj){
+                                                try{
+                                                    gestor.reactivarCuenta(usuario, password);
+                                                    game.setScreen(new MenuScreen(game,gestor));
+                                                }catch(Exception ex){
+                                                    new Dialog("Error al reactivar: "+ex.getMessage(),skin).button("OK").show(stage);
+                                                }
+                                            }
+                                        }
+                                    };
+                                    dialogReactivar.text("Tu cuenta esta deshabilitada \nDeseas reactivarla?");
+                                    dialogReactivar.button("Cancelar",false);
+                                    dialogReactivar.button("Reactivar",true);
+                                    dialogReactivar.setMovable(false);
+                                    dialogReactivar.pack();
+                                    dialogReactivar.show(stage);
+                                }
+                                else{
+                                    mensaje="Password incorrecto";
+                                    dialog=new Dialog(mensaje,skin){
+                                        @Override
+                                        protected void result(Object obj){
+                                            this.hide();
+                                        }
+                                    };
+                                    dialog.button("Ok",true);
+                                    dialog.setMovable(false);
+                                    dialog.pack();
+                                    dialog.show(stage);
+                                }
+                            }catch(Exception ex){
+                                dialog=new Dialog("Password incorrecto",skin){
+                                    @Override
+                                    protected void result(Object obj){
+                                        this.hide();
+                                    }
+                                };
+                                dialog.button("Ok",true);
+                                dialog.setMovable(false);
+                                dialog.pack();
+                                dialog.show(stage);
+                            }
                         }
                     }
                 }catch(IOException|ClassNotFoundException e){
-                    
+                    Dialog dialog=new Dialog("Hubo un error al iniciar sesion: "+e.getMessage(),skin);
+                    dialog.show(stage);
                 } 
             }
             

@@ -17,6 +17,7 @@ public class Usuario implements Serializable {
     private int nivelActual;
     private int partidasJugadas;
     private boolean[] nivelesDesbloqueados;
+    private boolean cuentaDeshabilitada;
     private long tiempoJugado;
     private double tiempoPromedio;
     private ArrayList<String> amigos;
@@ -42,6 +43,7 @@ public class Usuario implements Serializable {
 
         nivelesDesbloqueados = new boolean[5];
         nivelesDesbloqueados[0] = true;
+        cuentaDeshabilitada=false;
 
         genero = GeneroAvatar.MASCULINO;
         idioma = Idioma.ESPANOL;
@@ -318,6 +320,18 @@ public class Usuario implements Serializable {
     public void eliminarSolicitudEnviada(String username) {
         revisarDatos();
         solicitudesEnviadas.remove(username);
+    }
+    
+    public boolean isCuentaDeshabilitada(){
+        return cuentaDeshabilitada;
+    }
+    
+    public void deshabilitar(){
+        cuentaDeshabilitada=true;
+    }
+    
+    public void habilitar(){
+        cuentaDeshabilitada=false;
     }
 
     @Override

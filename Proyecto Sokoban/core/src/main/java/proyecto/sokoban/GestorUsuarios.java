@@ -85,15 +85,13 @@ public class GestorUsuarios {
         return archivo.exists();
     }
 
-    public void crearUsuario(String username, String password, String nombreCompleto)
-        throws IOException, ClassNotFoundException {
+    public void crearUsuario(String username, String password, String nombreCompleto)throws IOException, ClassNotFoundException {
 
         Usuario usuario = new Usuario(username, password, nombreCompleto);
         guardarUsuario(usuario);
     }
 
-    public boolean logIn(String username, String password)
-        throws IOException, ClassNotFoundException {
+    public boolean logIn(String username, String password)throws IOException, ClassNotFoundException {
 
         if (!existeUsuario(username)) {
             return false;
@@ -101,7 +99,7 @@ public class GestorUsuarios {
 
         Usuario usuario = buscarUsuario(username);
 
-        if (!usuario.getPassword().equals(password)) {
+        if (!usuario.getPassword().equals(password) || usuario.isCuentaDeshabilitada()) {
             return false;
         }
 
@@ -112,8 +110,7 @@ public class GestorUsuarios {
         return true;
     }
 
-    public boolean signIn(String username, String password, String nombreCompleto)
-        throws IOException, ClassNotFoundException {
+    public boolean signIn(String username, String password, String nombreCompleto)throws IOException, ClassNotFoundException {
 
         if (existeUsuario(username) || !passwordValido(password)) {
             return false;
@@ -161,8 +158,7 @@ public class GestorUsuarios {
         return loggedIn;
     }
 
-    public String enviarSolicitudAmistad(String destinatario)
-        throws IOException, ClassNotFoundException {
+    public String enviarSolicitudAmistad(String destinatario)throws IOException, ClassNotFoundException {
 
         if (loggedIn.getUsername().equals(destinatario)) {
             return "No puedes enviarte solicitudes a ti mismo";
@@ -195,8 +191,7 @@ public class GestorUsuarios {
         return "Se envio la solicitud exitosamente";
     }
 
-    public boolean aceptarSolicitudAmistad(String remitente)
-        throws IOException, ClassNotFoundException {
+    public boolean aceptarSolicitudAmistad(String remitente)throws IOException, ClassNotFoundException {
 
         if (!loggedIn.tieneSolicitudesRecibidasDe(remitente) || !existeUsuario(remitente)) {
             return false;
@@ -216,8 +211,7 @@ public class GestorUsuarios {
         return true;
     }
 
-    public boolean rechazarSolicitudAmistad(String remitente)
-        throws IOException, ClassNotFoundException {
+    public boolean rechazarSolicitudAmistad(String remitente)throws IOException, ClassNotFoundException {
 
         if (!loggedIn.tieneSolicitudesRecibidasDe(remitente)) {
             return false;
@@ -235,8 +229,7 @@ public class GestorUsuarios {
         return true;
     }
 
-    public boolean eliminarAmigo(String amigo)
-        throws IOException, ClassNotFoundException {
+    public boolean eliminarAmigo(String amigo)throws IOException, ClassNotFoundException {
 
         if (!loggedIn.isAmigo(amigo)) {
             return false;
@@ -254,22 +247,92 @@ public class GestorUsuarios {
         return true;
     }
 
-    public ArrayList<Usuario> buscarUsuarioPorNombre(String texto)
-        throws IOException, ClassNotFoundException {
+    public ArrayList<Usuario> buscarUsuarioPorNombre(String texto)throws IOException, ClassNotFoundException {
 
         ArrayList<Usuario> resultado = new ArrayList<>();
         String textoLower = texto.toLowerCase();
 
         for (Usuario usuario : getUsuarios()) {
-            if (usuario.getUsername().equals(loggedIn.getUsername())) {
+            if (usuario.getUsername().equals(loggedIn.getUsername())) 
                 continue;
-            }
-
+            if(usuario.isCuentaDeshabilitada())
+                continue;
             if (usuario.getUsername().toLowerCase().contains(textoLower)) {
                 resultado.add(usuario);
             }
         }
 
         return resultado;
+    }
+    
+    public boolean reactivarCuenta(String username, String password)throws IOException, ClassNotFoundException{
+        if(!existeUsuario(username))
+            return false;
+        Usuario usuario=buscarUsuario(username);
+        if(!usuario.getPassword().equals(password))
+            return false;
+        usuario.habilitar();
+        usuario.iniciarSesion();
+        loggedIn=usuario;
+        guardarUsuario(usuario);
+        return true;
+    }
+    
+    public void deshabilitarCuenta()throws IOException, ClassNotFoundException{
+        if(loggedIn==null)
+            return;
+        
+        loggedIn.deshabilitar();
+        guardarUsuario(loggedIn);
+        loggedIn=null;
+    }
+    
+    public void eliminarCuenta()throws IOException, ClassNotFoundException{
+        if(loggedIn==null)
+            return;
+        String username=loggedIn.getUsername();
+        
+        for(Usuario otro: getUsuarios()){
+            if(otro.getUsername().equals(username))
+                continue;
+            boolean modificado=false;
+            
+            if(otro.isAmigo(username)){
+                otro.eliminarAmigo(username);
+                modificado=true;
+            }
+            
+            if(otro.tieneSolicitudesEnviadasA(username)){
+                otro.eliminarSolicitudEnviada(username);
+                modificado=true;
+            }
+            
+            if(otro.tieneSolicitudesRecibidasDe(username)){
+                otro.eliminarSolicitudRecibida(username);
+                modificado=true;
+            }
+            
+            if(modificado)
+                guardarUsuario(otro);
+        }
+        
+        File archivo=new File("Usuarios/"+username+"/usuario.skb");
+        archivo.delete();
+        File carpeta=new File("Usuarios/"+username);
+        carpeta.delete();
+        loggedIn=null;
+    }
+    
+    public ArrayList<String> getAmigosActivos()throws IOException, ClassNotFoundException{
+        ArrayList<String> activos=new ArrayList<>();
+        
+        for(String username: loggedIn.getAmigos()){
+            if(!existeUsuario(username))
+                continue;
+            Usuario amigo=buscarUsuario(username);
+            if(!amigo.isCuentaDeshabilitada())
+                activos.add(username);
+        }
+        return activos;
     }
 }
