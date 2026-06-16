@@ -66,6 +66,7 @@ public class MenuScreen implements Screen {
         btnConfi.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(new ConfiguracionScreen(game,gestor));
             }
         });
 
@@ -73,6 +74,7 @@ public class MenuScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 gestor.logOut();
+                MusicaManager.getInstance().detener();
                 game.setScreen(new FirstScreen(game, gestor));
             }
         });

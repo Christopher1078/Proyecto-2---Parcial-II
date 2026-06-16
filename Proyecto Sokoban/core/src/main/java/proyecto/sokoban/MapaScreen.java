@@ -100,6 +100,8 @@ public class MapaScreen extends ScreenAdapter {
     }
 
     private void leerTeclado() {
+        ConfiguracionJuego config=ConfiguracionJuego.getInstance();
+        
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             guardarPartida(false);
 
@@ -128,34 +130,34 @@ public class MapaScreen extends ScreenAdapter {
             return;
         }
 
-        if (Gdx.input.isKeyJustPressed(Input.Keys.R)) {
+        if (Gdx.input.isKeyJustPressed(config.getTeclaReiniciar())) {
             sokoban.reiniciarNivel();
             partidaGuardada = false;
             return;
         }
 
-        if (Gdx.input.isKeyJustPressed(Input.Keys.W)
+        if (Gdx.input.isKeyJustPressed(config.getTeclaArriba())
             || Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
 
             personajeActual = personajeArriba;
             sokoban.moverJugador(-1, 0);
         }
 
-        if (Gdx.input.isKeyJustPressed(Input.Keys.S)
+        if (Gdx.input.isKeyJustPressed(config.getTeclaAbajo())
             || Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) {
 
             personajeActual = personajeAbajo;
             sokoban.moverJugador(1, 0);
         }
 
-        if (Gdx.input.isKeyJustPressed(Input.Keys.A)
+        if (Gdx.input.isKeyJustPressed(config.getTeclaIzquierda())
             || Gdx.input.isKeyJustPressed(Input.Keys.LEFT)) {
 
             personajeActual = personajeIzquierda;
             sokoban.moverJugador(0, -1);
         }
 
-        if (Gdx.input.isKeyJustPressed(Input.Keys.D)
+        if (Gdx.input.isKeyJustPressed(config.getTeclaDerecha())
             || Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)) {
 
             personajeActual = personajeDerecha;
@@ -286,7 +288,9 @@ public class MapaScreen extends ScreenAdapter {
             20,
             Gdx.graphics.getHeight() - 48
         );
-
+        
+        ConfiguracionJuego config=ConfiguracionJuego.getInstance();
+        
         fuente.draw(
             batch,
             "Tiempo del nivel: "
@@ -299,7 +303,13 @@ public class MapaScreen extends ScreenAdapter {
 
         fuente.draw(
             batch,
-            "Controles: WASD o flechas | R reiniciar | ESC menu",
+            "Controles: "
+                    +ConfiguracionJuego.nombreTecla(config.getTeclaArriba())+"/"
+                    +ConfiguracionJuego.nombreTecla(config.getTeclaIzquierda())+"/"
+                    +ConfiguracionJuego.nombreTecla(config.getTeclaAbajo())+"/"
+                    +ConfiguracionJuego.nombreTecla(config.getTeclaDerecha())
+                    +" o flechas | "
+                    +ConfiguracionJuego.nombreTecla(config.getTeclaReiniciar())+" reiniciar | ESC menu",
             20,
             Gdx.graphics.getHeight() - 100
         );

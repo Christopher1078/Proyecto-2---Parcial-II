@@ -78,9 +78,11 @@ public class LoginScreen implements Screen{
                 String usuario=txtUsuario.getText();
                 String password=txtPassword.getText();
                 try{
-                    if(gestor.logIn(usuario, password))
+                    if(gestor.logIn(usuario, password)){
+                        MusicaManager.getInstance().iniciar();
                         game.setScreen(new MenuScreen(game,gestor));
-                     else{
+                    }
+                    else{
                         Dialog dialog;
                         String mensaje;
                         if(usuario.isBlank() || password.isBlank()){

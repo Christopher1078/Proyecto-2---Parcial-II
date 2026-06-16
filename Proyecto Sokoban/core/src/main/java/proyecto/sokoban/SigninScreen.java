@@ -23,7 +23,7 @@ public class SigninScreen implements Screen {
     private final Game game;
     private Stage stage;
     private Skin skin;
-    private GestorUsuarios gestor;
+    private final GestorUsuarios gestor;
     private Label lblLongitud;
     private Label lblMayuscula;
     private Label lblMinuscula;
@@ -112,8 +112,10 @@ public class SigninScreen implements Screen {
                 String password=txtPassword.getText();
                 String nombreCompleto=txtNombre.getText();
                 try {
-                    if(gestor.signIn(usuario, password, nombreCompleto))
-                    game.setScreen(new SeleccionarAvatarScreen(game,gestor));
+                    if(gestor.signIn(usuario, password, nombreCompleto)){
+                        MusicaManager.getInstance().iniciar();
+                        game.setScreen(new SeleccionarAvatarScreen(game,gestor));
+                    }
                     else {
                         Dialog dialog;
                         String mensaje="";
