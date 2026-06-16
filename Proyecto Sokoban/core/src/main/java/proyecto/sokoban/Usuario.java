@@ -24,6 +24,7 @@ public class Usuario implements Serializable {
     private ArrayList<String> solicitudesRecibidas;
     private ArrayList<String> solicitudesEnviadas;
     private ArrayList<HistorialPartida> historial;
+    private ArrayList<SolicitudDuelo> duelos;
 
     private static final long serialVersionUID = 1L;
 
@@ -52,6 +53,7 @@ public class Usuario implements Serializable {
         solicitudesRecibidas = new ArrayList<>();
         solicitudesEnviadas = new ArrayList<>();
         historial = new ArrayList<>();
+        duelos=new ArrayList<>();
     }
 
     private void revisarDatos() {
@@ -102,6 +104,10 @@ public class Usuario implements Serializable {
 
         if (historial == null) {
             historial = new ArrayList<>();
+        }
+        
+        if(duelos==null){
+            duelos=new ArrayList<>();
         }
     }
 
@@ -332,6 +338,63 @@ public class Usuario implements Serializable {
     
     public void habilitar(){
         cuentaDeshabilitada=false;
+    }
+
+    public ArrayList<SolicitudDuelo> getDuelos(){
+        revisarDatos();
+        return duelos;
+    }
+    
+    public void agregarDuelo(SolicitudDuelo duelo){
+        revisarDatos();
+        duelos.add(duelo);
+    }
+    
+    public SolicitudDuelo buscarDuelo(String retador, String retado, int nivel){
+        revisarDatos();
+        for(SolicitudDuelo d:duelos){
+            if(d.getRetador().equals(retador) && d.getRetado().equals(retado) && d.getNivel()==nivel )
+                return d;
+        }
+        return null;
+    }
+    
+    public ArrayList<SolicitudDuelo> getDuelosPendientesAceptar(String yo){
+        revisarDatos();
+        ArrayList<SolicitudDuelo> resultado=new ArrayList<>();
+        
+        for(SolicitudDuelo d: duelos){
+            if(d.eresElRetado(yo) && d.getEstado()==SolicitudDuelo.Estado.PENDIENTE)
+                resultado.add(d);
+        }
+        return resultado;
+    }
+    
+    public ArrayList<SolicitudDuelo> getDuelosPorJugar(String yo){
+        revisarDatos();
+        ArrayList<SolicitudDuelo> resultado=new ArrayList<>();
+        
+        for(SolicitudDuelo d: duelos){
+            boolean aceptadoOPendienteComoRetador=d.getEstado()==SolicitudDuelo.Estado.ACEPTADO || (d.getEstado()==SolicitudDuelo.Estado.PENDIENTE && d.getRetador().equals(yo));
+            if(!d.yaJugo(yo) && (d.getEstado()!=SolicitudDuelo.Estado.PENDIENTE || !d.eresElRetado(yo))){
+                if(d.getRetador().equals(yo) && d.getEstado()==SolicitudDuelo.Estado.ACEPTADO)
+                    resultado.add(d);
+            }
+        }
+        
+        return resultado;
+    }
+    
+    public ArrayList<SolicitudDuelo> getDuelosCompetados(String yo){
+        revisarDatos();
+        ArrayList<SolicitudDuelo> resultado=new ArrayList<>();
+        
+        for(SolicitudDuelo d:duelos){
+            if(d.getEstado()==SolicitudDuelo.Estado.COMPLETADO)
+                resultado.add(d);
+        }
+        
+        return resultado;
     }
 
     @Override

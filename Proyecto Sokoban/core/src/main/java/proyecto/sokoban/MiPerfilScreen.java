@@ -39,7 +39,7 @@ public class MiPerfilScreen implements Screen{
         stage.addActor(table);
         
         Label titulo=new Label("Mi Perfil",skin);
-        table.add(titulo).padTop(10).padBottom(10).colspan(2);
+        table.add(titulo).padTop(5).padBottom(5).colspan(2);
         table.row();
         
         String rutaAvatar=usuario.getGenero().getRuta()+"1.PNG";
@@ -66,6 +66,7 @@ public class MiPerfilScreen implements Screen{
         TextButton btnCambiarAvatar=new TextButton("Cambiar Avatar",skin);
         TextButton btnVerAmigos=new TextButton("Ver Amigos",skin);
         TextButton btnHistorial=new TextButton("Ver Historial",skin);
+        TextButton btnDuelos=new TextButton("Mis Duelos",skin);
         
         Table botonesTable=new Table();
         botonesTable.add(btnCambiarAvatar).width(180).height(40).padRight(20);
@@ -74,7 +75,11 @@ public class MiPerfilScreen implements Screen{
         table.add(botonesTable).padTop(5).padBottom(10).colspan(2);
         table.row();
         
-        table.add(btnHistorial).width(250).height(40).colspan(2);
+        Table botonesTable2=new Table();
+        botonesTable2.add(btnHistorial).width(180).height(40).padRight(20);
+        botonesTable2.add(btnDuelos).width(180).height(40);
+        
+        table.add(botonesTable2).padBottom(15).colspan(2);
         table.row();
         
         btnCambiarAvatar.addListener(new ClickListener(){
@@ -98,8 +103,15 @@ public class MiPerfilScreen implements Screen{
             }
         });
         
+        btnDuelos.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                game.setScreen(new DuelosScreen(game,gestor));
+            }
+        });
+        
         Label tituloStats=new Label("Estadisticas",skin);
-        table.add(tituloStats).padBottom(10).colspan(2);
+        table.add(tituloStats).padBottom(5).colspan(2);
         table.row();
         
         Table statsTable=new Table();
