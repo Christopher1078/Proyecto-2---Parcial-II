@@ -241,46 +241,49 @@ public class AmigosScreen implements Screen{
     private void cargarAmigos(){
         tablaAmigos.clear();
         
-        Usuario usuario=gestor.getLoggedIn();
-        ArrayList<String> amigos=usuario.getAmigos();
+        try{
+            ArrayList<String> amigos=gestor.getAmigosActivos();
         
-        if(amigos.isEmpty()){
-            tablaAmigos.add(new Label("Aun no tienes amigos",skin)).pad(5);
-            return;
-        }
+            if(amigos.isEmpty()){
+                tablaAmigos.add(new Label("Aun no tienes amigos",skin)).pad(5);
+                return;
+            }
         
-        for(String username: amigos){
-            Label lbl=new Label(username,skin);
-            TextButton btnEstadisticas=new TextButton("Estadisticas",skin);
-            TextButton btnRetar=new TextButton("Retar",skin);
-            TextButton btnEliminar=new TextButton("Eliminar",skin);
+            for(String username: amigos){
+                Label lbl=new Label(username,skin);
+                TextButton btnEstadisticas=new TextButton("Estadisticas",skin);
+                TextButton btnRetar=new TextButton("Retar",skin);
+                TextButton btnEliminar=new TextButton("Eliminar",skin);
             
-            btnEliminar.addListener(new ClickListener(){
-                @Override
-                public void clicked(InputEvent event, float x, float y){
-                    eliminarAmigo(username);
-                }
-            });
+                btnEliminar.addListener(new ClickListener(){
+                    @Override
+                    public void clicked(InputEvent event, float x, float y){
+                        eliminarAmigo(username);
+                    }
+                });
             
-            btnEstadisticas.addListener(new ClickListener(){
-                @Override
-                public void clicked(InputEvent event, float x, float y){
-                    verEstadisticas(username);
-                }
-            });
+                btnEstadisticas.addListener(new ClickListener(){
+                    @Override
+                    public void clicked(InputEvent event, float x, float y){
+                        verEstadisticas(username);
+                    }
+                });
             
-            btnRetar.addListener(new ClickListener(){
-                @Override
-                public void clicked(InputEvent event, float x, float y){
+                btnRetar.addListener(new ClickListener(){
+                    @Override
+                    public void clicked(InputEvent event, float x, float y){
                     
-                }
-            });
+                    }
+                });
             
-            tablaAmigos.add(lbl).left().padRight(20).pad(5);
-            tablaAmigos.add(btnEliminar).width(100).height(35).pad(5);
-            tablaAmigos.add(btnEstadisticas).width(110).height(35).padRight(10).pad(5);
-            tablaAmigos.add(btnRetar).width(90).height(35).padRight(10).pad(5);
-            tablaAmigos.row();
+                tablaAmigos.add(lbl).left().padRight(20).pad(5);
+                tablaAmigos.add(btnEliminar).width(100).height(35).pad(5);
+                tablaAmigos.add(btnEstadisticas).width(110).height(35).padRight(10).pad(5);
+                tablaAmigos.add(btnRetar).width(90).height(35).padRight(10).pad(5);
+                tablaAmigos.row();
+            }
+        }catch(IOException|ClassNotFoundException e){
+            tablaAmigos.add(new Label("Error al cargar amigos: "+e.getMessage(),skin)).pad(5);
         }
     }
     
