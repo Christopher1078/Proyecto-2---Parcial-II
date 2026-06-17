@@ -77,110 +77,55 @@ public class LoginScreen implements Screen{
             public void clicked(InputEvent event,float x, float y){
                 String usuario=txtUsuario.getText();
                 String password=txtPassword.getText();
+ 
+                if(usuario.isBlank() || password.isBlank()){
+                    mostrarDialog(Textos.get("login.vacio"));
+                    return;
+                }
+ 
                 try{
                     if(gestor.logIn(usuario, password)){
                         MusicaManager.getInstance().iniciar();
                         game.setScreen(new MenuScreen(game,gestor));
+                        return;
                     }
-                    else{
-                        Dialog dialog;
-                        String mensaje;
-                        if(usuario.isBlank() || password.isBlank()){
-                            mensaje=Textos.get("login.vacio");
-                            dialog=new Dialog(mensaje, skin){
-                                @Override
-                                protected void result(Object obj){
-                                    this.hide();
-                                }
-                            };
-                            dialog.button("Ok",true);
-                            dialog.setMovable(false);
-                            dialog.pack();
-                            dialog.show(stage);
-                        }
-                        else if(!gestor.existeUsuario(usuario)){
-                            mensaje=Textos.get("login.noExiste");
-                            dialog=new Dialog(mensaje,skin){
-                                @Override
-                                protected void result(Object obj){
-                                    this.hide();
-                                }
-                            };
-                            dialog.button("Ok",true);
-                            dialog.setMovable(false);
-                            dialog.pack();
-                            dialog.show(stage);
-                        }
-                        else if(!gestor.buscarUsuario(usuario).getPassword().equals(password)){
-                            mensaje=Textos.get("login.incorrecto");
-                            dialog=new Dialog(mensaje,skin){
-                                @Override
-                                protected void result(Object obj){
-                                    this.hide();
-                                }
-                            };
-                            dialog.button("Ok",true);
-                            dialog.setMovable(false);
-                            dialog.pack();
-                            dialog.show(stage);                            
-                        }
-                        else{
-                            try{
-                                Usuario u=gestor.buscarUsuario(usuario);
-                                if(u.isCuentaDeshabilitada() && u.getPassword().equals(password)){
-                                    Dialog dialogReactivar=new Dialog(Textos.get("login.deshabilitada"),skin){
-                                        @Override
-                                        protected void result(Object obj){
-                                            if((boolean)obj){
-                                                try{
-                                                    gestor.reactivarCuenta(usuario, password);
-                                                    game.setScreen(new MenuScreen(game,gestor));
-                                                }catch(Exception ex){
-                                                    new Dialog("Error: "+ex.getMessage(),skin).button("OK").show(stage);
-                                                }
-                                            }
-                                        }
-                                    };
-                                    dialogReactivar.text(Textos.get("login.reactivar"));
-                                    dialogReactivar.button(Textos.get("login.cancelar"),false);
-                                    dialogReactivar.button(Textos.get("login.reactivarBtn"),true);
-                                    dialogReactivar.setMovable(false);
-                                    dialogReactivar.pack();
-                                    dialogReactivar.show(stage);
-                                }
-                                else{
-                                    mensaje=Textos.get("");
-                                    dialog=new Dialog(mensaje,skin){
-                                        @Override
-                                        protected void result(Object obj){
-                                            this.hide();
-                                        }
-                                    };
-                                    dialog.button("Ok",true);
-                                    dialog.setMovable(false);
-                                    dialog.pack();
-                                    dialog.show(stage);
-                                }
-                            }catch(Exception ex){
-                                dialog=new Dialog(Textos.get("login.incorrecto"),skin){
-                                    @Override
-                                    protected void result(Object obj){
-                                        this.hide();
+ 
+                    if(!gestor.existeUsuario(usuario)){
+                        mostrarDialog(Textos.get("login.noExiste"));
+                        return;
+                    }
+ 
+                    Usuario u=gestor.buscarUsuario(usuario);
+ 
+                    if(u.isCuentaDeshabilitada() && u.getPassword().equals(password)){
+                        Dialog dialogReactivar=new Dialog(Textos.get("login.deshabilitada"),skin){
+                            @Override
+                            protected void result(Object obj){
+                                if((boolean)obj){
+                                    try{
+                                        gestor.reactivarCuenta(usuario, password);
+                                        MusicaManager.getInstance().iniciar();
+                                        game.setScreen(new MenuScreen(game,gestor));
+                                    }catch(Exception ex){
+                                        mostrarDialog("Error: "+ex.getMessage());
                                     }
-                                };
-                                dialog.button("Ok",true);
-                                dialog.setMovable(false);
-                                dialog.pack();
-                                dialog.show(stage);
+                                }
                             }
-                        }
+                        };
+                        dialogReactivar.text(Textos.get("login.reactivar"));
+                        dialogReactivar.button(Textos.get("login.cancelar"),false);
+                        dialogReactivar.button(Textos.get("login.reactivarBtn"),true);
+                        dialogReactivar.setMovable(false);
+                        dialogReactivar.pack();
+                        dialogReactivar.show(stage);
+                    } else {
+                        mostrarDialog(Textos.get("login.incorrecto"));
                     }
+ 
                 }catch(IOException|ClassNotFoundException e){
-                    Dialog dialog=new Dialog("Error: "+e.getMessage(),skin);
-                    dialog.show(stage);
-                } 
+                    mostrarDialog("Error: "+e.getMessage());
+                }
             }
-            
         });
         
         btnRegresar.addListener(new ClickListener(){
@@ -201,6 +146,17 @@ public class LoginScreen implements Screen{
         });
         
         Gdx.input.setInputProcessor(stage);
+    }
+ 
+    private void mostrarDialog(String mensaje){
+        Dialog dialog=new Dialog(mensaje, skin){
+            @Override
+            protected void result(Object obj){ this.hide(); }
+        };
+        dialog.button(Textos.get("comun.ok"), true);
+        dialog.setMovable(false);
+        dialog.pack();
+        dialog.show(stage);
     }
  
     @Override

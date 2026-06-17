@@ -124,26 +124,27 @@ public class GestorUsuarios {
     }
 
     public boolean passwordValido(String password) {
-        if (password == null || password.length() != 5) {
+        if (password == null || password.length() < 5) {
             return false;
         }
 
         boolean mayuscula = false;
         boolean minuscula = false;
         boolean numero = false;
+        boolean especial = false;
 
         for (char letra : password.toCharArray()) {
-            if (!mayuscula) {
+            if (!mayuscula) 
                 mayuscula = Character.isUpperCase(letra);
-            }
 
-            if (!minuscula) {
+            if (!minuscula) 
                 minuscula = Character.isLowerCase(letra);
-            }
 
-            if (!numero) {
+            if (!numero) 
                 numero = Character.isDigit(letra);
-            }
+            
+            if(!especial)
+                especial = !Character.isLetterOrDigit(letra);
         }
 
         return mayuscula && minuscula && numero;

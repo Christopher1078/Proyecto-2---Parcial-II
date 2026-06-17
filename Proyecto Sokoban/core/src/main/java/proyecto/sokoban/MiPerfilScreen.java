@@ -50,6 +50,10 @@ public class MiPerfilScreen implements Screen{
         Label lblUsuario=new Label(Textos.get("perfil.username")+usuario.getUsername(),skin);
         Label lblNombre=new Label(Textos.get("perfil.nombre")+usuario.getNombreCompleto(),skin);
         Label lblAmigos=new Label(Textos.get("perfil.amigos")+usuario.getAmigos().size(),skin);
+        Label lblFechas=new Label(
+            Textos.get("perfil.registro")+usuario.getFechaRegistro()
+            +"  |  "+Textos.get("perfil.ultimaSesion")+usuario.getUltimaSesion(),
+            skin);
         
         datosTable.add(lblUsuario).left();
         datosTable.row();
@@ -58,6 +62,9 @@ public class MiPerfilScreen implements Screen{
         datosTable.row();
         
         datosTable.add(lblAmigos).left().padTop(5);
+        datosTable.row();
+        
+        datosTable.add(lblFechas).left().padTop(5);
         
         table.add(avatar).size(100,200).padRight(30);
         table.add(datosTable).left();

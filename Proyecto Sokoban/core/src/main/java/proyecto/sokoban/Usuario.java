@@ -352,22 +352,22 @@ public class Usuario implements Serializable {
 
     public String getMejorTiempo() {
         revisarDatos();
-
+ 
         long mejor = Long.MAX_VALUE;
-
+ 
         for (HistorialPartida partida : historial) {
-            if (partida.isVictoria() && partida.getTiempo() < mejor) {
+            if (partida.isVictoria()&& partida.getNivel() == nivelesCompletados&& partida.getTiempo() < mejor) {
                 mejor = partida.getTiempo();
             }
         }
-
+ 
         if (mejor == Long.MAX_VALUE) {
             return "N/A";
         }
-
+ 
         long minutos = mejor / 60;
         long segundos = mejor % 60;
-
+ 
         return minutos + "m " + segundos + "s";
     }
 

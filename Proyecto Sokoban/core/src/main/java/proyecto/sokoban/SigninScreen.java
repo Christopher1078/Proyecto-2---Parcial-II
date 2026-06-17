@@ -28,6 +28,7 @@ public class SigninScreen implements Screen {
     private Label lblMayuscula;
     private Label lblMinuscula;
     private Label lblNumero;
+    private Label lblEspecial;
  
     public SigninScreen(Game game, GestorUsuarios gestor) {
         this.game = game;
@@ -55,6 +56,12 @@ public class SigninScreen implements Screen {
         TextField txtPassword=new TextField("",skin);
         txtPassword.setPasswordMode(true);
         txtPassword.setPasswordCharacter('*');
+        txtPassword.setMessageText("Password");
+ 
+        TextField txtConfirmar=new TextField("",skin);
+        txtConfirmar.setPasswordMode(true);
+        txtConfirmar.setPasswordCharacter('*');
+        txtConfirmar.setMessageText(Textos.get("signin.confirmar"));
         
         lblLongitud=new Label(Textos.get("signin.longitud"),skin);
         lblLongitud.setColor(Color.RED);
@@ -67,12 +74,15 @@ public class SigninScreen implements Screen {
          
         lblNumero=new Label(Textos.get("signin.numero"),skin);
         lblNumero.setColor(Color.RED);
+ 
+        lblEspecial=new Label(Textos.get("signin.especial"),skin);
+        lblEspecial.setColor(Color.RED);
         
         TextButton btnSignIn=new TextButton(Textos.get("signin.btn"),skin);
         
         TextButton btnRegresar=new TextButton(Textos.get("signin.regresar"),skin);
         
-        table.add(titulo).padBottom(40);
+        table.add(titulo).padBottom(20);
         table.row(); 
         
         table.add(txtNombre).width(250).height(40);
@@ -82,7 +92,10 @@ public class SigninScreen implements Screen {
         table.row();  
         
         table.add(txtPassword).width(250).height(40).padTop(10);
-        table.row();       
+        table.row();
+ 
+        table.add(txtConfirmar).width(250).height(40).padTop(10);
+        table.row();
         
         table.add(chkMostrar).left().padTop(5);
         table.row();
@@ -98,8 +111,11 @@ public class SigninScreen implements Screen {
         
         table.add(lblNumero).left();
         table.row();
+ 
+        table.add(lblEspecial).left();
+        table.row();
         
-        table.add(btnSignIn).width(250).height(40).padTop(20);
+        table.add(btnSignIn).width(250).height(40).padTop(15);
         table.row();
         
         table.add(btnRegresar).width(250).height(40).padTop(10);
@@ -110,45 +126,35 @@ public class SigninScreen implements Screen {
             public void clicked(InputEvent event,float x, float y){
                 String usuario=txtUsuario.getText();
                 String password=txtPassword.getText();
+                String confirmar=txtConfirmar.getText();
                 String nombreCompleto=txtNombre.getText();
-                try {
-                    if(gestor.signIn(usuario, password, nombreCompleto)){
-                        MusicaManager.getInstance().iniciar();
-                        game.setScreen(new SeleccionarAvatarScreen(game,gestor));
-                    }
-                    else {
-                        Dialog dialog;
-                        String mensaje="";
-                        if(usuario.isBlank() || password.isBlank() || nombreCompleto.isBlank()){
-                            mensaje=Textos.get("signin.vacio");
-                        }
-                        else if(gestor.existeUsuario(usuario)){
+ 
+                String mensaje="";
+ 
+                if(usuario.isBlank() || password.isBlank() || nombreCompleto.isBlank() || confirmar.isBlank()){
+                    mensaje=Textos.get("signin.vacio");
+                } else if(!password.equals(confirmar)){
+                    mensaje=Textos.get("signin.noCoincide");
+                } else if(!gestor.passwordValido(password)){
+                    mensaje=Textos.get("signin.passInvalido");
+                } else {
+                    try {
+                        if(gestor.existeUsuario(usuario)){
                             mensaje=Textos.get("signin.existe");
+                        } else if(gestor.signIn(usuario, password, nombreCompleto)){
+                            MusicaManager.getInstance().iniciar();
+                            game.setScreen(new SeleccionarAvatarScreen(game,gestor));
+                            return;
                         }
-                        else if(!gestor.passwordValido(password)){
-                            mensaje=Textos.get("signin.passInvalido");
-                        }
-                        if(!mensaje.isBlank()){
-                            dialog=new Dialog(mensaje, skin){
-                                @Override
-                                protected void result(Object obj){
-                                    this.hide();
-                                }
-                            };
-                            dialog.show(stage);
-                            dialog.button("Ok", true);
-                            dialog.setSize(400, 200);
-                            dialog.invalidate();
-                            dialog.pack();
-                            dialog.setMovable(false);
-                        }
+                    } catch(IOException | ClassNotFoundException e){
+                        mensaje="Error: "+e.getMessage();
                     }
-                } catch (IOException | ClassNotFoundException e) {
-                    Dialog dialog=new Dialog("Error: "+e.getMessage(),skin);
-                    dialog.show(stage);
+                }
+ 
+                if(!mensaje.isBlank()){
+                    mostrarDialog(mensaje);
                 }
             }
-            
         });
         
         btnRegresar.addListener(new ClickListener(){
@@ -162,51 +168,57 @@ public class SigninScreen implements Screen {
         chkMostrar.addListener(new ChangeListener(){
             @Override
             public void changed(ChangeListener.ChangeEvent event, Actor actor){
-                if(chkMostrar.isChecked())
-                    txtPassword.setPasswordMode(false);
-                else txtPassword.setPasswordMode(true);
+                boolean mostrar = chkMostrar.isChecked();
+                txtPassword.setPasswordMode(!mostrar);
+                txtConfirmar.setPasswordMode(!mostrar);
             }
         });
         
         txtPassword.addListener(new ChangeListener(){
             @Override
             public void changed(ChangeListener.ChangeEvent event, Actor actor){                
-                actualizarValidacion(txtPassword.getText());
+                actualizarValidacion(txtPassword.getText(), txtConfirmar.getText());
             }            
         });
+ 
+        txtConfirmar.addListener(new ChangeListener(){
+            @Override
+            public void changed(ChangeListener.ChangeEvent event, Actor actor){
+                actualizarValidacion(txtPassword.getText(), txtConfirmar.getText());
+            }
+        });
+ 
         Gdx.input.setInputProcessor(stage);        
     }
     
-    private void actualizarValidacion(String password){
-        boolean mayuscula=false,minuscula=false,numero=false,longitud;
+    private void actualizarValidacion(String password, String confirmar){
+        boolean mayuscula=false, minuscula=false, numero=false, longitud, especial=false;
         
-        longitud=password.length()==5;
+        longitud = password.length() >= 6;
         
         for(char letra: password.toCharArray()){
-            if(!mayuscula)
-                mayuscula=Character.isUpperCase(letra);
-            if(!minuscula)
-                minuscula=Character.isLowerCase(letra);
-            if(!numero)
-                numero=Character.isDigit(letra);
+            if(!mayuscula) mayuscula = Character.isUpperCase(letra);
+            if(!minuscula) minuscula = Character.isLowerCase(letra);
+            if(!numero)    numero    = Character.isDigit(letra);
+            if(!especial)  especial  = !Character.isLetterOrDigit(letra);
         }
  
-        if(longitud)
-            lblLongitud.setColor(Color.GREEN);
-        else lblLongitud.setColor(Color.RED);
-        
-        if(mayuscula)
-            lblMayuscula.setColor(Color.GREEN);
-        else lblMayuscula.setColor(Color.RED);
-        
-        if(minuscula)
-            lblMinuscula.setColor(Color.GREEN);
-        else lblMinuscula.setColor(Color.RED);
-        
-        if(numero)
-            lblNumero.setColor(Color.GREEN);
-        else lblNumero.setColor(Color.RED);
+        lblLongitud.setColor(longitud   ? Color.GREEN : Color.RED);
+        lblMayuscula.setColor(mayuscula ? Color.GREEN : Color.RED);
+        lblMinuscula.setColor(minuscula ? Color.GREEN : Color.RED);
+        lblNumero.setColor(numero       ? Color.GREEN : Color.RED);
+        lblEspecial.setColor(especial   ? Color.GREEN : Color.RED);
+    }
  
+    private void mostrarDialog(String mensaje){
+        Dialog dialog=new Dialog(mensaje, skin){
+            @Override
+            protected void result(Object obj){ this.hide(); }
+        };
+        dialog.button(Textos.get("comun.ok"), true);
+        dialog.setMovable(false);
+        dialog.pack();
+        dialog.show(stage);
     }
  
     @Override
