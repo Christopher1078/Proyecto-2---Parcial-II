@@ -66,6 +66,7 @@ public class MenuScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 gestor.logOut();
+                MusicaManager.getInstance().detener();                
                 game.setScreen(new FirstScreen(game, gestor));
             }
         });

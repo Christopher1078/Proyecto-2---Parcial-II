@@ -106,7 +106,7 @@ public class GestorUsuarios {
         usuario.iniciarSesion();
         loggedIn = usuario;
         guardarUsuario(usuario);
-
+        ConfiguracionJuego.cargar(username);
         return true;
     }
 
@@ -119,7 +119,7 @@ public class GestorUsuarios {
         Usuario usuario = new Usuario(username, password, nombreCompleto);
         loggedIn = usuario;
         guardarUsuario(usuario);
-
+        ConfiguracionJuego.cargar(username);
         return true;
     }
 
@@ -151,6 +151,7 @@ public class GestorUsuarios {
 
     public void logOut() {
         guardarUsuarioActual();
+        ConfiguracionJuego.limpiar();
         loggedIn = null;
     }
 
@@ -275,6 +276,7 @@ public class GestorUsuarios {
         usuario.iniciarSesion();
         loggedIn=usuario;
         guardarUsuario(usuario);
+        ConfiguracionJuego.cargar(username);
         return true;
     }
     
@@ -284,6 +286,7 @@ public class GestorUsuarios {
         
         loggedIn.deshabilitar();
         guardarUsuario(loggedIn);
+        ConfiguracionJuego.limpiar();
         loggedIn=null;
     }
     
@@ -320,8 +323,11 @@ public class GestorUsuarios {
         archivo.delete();
         File historialArchivo=new File("Usuarios/"+username+"/historial.skb");
         historialArchivo.delete();
+        File configArchivo=new File("Usuarios/"+username+"/config.skb");
+        configArchivo.delete();
         File carpeta=new File("Usuarios/"+username);
         carpeta.delete();
+        ConfiguracionJuego.limpiar();
         loggedIn=null;
     }
     

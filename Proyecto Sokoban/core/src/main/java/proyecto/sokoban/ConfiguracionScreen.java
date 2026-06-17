@@ -69,6 +69,7 @@ public class ConfiguracionScreen implements Screen{
                 float v = sliderVol.getValue();
                 MusicaManager.getInstance().setVolumen(v);
                 lblVolPorcentaje.setText(porcentaje(v));
+                config.guardar(gestor.getLoggedIn().getUsername());
             }
         });
  
@@ -124,9 +125,9 @@ public class ConfiguracionScreen implements Screen{
  
         Table ctrlTable = new Table();
  
-        lblArriba    = new Label(ConfiguracionJuego.nombreTecla(config.getTeclaArriba()),    skin);
-        lblAbajo     = new Label(ConfiguracionJuego.nombreTecla(config.getTeclaAbajo()),     skin);
-        lblIzquierda = new Label(ConfiguracionJuego.nombreTecla(config.getTeclaIzquierda()), skin);
+        lblArriba    = new Label(ConfiguracionJuego.nombreTecla(config.getTeclaArriba()),skin);
+        lblAbajo     = new Label(ConfiguracionJuego.nombreTecla(config.getTeclaAbajo()),skin);
+        lblIzquierda = new Label(ConfiguracionJuego.nombreTecla(config.getTeclaIzquierda()),skin);
         lblDerecha   = new Label(ConfiguracionJuego.nombreTecla(config.getTeclaDerecha()),   skin);
         lblReiniciar = new Label(ConfiguracionJuego.nombreTecla(config.getTeclaReiniciar()), skin);
  
