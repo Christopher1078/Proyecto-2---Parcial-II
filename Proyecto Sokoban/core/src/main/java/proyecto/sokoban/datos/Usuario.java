@@ -3,7 +3,8 @@ package proyecto.sokoban.datos;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
-public class Usuario implements Serializable {
+import proyecto.sokoban.utilidad.Estadistico;
+public class Usuario implements Serializable, Estadistico {
 
     private static final long serialVersionUID = 1L;
 
@@ -302,6 +303,7 @@ public class Usuario implements Serializable {
         return ultimaSesion;
     }
 
+    @Override
     public int getNivelesCompletados() {
         revisarDatos();
         return nivelesCompletados;
@@ -312,6 +314,7 @@ public class Usuario implements Serializable {
         return nivelActual;
     }
 
+    @Override
     public int getPartidasJugadas() {
         revisarDatos();
         return partidasJugadas;
@@ -322,6 +325,7 @@ public class Usuario implements Serializable {
         return tiempoJugado;
     }
 
+    @Override
     public double getTiempoPromedio() {
         revisarDatos();
         return tiempoPromedio;
@@ -352,6 +356,7 @@ public class Usuario implements Serializable {
         return duelos;
     }
 
+    @Override
     public String getMejorTiempo() {
         revisarDatos();
  
