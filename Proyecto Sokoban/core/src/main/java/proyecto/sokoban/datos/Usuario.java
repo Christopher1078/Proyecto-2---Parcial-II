@@ -155,7 +155,7 @@ public class Usuario implements Serializable, Estadistico {
         }
     }
 
-    public void registrarPartida(int nivel, int movimientos, long tiempo, boolean victoria) {
+    final public void registrarPartida(int nivel, int movimientos, long tiempo, boolean victoria) {
         revisarDatos();
 
         partidasJugadas++;
@@ -357,7 +357,7 @@ public class Usuario implements Serializable, Estadistico {
     }
 
     @Override
-    public String getMejorTiempo() {
+    final public String getMejorTiempo() {
         revisarDatos();
  
         long mejor = Long.MAX_VALUE;
