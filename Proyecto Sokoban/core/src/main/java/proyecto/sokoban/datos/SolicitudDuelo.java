@@ -1,4 +1,4 @@
-package proyecto.sokoban;
+package proyecto.sokoban.datos;
 import java.io.Serializable;
 import java.time.LocalDate;
 public class SolicitudDuelo implements Serializable {

@@ -1,4 +1,4 @@
-package proyecto.sokoban;
+package proyecto.sokoban.screens;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -18,6 +18,11 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import java.io.IOException;
 import com.badlogic.gdx.graphics.Color;
+import proyecto.sokoban.datos.ConfiguracionJuego;
+import proyecto.sokoban.datos.GestorUsuarios;
+import proyecto.sokoban.datos.Idioma;
+import proyecto.sokoban.utilidad.MusicaManager;
+import proyecto.sokoban.utilidad.Textos;
 public class SigninScreen implements Screen {
     
     private final Game game;

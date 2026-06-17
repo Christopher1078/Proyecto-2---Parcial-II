@@ -1,4 +1,4 @@
-package proyecto.sokoban;
+package proyecto.sokoban.datos;
 public enum GeneroAvatar {
     MASCULINO("Avatares/Avatar1_pos"),
     FEMENINO("Avatares/Avatar2_pos");

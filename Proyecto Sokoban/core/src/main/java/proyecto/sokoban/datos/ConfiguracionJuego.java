@@ -1,4 +1,4 @@
-package proyecto.sokoban;
+package proyecto.sokoban.datos;
 import com.badlogic.gdx.Input;
 import java.io.File;
 import java.io.FileInputStream;

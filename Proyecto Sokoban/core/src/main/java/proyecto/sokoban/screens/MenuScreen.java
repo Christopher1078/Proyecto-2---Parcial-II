@@ -1,4 +1,4 @@
-package proyecto.sokoban;
+package proyecto.sokoban.screens;
  
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -12,6 +12,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import proyecto.sokoban.datos.GestorUsuarios;
+import proyecto.sokoban.utilidad.MusicaManager;
+import proyecto.sokoban.utilidad.Textos;
  
 public class MenuScreen implements Screen {
  

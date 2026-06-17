@@ -1,4 +1,8 @@
-package proyecto.sokoban;
+package proyecto.sokoban.utilidad;
+
+import proyecto.sokoban.datos.ConfiguracionJuego;
+import proyecto.sokoban.datos.Idioma;
+
 public class Textos {
 
     private Textos() {}

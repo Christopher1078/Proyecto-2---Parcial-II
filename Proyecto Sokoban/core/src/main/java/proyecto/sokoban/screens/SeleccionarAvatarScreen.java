@@ -1,4 +1,4 @@
-package proyecto.sokoban;
+package proyecto.sokoban.screens;
  
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -16,6 +16,10 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import java.io.IOException;
+import proyecto.sokoban.datos.GeneroAvatar;
+import proyecto.sokoban.datos.GestorUsuarios;
+import proyecto.sokoban.datos.Usuario;
+import proyecto.sokoban.utilidad.Textos;
  
 public class SeleccionarAvatarScreen implements Screen {
  

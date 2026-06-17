@@ -1,6 +1,7 @@
-package proyecto.sokoban;
+package proyecto.sokoban.utilidad;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
+import proyecto.sokoban.datos.ConfiguracionJuego;
 public class MusicaManager {
 
     private static MusicaManager instancia;

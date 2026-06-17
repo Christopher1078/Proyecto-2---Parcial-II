@@ -1,4 +1,4 @@
-package proyecto.sokoban;
+package proyecto.sokoban.screens;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -15,6 +15,9 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import java.io.IOException;
 import java.util.ArrayList;
+import proyecto.sokoban.datos.GestorUsuarios;
+import proyecto.sokoban.datos.Usuario;
+import proyecto.sokoban.utilidad.Textos;
 public class RankingScreen implements Screen{
  
     private final Game game;
