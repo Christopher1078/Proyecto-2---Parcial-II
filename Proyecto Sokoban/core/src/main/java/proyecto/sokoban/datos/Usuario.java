@@ -463,6 +463,51 @@ public class Usuario implements Serializable {
         revisarDatos();
         solicitudesEnviadas.remove(username);
     }
+    
+    public String getTiempoPromedioPorNivel(int nivel){
+        revisarDatos();
+        
+        long suma=0;
+        int count=0;
+        
+        for(HistorialPartida p: historial){
+            if(p.isVictoria() && p.getNivel()==nivel){
+                suma += p.getTiempo();
+                count++;
+            }
+        }
+        
+        if(count==0)
+            return "N/A";
+        
+        long promedio=suma/count;
+        long minutos=promedio/60;
+        long segundos=promedio%60;
+        
+        return String.format("%02d:%02d", minutos, segundos);
+    }
+    
+    public String getTiempoPromedioGlobal(){
+        revisarDatos();
+        
+        long suma=0;
+        int count=0;
+        
+        for(HistorialPartida p: historial){
+            if(p.isVictoria()){
+                suma+=p.getTiempo();
+                count++;
+            }
+        }
+        
+        if(count==0)
+            return "N/A";
+        
+        long promedio=suma/count;
+        long minutos=promedio/60;
+        long segundos=promedio%60;
+        return String.format("%02d:%02d", minutos, segundos);
+    }
 
     @Override
     public String toString() {

@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import proyecto.sokoban.datos.GestorUsuarios;
 import proyecto.sokoban.datos.HistorialPartida;
+import proyecto.sokoban.datos.Usuario;
 import proyecto.sokoban.utilidad.Textos;
  
 public class HistoriaScreen implements Screen {
@@ -103,6 +104,22 @@ public class HistoriaScreen implements Screen {
  
         root.add(scroll).width(600).expandY().fillY().padBottom(15);
         root.row();
+        
+        Table promedioTable = new Table();
+        promedioTable.add(new Label(Textos.get("historial.promedioTitulo"), skin))
+                .colspan(10).padBottom(5);
+        promedioTable.row();
+ 
+        Usuario usuario = gestor.getLoggedIn();
+        int totalNiveles = 5;
+        for (int n = 1; n <= totalNiveles; n++) {
+            String promedio = usuario.getTiempoPromedioPorNivel(n);
+            Label lbl = new Label(Textos.get("historial.nivel") + " " + n + ": " + promedio, skin);
+            promedioTable.add(lbl).padRight(25);
+        }
+ 
+        root.add(promedioTable).padBottom(10);
+        root.row();        
  
         TextButton btnVolver = new TextButton(Textos.get("historial.volver"), skin);
         btnVolver.addListener(new ClickListener() {

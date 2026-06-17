@@ -2,7 +2,6 @@ package proyecto.sokoban.screens;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -67,7 +66,7 @@ public class MiPerfilScreen implements Screen{
         
         datosTable.add(lblFechas).left().padTop(5);
         
-        table.add(avatar).size(100,200).padRight(30);
+        table.add(avatar).size(100,200).padRight(30).padLeft(200);
         table.add(datosTable).left();
         table.row();
         
@@ -132,13 +131,16 @@ public class MiPerfilScreen implements Screen{
         statsTable.add(new Label(Textos.get("perfil.partidas")+usuario.getPartidasJugadas(),skin)).left();
         statsTable.row();
         
-        statsTable.add(new Label(Textos.get("perfil.niveles")+usuario.getNivelesCompletados(),skin)).left().padTop(5);
+        statsTable.add(new Label(Textos.get("perfil.niveles")+usuario.getNivelesCompletados(),skin)).left();
         statsTable.row();
         
-        statsTable.add(new Label(Textos.get("perfil.tiempoTotal")+tiempoTotal,skin)).left().padTop(5);
+        statsTable.add(new Label(Textos.get("perfil.tiempoTotal")+tiempoTotal,skin)).left();
         statsTable.row();
         
-        statsTable.add(new Label(Textos.get("perfil.mejorTiempo")+usuario.getMejorTiempo(),skin)).left().padTop(5);
+        statsTable.add(new Label(Textos.get("perfil.mejorTiempo")+usuario.getMejorTiempo(),skin)).left();
+        statsTable.row();
+ 
+        statsTable.add(new Label(Textos.get("perfil.tiempoPromedio")+usuario.getTiempoPromedioGlobal(),skin)).left();
         statsTable.row();
                 
         table.add(statsTable).colspan(2);

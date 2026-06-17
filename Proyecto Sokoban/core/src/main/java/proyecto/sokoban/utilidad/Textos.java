@@ -193,6 +193,8 @@ public class Textos {
                 return "Usuario cambiado correctamente";
             case "perfil.ok.password":     
                 return "Password cambiado correctamente";
+            case "perfil.tiempoPromedio":   
+                return "Tiempo promedio: ";                
                 
             case "amigos.titulo":           
                 return "Amigos";
@@ -309,25 +311,27 @@ public class Textos {
             case "duelos.tiempoRival":      
                 return "Tiempo rival: ";
  
-            case "historial.titulo":        
-                return "Historial de Partidas";
-            case "historial.fecha":         
+        case "historial.titulo":        
+            return "Historial de Partidas";
+            case "historial.fecha":     
                 return "Fecha";
-            case "historial.nivel":         
+            case "historial.nivel":      
                 return "Nivel";
-            case "historial.resultado":     
+            case "historial.resultado":   
                 return "Resultado";
-            case "historial.movimientos":   
+            case "historial.movimientos": 
                 return "Movimientos";
-            case "historial.tiempo":        
+            case "historial.tiempo":      
                 return "Tiempo";
-            case "historial.vacio":         
+            case "historial.vacio":        
                 return "Aun no has jugado ninguna partida.";
-            case "historial.victoria":      
+            case "historial.victoria":    
                 return "Victoria";
             case "historial.intento":       
                 return "Intento";
-            case "historial.volver":        
+            case "historial.promedioTitulo":
+                return "Tiempo promedio por nivel:";
+            case "historial.volver":     
                 return "Volver";
  
             case "ranking.titulo":          
@@ -568,17 +572,17 @@ public class Textos {
             case "avatar.regresar":     
                 return "Back";
  
-            case "perfil.titulo":           
+            case "perfil.titulo":          
                 return "My Profile";
-            case "perfil.username":       
+            case "perfil.username":        
                 return "Username: ";
-            case "perfil.nombre":         
+            case "perfil.nombre":        
                 return "Name: ";
-            case "perfil.amigos":         
+            case "perfil.amigos":        
                 return "Friends: ";
             case "perfil.cambiarAvatar":  
                 return "Change Avatar";
-            case "perfil.verAmigos":      
+            case "perfil.verAmigos":     
                 return "View Friends";
             case "perfil.historial":      
                 return "Match History";
@@ -588,55 +592,57 @@ public class Textos {
                 return "Statistics";
             case "perfil.partidas":       
                 return "Matches played: ";
-            case "perfil.niveles":         
+            case "perfil.niveles":        
                 return "Levels completed: ";
             case "perfil.tiempoTotal":    
                 return "Total time: ";
-            case "perfil.mejorTiempo":      
+            case "perfil.mejorTiempo":     
                 return "Best time: ";
+            case "perfil.tiempoPromedio":  
+                return "Avg time: ";
             case "perfil.registro":         
                 return "Registered: ";
             case "perfil.ultimaSesion":    
                 return "Last session: ";
-            case "perfil.deshabilitar":     
+            case "perfil.deshabilitar":    
                 return "Disable account";
-            case "perfil.eliminar":         
+            case "perfil.eliminar":       
                 return "Delete account";
-            case "perfil.volver":           
+            case "perfil.volver":          
                 return "Back";
-            case "perfil.deshabConfirm":    
+            case "perfil.deshabConfirm":   
                 return "Your account will be disabled.\nYou won't be able to log in until you reactivate it.\n\nConfirm?";
-            case "perfil.elimConfirm":      
+            case "perfil.elimConfirm":     
                 return "This action is PERMANENT.\nAll your data will be deleted.\n\nAre you sure?";
-            case "perfil.confirmarBtn":    
+            case "perfil.confirmarBtn":   
                 return "Confirm";
             case "perfil.cancelarBtn":     
                 return "Cancel";
-            case "perfil.deshabBtn":        
+            case "perfil.deshabBtn":       
                 return "Disable";
-            case "perfil.elimBtn":          
+            case "perfil.elimBtn":         
                 return "Delete";
-            case "perfil.cambiarUsername":  
+            case "perfil.cambiarUsername": 
                 return "Change username";
-            case "perfil.cambiarPassword": 
+            case "perfil.cambiarPassword":  
                 return "Change password";
-            case "perfil.usernameActual":  
+            case "perfil.usernameActual":   
                 return "New username:";
-            case "perfil.passActual":      
+            case "perfil.passActual":       
                 return "Current password:";
             case "perfil.passNuevo":      
                 return "New password:";
-            case "perfil.passConfirmar":   
+            case "perfil.passConfirmar":  
                 return "Confirm password:";
-            case "perfil.cambiarBtn":      
+            case "perfil.cambiarBtn":     
                 return "Change";
-            case "perfil.err.vacio":       
+            case "perfil.err.vacio":      
                 return "Fields cannot be blank";
             case "perfil.err.existe":      
                 return "That username already exists";
             case "perfil.err.incorrecto":  
                 return "Current password is incorrect";
-            case "perfil.err.invalido":    
+            case "perfil.err.invalido":     
                 return "New password does not meet requirements";
             case "perfil.err.noCoincide":  
                 return "Passwords do not match";
@@ -762,15 +768,15 @@ public class Textos {
  
             case "historial.titulo":      
                 return "Match History";
-            case "historial.fecha":        
+            case "historial.fecha":      
                 return "Date";
             case "historial.nivel":       
                 return "Level";
             case "historial.resultado":    
                 return "Result";
-            case "historial.movimientos":  
+            case "historial.movimientos": 
                 return "Moves";
-            case "historial.tiempo":       
+            case "historial.tiempo":      
                 return "Time";
             case "historial.vacio":       
                 return "You haven't played any match yet.";
@@ -778,7 +784,9 @@ public class Textos {
                 return "Victory";
             case "historial.intento":     
                 return "Attempt";
-            case "historial.volver":      
+            case "historial.promedioTitulo": 
+                return "Average time per level:";
+            case "historial.volver":       
                 return "Back";
  
             case "ranking.titulo":         
