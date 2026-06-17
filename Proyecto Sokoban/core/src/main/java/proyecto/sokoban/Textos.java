@@ -358,6 +358,9 @@ public class Textos {
                 return "Ok";
             case "comun.error":             
                 return "Error";
+            case "comun.idioma":          
+                return "EN";
+                
                 
             case "mapa.titulo":            
                 return "SOKOBAN | Nivel ";
@@ -778,6 +781,8 @@ public class Textos {
                 return "Ok";
             case "comun.error":             
                 return "Error";
+            case "comun.idioma":  
+                return "ES";
                 
             case "mapa.titulo":            
                 return "SOKOBAN | Level ";

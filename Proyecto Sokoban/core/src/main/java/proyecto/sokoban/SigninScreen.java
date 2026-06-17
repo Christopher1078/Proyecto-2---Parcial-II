@@ -29,6 +29,7 @@ public class SigninScreen implements Screen {
     private Label lblMinuscula;
     private Label lblNumero;
     private Label lblEspecial;
+    private Label lblConfirmar;
  
     public SigninScreen(Game game, GestorUsuarios gestor) {
         this.game = game;
@@ -38,9 +39,25 @@ public class SigninScreen implements Screen {
     @Override
     public void show() {
         stage=new Stage(new ScreenViewport());
-        skin=new Skin(Gdx.files.internal("uiskin.json"));        
+        skin=new Skin(Gdx.files.internal("uiskin.json"));
         CheckBox chkMostrar=new CheckBox("  "+Textos.get("login.mostrar"),skin);
-        
+ 
+        Table cornerTable=new Table();
+        cornerTable.setFillParent(true);
+        cornerTable.top().right();
+        stage.addActor(cornerTable);
+ 
+        TextButton btnIdioma=new TextButton(Textos.get("comun.idioma"),skin);
+        btnIdioma.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                ConfiguracionJuego config=ConfiguracionJuego.getInstance();
+                config.setIdioma(config.getIdioma()==Idioma.ESPANOL ? Idioma.INGLES : Idioma.ESPANOL);
+                game.setScreen(new SigninScreen(game,gestor));
+            }
+        });
+        cornerTable.add(btnIdioma).width(60).height(35).pad(10);
+ 
         Table table=new Table();
         table.setFillParent(true);
         stage.addActor(table);
@@ -77,6 +94,10 @@ public class SigninScreen implements Screen {
  
         lblEspecial=new Label(Textos.get("signin.especial"),skin);
         lblEspecial.setColor(Color.RED);
+ 
+        lblConfirmar=new Label(Textos.get("signin.noCoincide"),skin);
+        lblConfirmar.setColor(Color.RED);
+        lblConfirmar.setVisible(false);
         
         TextButton btnSignIn=new TextButton(Textos.get("signin.btn"),skin);
         
@@ -113,6 +134,9 @@ public class SigninScreen implements Screen {
         table.row();
  
         table.add(lblEspecial).left();
+        table.row();
+ 
+        table.add(lblConfirmar).left();
         table.row();
         
         table.add(btnSignIn).width(250).height(40).padTop(15);
@@ -208,6 +232,17 @@ public class SigninScreen implements Screen {
         lblMinuscula.setColor(minuscula ? Color.GREEN : Color.RED);
         lblNumero.setColor(numero       ? Color.GREEN : Color.RED);
         lblEspecial.setColor(especial   ? Color.GREEN : Color.RED);
+ 
+        if(!confirmar.isEmpty()){
+            boolean coinciden = password.equals(confirmar);
+            lblConfirmar.setColor(coinciden ? Color.GREEN : Color.RED);
+            lblConfirmar.setText(coinciden
+                ? Textos.get("signin.confirmar") + " ✓"
+                : Textos.get("signin.noCoincide"));
+            lblConfirmar.setVisible(true);
+        } else {
+            lblConfirmar.setVisible(false);
+        }
     }
  
     private void mostrarDialog(String mensaje){

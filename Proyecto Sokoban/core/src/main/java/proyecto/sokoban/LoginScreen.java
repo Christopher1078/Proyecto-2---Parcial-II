@@ -34,9 +34,25 @@ public class LoginScreen implements Screen{
     @Override
     public void show() {
         stage=new Stage(new ScreenViewport());
-        skin=new Skin(Gdx.files.internal("uiskin.json"));       
-        CheckBox chkMostrar=new CheckBox("  "+Textos.get("login.mostrar"),skin);        
-        
+        skin=new Skin(Gdx.files.internal("uiskin.json"));
+        CheckBox chkMostrar=new CheckBox("  "+Textos.get("login.mostrar"),skin);
+ 
+        Table cornerTable=new Table();
+        cornerTable.setFillParent(true);
+        cornerTable.top().right();
+        stage.addActor(cornerTable);
+ 
+        TextButton btnIdioma=new TextButton(Textos.get("comun.idioma"),skin);
+        btnIdioma.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                ConfiguracionJuego config=ConfiguracionJuego.getInstance();
+                config.setIdioma(config.getIdioma()==Idioma.ESPANOL ? Idioma.INGLES : Idioma.ESPANOL);
+                game.setScreen(new LoginScreen(game,gestor));
+            }
+        });
+        cornerTable.add(btnIdioma).width(60).height(35).pad(10);
+ 
         Table table=new Table();
         table.setFillParent(true);
         stage.addActor(table);
