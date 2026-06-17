@@ -199,22 +199,45 @@ public class DueloScreen extends ScreenAdapter{
     private void dibujarHud() {
         int h = Gdx.graphics.getHeight();
         String rival = duelo.getRival(gestor.getLoggedIn().getUsername());
-        String rolTexto = esRetado ? "Retado por: " + duelo.getRetador(): "Retaste a: " + rival;
+        String rolTexto = esRetado
+                ? Textos.get("duelo.hud.retadoPor") + duelo.getRetador()
+                : Textos.get("duelo.hud.retastea")  + rival;
  
-        fuente.draw(batch, "DUELO | Nivel " + duelo.getNivel() + " | " + rolTexto, 20, h - 22);
-        fuente.draw(batch, "Movimientos: " + sokoban.getMovimientosNivel()+ " | Tiempo: " + sokoban.getTiempoNivelFormateado(), 20, h - 48);
+        fuente.draw(batch,
+                Textos.get("duelo.hud.titulo") + duelo.getNivel() + " | " + rolTexto,
+                20, h - 22);
+ 
+        fuente.draw(batch,
+                Textos.get("duelo.hud.movimientos") + sokoban.getMovimientosNivel()
+                + Textos.get("duelo.hud.tiempo")    + sokoban.getTiempoNivelFormateado(),
+                20, h - 48);
  
         long tiempoRival = esRetado ? -1 : duelo.getTiempoRetado();
         if (tiempoRival >= 0) {
-            fuente.draw(batch, "Tiempo de " + rival + ": "
+            fuente.draw(batch,
+                    Textos.get("duelo.hud.tiempoRival") + rival + ": "
                     + SolicitudDuelo.formatearTiempo(tiempoRival)
-                    + "  (supéralo!)", 20, h - 74);
+                    + Textos.get("duelo.hud.superalo"),
+                    20, h - 74);
         } else {
-            fuente.draw(batch, rival + " aun no ha jugado.", 20, h - 74);
+            fuente.draw(batch,
+                    rival + Textos.get("duelo.hud.noJugo"),
+                    20, h - 74);
         }
  
-        fuente.draw(batch, "Controles: WASD o flechas | R reiniciar | ESC salir", 20, h - 100);
-        fuente.draw(batch, sokoban.getMensaje()/*+ (sokoban.isNivelCompletado() ? "  Presiona ENTER para continuar." : "")*/, 20, h - 126);
+        ConfiguracionJuego config = ConfiguracionJuego.getInstance();
+        fuente.draw(batch,
+                Textos.get("duelo.hud.controles")
+                + ConfiguracionJuego.nombreTecla(config.getTeclaArriba())   + "/"
+                + ConfiguracionJuego.nombreTecla(config.getTeclaIzquierda())+ "/"
+                + ConfiguracionJuego.nombreTecla(config.getTeclaAbajo())    + "/"
+                + ConfiguracionJuego.nombreTecla(config.getTeclaDerecha())
+                + Textos.get("duelo.hud.oFlechas")
+                + ConfiguracionJuego.nombreTecla(config.getTeclaReiniciar())
+                + Textos.get("duelo.hud.reiniciarEsc"),
+                20, h - 100);
+ 
+        fuente.draw(batch, sokoban.getMensaje(), 20, h - 126);
     }
  
     @Override

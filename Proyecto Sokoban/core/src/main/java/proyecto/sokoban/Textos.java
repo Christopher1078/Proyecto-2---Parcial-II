@@ -211,8 +211,8 @@ public class Textos {
             case "amigos.enNivel":
                 return "en nivel ";  
             case "amigos.yaEnviada":
-                return "Ya hay una solicitud enviada";                
- 
+                return "Ya hay una solicitud enviada";                  
+                
             case "estAmigo.titulo":         
                 return "Comparar estadisticas";
             case "estAmigo.columna":        
@@ -348,7 +348,41 @@ public class Textos {
                 return "Ok";
             case "comun.error":             
                 return "Error";
+                
+            case "mapa.titulo":             return "SOKOBAN | Nivel ";
+            case "mapa.de":                 return " de ";
+            case "mapa.movimientos":        return "Movimientos: ";
+            case "mapa.fallos":             return " | Fallos: ";
+            case "mapa.reinicios":          return " | Reinicios: ";
+            case "mapa.tiempoNivel":        return "Tiempo del nivel: ";
+            case "mapa.tiempoTotal":        return " | Tiempo total: ";
+            case "mapa.controles":          return "Controles: ";
+            case "mapa.oFlechas":           return " o flechas | ";
+            case "mapa.reiniciarTecla":     return " reiniciar | ESC menu";
  
+            case "victoria.titulo":         return "Victoria";
+            case "victoria.juegoCompleto":  return "Felicidades, terminaste el juego";
+            case "victoria.nivel":          return "Nivel completado: ";
+            case "victoria.movimientos":    return "Movimientos: ";
+            case "victoria.tiempo":         return "Tiempo: ";
+            case "victoria.reinicios":      return "Reinicios: ";
+            case "victoria.siguiente":      return "Siguiente nivel";
+            case "victoria.volverMenu":     return "Volver al menu principal";
+            case "victoria.repetir":        return "Repetir nivel";
+            case "victoria.menuNiveles":    return "Menu de niveles";
+            
+            case "duelo.hud.titulo":        return "DUELO | Nivel ";
+            case "duelo.hud.retadoPor":     return "Retado por: ";
+            case "duelo.hud.retastea":      return "Retaste a: ";
+            case "duelo.hud.movimientos":   return "Movimientos: ";
+            case "duelo.hud.tiempo":        return " | Tiempo: ";
+            case "duelo.hud.tiempoRival":   return "Tiempo de ";
+            case "duelo.hud.superalo":      return "  (superalo!)";
+            case "duelo.hud.noJugo":        return " aun no ha jugado.";
+            case "duelo.hud.controles":     return "Controles: ";
+            case "duelo.hud.oFlechas":      return " o flechas | ";
+            case "duelo.hud.reiniciarEsc":  return " reiniciar | ESC salir";            
+            
             default: return "?" + clave + "?";
         }
     }
@@ -556,7 +590,7 @@ public class Textos {
             case "amigos.enNivel":
                 return "in level ";
             case "amigos.yaEnviada":
-                return "You already have a request sent";
+                return "You already have a request sent";             
  
             case "estAmigo.titulo":   
                 return "Compare Statistics";
@@ -693,6 +727,40 @@ public class Textos {
                 return "Ok";
             case "comun.error":             
                 return "Error";
+                
+            case "mapa.titulo":             return "SOKOBAN | Level ";
+            case "mapa.de":                 return " of ";
+            case "mapa.movimientos":        return "Moves: ";
+            case "mapa.fallos":             return " | Fails: ";
+            case "mapa.reinicios":          return " | Restarts: ";
+            case "mapa.tiempoNivel":        return "Level time: ";
+            case "mapa.tiempoTotal":        return " | Total time: ";
+            case "mapa.controles":          return "Controls: ";
+            case "mapa.oFlechas":           return " or arrows | ";
+            case "mapa.reiniciarTecla":     return " restart | ESC menu";
+ 
+            case "victoria.titulo":         return "Victory";
+            case "victoria.juegoCompleto":  return "Congratulations, you finished the game!";
+            case "victoria.nivel":          return "Level completed: ";
+            case "victoria.movimientos":    return "Moves: ";
+            case "victoria.tiempo":         return "Time: ";
+            case "victoria.reinicios":      return "Restarts: ";
+            case "victoria.siguiente":      return "Next level";
+            case "victoria.volverMenu":     return "Back to main menu";
+            case "victoria.repetir":        return "Replay level";
+            case "victoria.menuNiveles":    return "Level select";       
+            
+            case "duelo.hud.titulo":        return "DUEL | Level ";
+            case "duelo.hud.retadoPor":     return "Challenged by: ";
+            case "duelo.hud.retastea":      return "You challenged: ";
+            case "duelo.hud.movimientos":   return "Moves: ";
+            case "duelo.hud.tiempo":        return " | Time: ";
+            case "duelo.hud.tiempoRival":   return "Time of ";
+            case "duelo.hud.superalo":      return "  (beat it!)";
+            case "duelo.hud.noJugo":        return " hasn't played yet.";
+            case "duelo.hud.controles":     return "Controls: ";
+            case "duelo.hud.oFlechas":      return " or arrows | ";
+            case "duelo.hud.reiniciarEsc":  return " restart | ESC exit";            
  
             default: return "?" + clave + "?";
         }

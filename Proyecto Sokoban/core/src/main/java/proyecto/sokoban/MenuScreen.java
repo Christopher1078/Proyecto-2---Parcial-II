@@ -15,8 +15,8 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
  
 public class MenuScreen implements Screen {
  
-    private Game game;
-    private GestorUsuarios gestor;
+    private final Game game;
+    private final GestorUsuarios gestor;
     private Stage stage;
     private Skin skin;
  
@@ -55,6 +55,13 @@ public class MenuScreen implements Screen {
                 game.setScreen(new MiPerfilScreen(game, gestor));
             }
         });
+        
+        btnRanking.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(new RankingScreen(game, gestor));
+            }
+        });        
  
         btnConfi.addListener(new ClickListener() {
             @Override
@@ -79,6 +86,9 @@ public class MenuScreen implements Screen {
         table.row();
  
         table.add(btnMiPerfil).width(250).height(40).padTop(20);
+        table.row();
+        
+        table.add(btnRanking).width(250).height(40).padTop(20);
         table.row();
  
         table.add(btnConfi).width(250).height(40).padTop(20);

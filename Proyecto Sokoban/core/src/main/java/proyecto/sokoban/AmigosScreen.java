@@ -346,7 +346,7 @@ public class AmigosScreen implements Screen{
         botonesNivel.add(btnAleatorio).width(110).height(35).pad(5);
         
         dialogo.getContentTable().add(botonesNivel).padBottom(10);
-        dialogo.button("Textos.get(\"amigos.retoCancelar\")");
+        dialogo.button(Textos.get("amigos.retoCancelar"));
         dialogo.setMovable(false);
         dialogo.show(stage);
     }

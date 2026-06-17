@@ -282,53 +282,54 @@ public class MapaScreen extends ScreenAdapter {
     private void dibujarInformacion() {
         fuente.draw(
             batch,
-            "SOKOBAN | Nivel "
+            Textos.get("mapa.titulo")
                 + (sokoban.getNivelActual() + 1)
-                + " de "
+                + Textos.get("mapa.de")
                 + sokoban.getCantidadNiveles()
                 + " | "
                 + sokoban.getNombreNivelActual(),
             20,
             Gdx.graphics.getHeight() - 22
         );
-
+ 
         fuente.draw(
             batch,
-            "Movimientos: "
+            Textos.get("mapa.movimientos")
                 + sokoban.getMovimientosNivel()
-                + " | Fallos: "
+                + Textos.get("mapa.fallos")
                 + sokoban.getFallosNivel()
-                + " | Reinicios: "
+                + Textos.get("mapa.reinicios")
                 + sokoban.getReinicios(),
             20,
             Gdx.graphics.getHeight() - 48
         );
-
+ 
         fuente.draw(
             batch,
-            "Tiempo del nivel: "
+            Textos.get("mapa.tiempoNivel")
                 + sokoban.getTiempoNivelFormateado()
-                + " | Tiempo total: "
+                + Textos.get("mapa.tiempoTotal")
                 + sokoban.getTiempoPartidaFormateado(),
             20,
             Gdx.graphics.getHeight() - 74
         );
-
+ 
         ConfiguracionJuego config=ConfiguracionJuego.getInstance();
-        
+ 
         fuente.draw(
             batch,
-            "Controles: "
-                    +ConfiguracionJuego.nombreTecla(config.getTeclaArriba())+"/"
-                    +ConfiguracionJuego.nombreTecla(config.getTeclaIzquierda())+"/"
-                    +ConfiguracionJuego.nombreTecla(config.getTeclaAbajo())+"/"
-                    +ConfiguracionJuego.nombreTecla(config.getTeclaDerecha())
-                    +" o flechas | "
-                    +ConfiguracionJuego.nombreTecla(config.getTeclaReiniciar())+" reiniciar | ESC menu",
+            Textos.get("mapa.controles")
+                + ConfiguracionJuego.nombreTecla(config.getTeclaArriba()) + "/"
+                + ConfiguracionJuego.nombreTecla(config.getTeclaIzquierda()) + "/"
+                + ConfiguracionJuego.nombreTecla(config.getTeclaAbajo()) + "/"
+                + ConfiguracionJuego.nombreTecla(config.getTeclaDerecha())
+                + Textos.get("mapa.oFlechas")
+                + ConfiguracionJuego.nombreTecla(config.getTeclaReiniciar())
+                + Textos.get("mapa.reiniciarTecla"),
             20,
             Gdx.graphics.getHeight() - 100
         );
-
+ 
         fuente.draw(
             batch,
             sokoban.getMensaje(),

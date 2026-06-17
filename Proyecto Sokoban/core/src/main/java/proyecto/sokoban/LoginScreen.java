@@ -111,6 +111,19 @@ public class LoginScreen implements Screen{
                             dialog.pack();
                             dialog.show(stage);
                         }
+                        else if(!gestor.buscarUsuario(usuario).getPassword().equals(password)){
+                            mensaje=Textos.get("login.incorrecto");
+                            dialog=new Dialog(mensaje,skin){
+                                @Override
+                                protected void result(Object obj){
+                                    this.hide();
+                                }
+                            };
+                            dialog.button("Ok",true);
+                            dialog.setMovable(false);
+                            dialog.pack();
+                            dialog.show(stage);                            
+                        }
                         else{
                             try{
                                 Usuario u=gestor.buscarUsuario(usuario);
@@ -123,7 +136,7 @@ public class LoginScreen implements Screen{
                                                     gestor.reactivarCuenta(usuario, password);
                                                     game.setScreen(new MenuScreen(game,gestor));
                                                 }catch(Exception ex){
-                                                    new Dialog("Error al reactivar: "+ex.getMessage(),skin).button("OK").show(stage);
+                                                    new Dialog("Error: "+ex.getMessage(),skin).button("OK").show(stage);
                                                 }
                                             }
                                         }
