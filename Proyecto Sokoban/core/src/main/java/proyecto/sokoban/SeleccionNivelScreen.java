@@ -16,8 +16,8 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
  
 public class SeleccionNivelScreen implements Screen {
  
-    private Game game;
-    private GestorUsuarios gestor;
+    private final Game game;
+    private final GestorUsuarios gestor;
     private Stage stage;
     private Skin skin;
  

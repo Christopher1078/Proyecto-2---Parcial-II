@@ -18,7 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 public class ConfiguracionScreen implements Screen{
-
+ 
     private final Game game;
     private final GestorUsuarios gestor;
     private Stage stage;
@@ -48,10 +48,10 @@ public class ConfiguracionScreen implements Screen{
         table.top();
         stage.addActor(table);
  
-        table.add(new Label("Configuracion", skin)).padTop(15).padBottom(25);
+        table.add(new Label(Textos.get("config.titulo"), skin)).padTop(15).padBottom(25);
         table.row();
  
-        table.add(new Label("Volumen", skin)).padBottom(8);
+        table.add(new Label(Textos.get("config.volumen"), skin)).padBottom(8);
         table.row();
  
         Table volTable = new Table();
@@ -97,12 +97,12 @@ public class ConfiguracionScreen implements Screen{
         table.add(volTable).padBottom(25);
         table.row();
  
-        table.add(new Label("Idioma", skin)).padBottom(8);
+        table.add(new Label(Textos.get("config.idioma"), skin)).padBottom(8);
         table.row();
  
         Table idiomaTable = new Table();
         Label lblIdiomaActual = new Label(nombreIdioma(config.getIdioma()), skin);
-        TextButton btnCambiarIdioma = new TextButton("Cambiar", skin);
+        TextButton btnCambiarIdioma = new TextButton(Textos.get("config.cambiar"), skin);
  
         btnCambiarIdioma.addListener(new ClickListener() {
             @Override
@@ -120,22 +120,22 @@ public class ConfiguracionScreen implements Screen{
         table.add(idiomaTable).padBottom(25);
         table.row();
  
-        table.add(new Label("Controles", skin)).padBottom(8);
+        table.add(new Label(Textos.get("config.controles"), skin)).padBottom(8);
         table.row();
  
         Table ctrlTable = new Table();
  
-        lblArriba    = new Label(ConfiguracionJuego.nombreTecla(config.getTeclaArriba()),skin);
-        lblAbajo     = new Label(ConfiguracionJuego.nombreTecla(config.getTeclaAbajo()),skin);
-        lblIzquierda = new Label(ConfiguracionJuego.nombreTecla(config.getTeclaIzquierda()),skin);
+        lblArriba    = new Label(ConfiguracionJuego.nombreTecla(config.getTeclaArriba()),    skin);
+        lblAbajo     = new Label(ConfiguracionJuego.nombreTecla(config.getTeclaAbajo()),     skin);
+        lblIzquierda = new Label(ConfiguracionJuego.nombreTecla(config.getTeclaIzquierda()), skin);
         lblDerecha   = new Label(ConfiguracionJuego.nombreTecla(config.getTeclaDerecha()),   skin);
         lblReiniciar = new Label(ConfiguracionJuego.nombreTecla(config.getTeclaReiniciar()), skin);
  
-        agregarFilaControl(ctrlTable, "Arriba:",     lblArriba,    ARRIBA);
-        agregarFilaControl(ctrlTable, "Abajo:",      lblAbajo,     ABAJO);
-        agregarFilaControl(ctrlTable, "Izquierda:",  lblIzquierda, IZQUIERDA);
-        agregarFilaControl(ctrlTable, "Derecha:",    lblDerecha,   DERECHA);
-        agregarFilaControl(ctrlTable, "Reiniciar:",  lblReiniciar, REINICIAR);
+        agregarFilaControl(ctrlTable, Textos.get("config.arriba"),     lblArriba,    ARRIBA);
+        agregarFilaControl(ctrlTable, Textos.get("config.abajo"),      lblAbajo,     ABAJO);
+        agregarFilaControl(ctrlTable, Textos.get("config.izquierda"),  lblIzquierda, IZQUIERDA);
+        agregarFilaControl(ctrlTable, Textos.get("config.derecha"),    lblDerecha,   DERECHA);
+        agregarFilaControl(ctrlTable, Textos.get("config.reiniciar"),  lblReiniciar, REINICIAR);
  
         table.add(ctrlTable).padBottom(25);
         table.row();
@@ -145,7 +145,7 @@ public class ConfiguracionScreen implements Screen{
         table.add(lblError).padBottom(10);
         table.row();
  
-        TextButton btnVolver = new TextButton("Volver", skin);
+        TextButton btnVolver = new TextButton(Textos.get("config.volver"), skin);
         btnVolver.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -171,7 +171,7 @@ public class ConfiguracionScreen implements Screen{
                 String conflicto=buscarConflicto(reasignando, keycode);
                 
                 if(conflicto!=null){
-                    lblError.setText("La tecla '"+ConfiguracionJuego.nombreTecla(keycode)+"' ya esta asignada a: "+conflicto);
+                    lblError.setText(Textos.get("config.teclaDuplicada")+ConfiguracionJuego.nombreTecla(keycode)+Textos.get("config.yaAsignada")+conflicto);
                     reasignando=-1;
                     actualizarLabels();
                     return true;
@@ -190,13 +190,13 @@ public class ConfiguracionScreen implements Screen{
     }
  
     private void agregarFilaControl(Table tabla, String nombre, Label lblTecla, int accion) {
-        TextButton btnReasignar = new TextButton("Reasignar", skin);
+        TextButton btnReasignar = new TextButton(Textos.get("config.reasignar"), skin);
  
         btnReasignar.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 reasignando = accion;
-                lblTecla.setText("Presiona una tecla...");
+                lblTecla.setText(Textos.get("config.presionaTecla"));
             }
         });
  
@@ -241,26 +241,26 @@ public class ConfiguracionScreen implements Screen{
     }
  
     private String nombreIdioma(Idioma idioma) {
-        return idioma == Idioma.ESPANOL ? "Espanol" : "English";
+        return Textos.get("config.idiomaActual");
     }
     
     private String buscarConflicto(int accionActual, int keyCode){
         ConfiguracionJuego config=ConfiguracionJuego.getInstance();
         
         if(accionActual!=ARRIBA && config.getTeclaArriba()==keyCode)
-            return "Arriba";
+            return Textos.get("config.arriba");
         
         if(accionActual!=ABAJO && config.getTeclaAbajo()==keyCode)
-            return "Abajo";
+            return Textos.get("config.abajo");
         
         if(accionActual!=IZQUIERDA && config.getTeclaIzquierda()==keyCode)
-            return "Izquierda";
+            return Textos.get("config.izquierda");
         
         if(accionActual!=DERECHA && config.getTeclaDerecha()==keyCode)
-            return "Derecha";
+            return Textos.get("config.derecha");
         
         if(accionActual!=REINICIAR && config.getTeclaReiniciar()==keyCode)
-            return "Reiniciar";
+            return Textos.get("config.reiniciar");
         return null;
     }
  
