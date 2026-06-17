@@ -20,13 +20,13 @@ public class EstadisticasAmigoScreen implements Screen{
     private final Usuario amigo;
     private Stage stage;
     private Skin skin;
-
+ 
     public EstadisticasAmigoScreen(Game game, GestorUsuarios gestor, Usuario amigo) {
         this.game = game;
         this.gestor = gestor;
         this.amigo = amigo;
     }
-
+ 
     @Override
     public void show() {
         stage=new Stage(new ScreenViewport());
@@ -38,21 +38,21 @@ public class EstadisticasAmigoScreen implements Screen{
         table.top();
         stage.addActor(table);
         
-        Label titulo=new Label("Comparar estadisticas",skin);
+        Label titulo=new Label(Textos.get("estAmigo.titulo"),skin);
         table.add(titulo).padTop(15).padBottom(20).colspan(3);
         table.row();
         
-        table.add(new Label("Estadistica",skin)).left().padRight(30).padBottom(10);
-        table.add(new Label("Tu ("+yo.getUsername()+")",skin)).padRight(30).padBottom(10);
+        table.add(new Label(Textos.get("estAmigo.columna"),skin)).left().padRight(30).padBottom(10);
+        table.add(new Label(Textos.get("estAmigo.tu")+yo.getUsername()+")",skin)).padRight(30).padBottom(10);
         table.add(new Label(amigo.getUsername(),skin)).padBottom(10);
         table.row();
         
-        agregarFila(table, "Partidas jugadas", String.valueOf(yo.getPartidasJugadas()),String.valueOf(amigo.getPartidasJugadas()));
-        agregarFila(table, "Niveles completados",String.valueOf(yo.getNivelesCompletados()),String.valueOf(amigo.getNivelesCompletados()));
-        agregarFila(table, "Tiempo total", formatearTiempoTotal(yo.getTiempoJugado()), formatearTiempoTotal(amigo.getTiempoJugado()));
-        agregarFila(table, "Mejor tiempo", yo.getMejorTiempo(), amigo.getMejorTiempo());
+        agregarFila(table, Textos.get("estAmigo.partidas"), String.valueOf(yo.getPartidasJugadas()),String.valueOf(amigo.getPartidasJugadas()));
+        agregarFila(table, Textos.get("estAmigo.niveles"),String.valueOf(yo.getNivelesCompletados()),String.valueOf(amigo.getNivelesCompletados()));
+        agregarFila(table, Textos.get("estAmigo.tiempoTotal"), formatearTiempoTotal(yo.getTiempoJugado()), formatearTiempoTotal(amigo.getTiempoJugado()));
+        agregarFila(table, Textos.get("estAmigo.mejorTiempo"), yo.getMejorTiempo(), amigo.getMejorTiempo());
         
-        TextButton btnRetar=new TextButton("Retar a duelo",skin);
+        TextButton btnRetar=new TextButton(Textos.get("estAmigo.retar"),skin);
         btnRetar.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y){
@@ -62,7 +62,7 @@ public class EstadisticasAmigoScreen implements Screen{
         table.add(btnRetar).width(220).height(40).padTop(30).colspan(3);
         table.row();
         
-        TextButton btnVolver=new TextButton("Volver",skin);
+        TextButton btnVolver=new TextButton(Textos.get("estAmigo.volver"),skin);
         btnVolver.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y){
@@ -90,13 +90,13 @@ public class EstadisticasAmigoScreen implements Screen{
     }
     
     private void mostrarDialogoNivel(){
-        Dialog dialogo=new Dialog("Elegir el nivel del duelo",skin);
-        dialogo.getContentTable().add(new Label("En que nivel quieres retar a "+amigo.getUsername()+"?",skin)).padTop(10).padBottom(10).padLeft(15).padRight(15);
+        Dialog dialogo=new Dialog(Textos.get("estAmigo.elegir"),skin);
+        dialogo.getContentTable().add(new Label(Textos.get("amigos.elegirNivel")+amigo.getUsername()+"?",skin)).padTop(10).padBottom(10).padLeft(15).padRight(15);
         
         Table botonesNivel=new Table();
         for(int n=1;n<=5;n++){
             final int nivel=n;
-            TextButton btn=new TextButton("Nivel "+n,skin);
+            TextButton btn=new TextButton(Textos.get("amigos.btnNivel")+n,skin);
             btn.addListener(new ClickListener(){
                 @Override
                 public void clicked(InputEvent event, float x, float y){
@@ -107,7 +107,7 @@ public class EstadisticasAmigoScreen implements Screen{
             botonesNivel.add(btn).width(100).height(35).pad(5);
         }
         
-        TextButton btnAleatorio=new TextButton("Aleatorio",skin);
+        TextButton btnAleatorio=new TextButton(Textos.get("amigos.nivelAleatorio"),skin);
         btnAleatorio.addListener(new ClickListener(){
            @Override
            public void clicked(InputEvent event, float x, float y){
@@ -118,7 +118,7 @@ public class EstadisticasAmigoScreen implements Screen{
         botonesNivel.add(btnAleatorio).width(110).height(35).pad(5);
         
         dialogo.getContentTable().add(botonesNivel).padBottom(10);
-        dialogo.button("Cancelar");
+        dialogo.button(Textos.get("amigos.retoCancelar"));
         dialogo.setMovable(false);
         dialogo.show(stage);
     }
@@ -126,36 +126,36 @@ public class EstadisticasAmigoScreen implements Screen{
     private void enviarReto(int nivel){
         try{
             String resultado=gestor.enviarRetoDuelo(amigo.getUsername(), nivel);
-            String msg=resultado.equals("OK")?"Reto enviado a "+amigo.getUsername()+" en Nivel "+nivel:resultado;
+            String msg=resultado.equals("OK")?Textos.get("amigos.enviado")+amigo.getUsername()+Textos.get("amigos.enNivel")+nivel:resultado;
             new Dialog("Duelo",skin).text(msg).button("Ok").show(stage);
         }catch(Exception e){
             new Dialog("Error",skin).text(e.getMessage()).button("Ok").show(stage);
         }
     }
-
+ 
     @Override
     public void render(float f) {
         ScreenUtils.clear(0,0,0,1);
         stage.act(f);
         stage.draw();
     }
-
+ 
     @Override
     public void resize(int i, int i1) {
     }
-
+ 
     @Override
     public void pause() {
     }
-
+ 
     @Override
     public void resume() {
     }
-
+ 
     @Override
     public void hide() {
     }
-
+ 
     @Override
     public void dispose() {
         stage.dispose();

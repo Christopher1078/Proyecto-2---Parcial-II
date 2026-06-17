@@ -16,7 +16,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import java.io.IOException;
 import java.util.ArrayList;
 public class RankingScreen implements Screen{
-
+ 
     private final Game game;
     private final GestorUsuarios gestor;
     private Stage stage;
@@ -42,13 +42,13 @@ public class RankingScreen implements Screen{
         table.top();
         stage.addActor(table);
  
-        Label titulo = new Label("Ranking", skin);
+        Label titulo = new Label(Textos.get("ranking.titulo"), skin);
         table.add(titulo).padTop(15).padBottom(20);
         table.row();
  
         Table tabs = new Table();
-        btnTabGlobal = new TextButton("Global", skin);
-        btnTabAmigos = new TextButton("Amigos", skin);
+        btnTabGlobal = new TextButton(Textos.get("ranking.global"), skin);
+        btnTabAmigos = new TextButton(Textos.get("ranking.amigos"), skin);
  
         btnTabGlobal.addListener(new ClickListener() {
             @Override
@@ -89,7 +89,7 @@ public class RankingScreen implements Screen{
         table.add(scroll).width(620).expandY().fillY().padBottom(15);
         table.row();
  
-        TextButton btnVolver = new TextButton("Volver", skin);
+        TextButton btnVolver = new TextButton(Textos.get("ranking.volver"), skin);
         btnVolver.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -123,16 +123,16 @@ public class RankingScreen implements Screen{
             ArrayList<Usuario> lista = tabGlobal? gestor.getRankingGlobal(): gestor.getRankingAmigos();
  
             if (lista.isEmpty()) {
-                tablaRanking.add(new Label("No hay jugadores para mostrar.", skin)).colspan(6).pad(20);
+                tablaRanking.add(new Label(Textos.get("ranking.vacio"), skin)).colspan(6).pad(20);
                 return;
             }
  
-            agregarEncabezado("#",            50);
-            agregarEncabezado("Usuario",      150);
-            agregarEncabezado("Niveles",      90);
-            agregarEncabezado("Mejor tiempo", 120);
-            agregarEncabezado("Partidas",     90);
-            agregarEncabezado("Tiempo total", 120);
+            agregarEncabezado(Textos.get("ranking.col.pos"),            50);
+            agregarEncabezado(Textos.get("ranking.col.usuario"),      150);
+            agregarEncabezado(Textos.get("ranking.col.niveles"),      90);
+            agregarEncabezado(Textos.get("ranking.col.mejor"), 120);
+            agregarEncabezado(Textos.get("ranking.col.partidas"),     90);
+            agregarEncabezado(Textos.get("ranking.col.total"), 120);
             tablaRanking.row();
  
             tablaRanking.add(new Label("--------------------------------------------------------------"+ "--------------------", skin)).colspan(6).padBottom(6);
@@ -190,14 +190,14 @@ public class RankingScreen implements Screen{
             }
  
         } catch (IOException | ClassNotFoundException e) {
-            lblError.setText("Error al cargar el ranking: " + e.getMessage());
+            lblError.setText("Error: " + e.getMessage());
         }
     }
  
     private void agregarEncabezado(String texto, int ancho) {
         Label lbl = new Label(texto, skin);
         lbl.setColor(Color.LIGHT_GRAY);
-        tablaRanking.add(lbl).width(ancho).left().padRight(texto.equals("#") ? 5 : 10).padBottom(4);
+        tablaRanking.add(lbl).width(ancho).left().padRight(texto.equals(Textos.get("ranking.col.pos")) ? 5 : 10).padBottom(4);
     }
  
     private String formatearTiempoTotal(long segundos) {

@@ -1,4 +1,5 @@
 package proyecto.sokoban;
+ 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -15,8 +16,9 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import java.io.IOException;
 import java.util.ArrayList;
+ 
 public class HistoriaScreen implements Screen {
-
+ 
     private final Game game;
     private final GestorUsuarios gestor;
     private Stage stage;
@@ -25,30 +27,30 @@ public class HistoriaScreen implements Screen {
     public HistoriaScreen(Game game, GestorUsuarios gestor) {
         this.game = game;
         this.gestor = gestor;
-    }    
-    
+    }
+ 
     @Override
     public void show() {
-     stage = new Stage(new ScreenViewport());
+        stage = new Stage(new ScreenViewport());
         skin = new Skin(Gdx.files.internal("uiskin.json"));
  
-        Table table = new Table();
-        table.setFillParent(true);
-        table.top();
-        stage.addActor(table);
+        Table root = new Table();
+        root.setFillParent(true);
+        root.top();
+        stage.addActor(root);
  
-        Label titulo = new Label("Historial de Partidas", skin);
-        table.add(titulo).padTop(15).padBottom(20);
-        table.row();
+        Label titulo = new Label(Textos.get("historial.titulo"), skin);
+        root.add(titulo).padTop(15).padBottom(20);
+        root.row();
  
         Table tablaHistorial = new Table();
         tablaHistorial.top();
  
-        tablaHistorial.add(new Label("Fecha", skin)).left().padRight(20).padBottom(8);
-        tablaHistorial.add(new Label("Nivel", skin)).padRight(20).padBottom(8);
-        tablaHistorial.add(new Label("Resultado", skin)).padRight(20).padBottom(8);
-        tablaHistorial.add(new Label("Movimientos", skin)).padRight(20).padBottom(8);
-        tablaHistorial.add(new Label("Tiempo", skin)).padBottom(8);
+        tablaHistorial.add(new Label(Textos.get("historial.fecha"), skin)).left().padRight(20).padBottom(8);
+        tablaHistorial.add(new Label(Textos.get("historial.nivel"), skin)).padRight(20).padBottom(8);
+        tablaHistorial.add(new Label(Textos.get("historial.resultado"), skin)).padRight(20).padBottom(8);
+        tablaHistorial.add(new Label(Textos.get("historial.movimientos"), skin)).padRight(20).padBottom(8);
+        tablaHistorial.add(new Label(Textos.get("historial.tiempo"), skin)).padBottom(8);
         tablaHistorial.row();
  
         tablaHistorial.add(
@@ -65,15 +67,15 @@ public class HistoriaScreen implements Screen {
  
         if (historial.isEmpty()) {
             tablaHistorial.add(
-                new Label("Aun no has jugado ninguna partida.", skin)
+                new Label(Textos.get("historial.vacio"), skin)
             ).colspan(5).padTop(10);
         } else {
             for (int i = historial.size() - 1; i >= 0; i--) {
                 HistorialPartida partida = historial.get(i);
  
                 Label lblFecha       = new Label(partida.getFecha().toString(), skin);
-                Label lblNivel       = new Label("Nivel " + partida.getNivel(), skin);
-                Label lblResultado   = new Label(partida.isVictoria() ? "Victoria" : "Intento", skin);
+                Label lblNivel       = new Label(Textos.get("nivel.nivel") + partida.getNivel(), skin);
+                Label lblResultado   = new Label(partida.isVictoria() ? Textos.get("historial.victoria") : Textos.get("historial.intento"), skin);
                 Label lblMovimientos = new Label(String.valueOf(partida.getMovimientos()), skin);
                 Label lblTiempo      = new Label(partida.getTiempoFormateado(), skin);
  
@@ -96,10 +98,10 @@ public class HistoriaScreen implements Screen {
         scroll.setFadeScrollBars(false);
         scroll.setScrollingDisabled(true, false);
  
-        table.add(scroll).width(600).expandY().fillY().padBottom(15);
-        table.row();
+        root.add(scroll).width(600).expandY().fillY().padBottom(15);
+        root.row();
  
-        TextButton btnVolver = new TextButton("Volver", skin);
+        TextButton btnVolver = new TextButton(Textos.get("historial.volver"), skin);
         btnVolver.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -107,36 +109,34 @@ public class HistoriaScreen implements Screen {
             }
         });
  
-        table.add(btnVolver).width(200).height(40).padBottom(20);
+        root.add(btnVolver).width(200).height(40).padBottom(20);
  
-        Gdx.input.setInputProcessor(stage);        
+        Gdx.input.setInputProcessor(stage);
     }
-
+ 
     @Override
-    public void render(float f) {
-        ScreenUtils.clear(0,0,0,1);
-        stage.act();
+    public void render(float delta) {
+        ScreenUtils.clear(0, 0, 0, 1);
+        stage.act(delta);
         stage.draw();
     }
-
+ 
     @Override
-    public void resize(int i, int i1) {
-        stage.getViewport().update(i, i1, true);
+    public void resize(int width, int height) {
+        stage.getViewport().update(width, height, true);
     }
-
+ 
     @Override
-    public void pause() {
-    }
-
+    public void pause() {}
+ 
     @Override
-    public void resume() {
-    }
-
+    public void resume() {}
+ 
     @Override
     public void hide() {
         Gdx.input.setInputProcessor(null);
     }
-
+ 
     @Override
     public void dispose() {
         stage.dispose();

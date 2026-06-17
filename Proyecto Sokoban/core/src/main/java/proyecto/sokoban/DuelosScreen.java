@@ -15,7 +15,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import java.util.ArrayList;
 public class DuelosScreen implements Screen {
-
+ 
     private final Game game;
     private final GestorUsuarios gestor;
     private Stage stage;
@@ -36,25 +36,25 @@ public class DuelosScreen implements Screen {
         table.top();
         stage.addActor(table);
  
-        Label titulo = new Label("Duelos", skin);
+        Label titulo = new Label(Textos.get("duelos.titulo"), skin);
         table.add(titulo).padTop(15).padBottom(20);
         table.row();
  
         Usuario yo = gestor.getLoggedIn();
         String miNombre = yo.getUsername();
  
-        table.add(new Label("Retos recibidos", skin)).padBottom(8);
+        table.add(new Label(Textos.get("duelos.retosRecibidos"), skin)).padBottom(8);
         table.row();
  
         Table tablaPendientes = new Table();
         ArrayList<SolicitudDuelo> pendientes = yo.getDuelosPendientesAceptar(miNombre);
  
         if (pendientes.isEmpty()) {
-            tablaPendientes.add(new Label("No tienes retos pendientes.", skin)).pad(5);
+            tablaPendientes.add(new Label(Textos.get("duelos.sinRetos"), skin)).pad(5);
         } else {
             for (SolicitudDuelo d : pendientes) {
-                Label lbl = new Label(d.getRetador() + "  |  Nivel " + d.getNivel(), skin);
-                TextButton btnJugar = new TextButton("Aceptar y jugar", skin);
+                Label lbl = new Label(d.getRetador() + "  |  "+Textos.get("duelos.nivel")+" " + d.getNivel(), skin);
+                TextButton btnJugar = new TextButton(Textos.get("duelos.aceptarJugar"), skin);
  
                 btnJugar.addListener(new ClickListener() {
                     @Override
@@ -74,21 +74,21 @@ public class DuelosScreen implements Screen {
         table.add(scrollPendientes).width(500).height(110).padBottom(20);
         table.row();
  
-        table.add(new Label("Tu turno de jugar", skin)).padBottom(8);
+        table.add(new Label(Textos.get("duelos.tuTurno"), skin)).padBottom(8);
         table.row();
  
         Table tablaTuTurno = new Table();
         ArrayList<SolicitudDuelo> porJugar = yo.getDuelosPorJugar(miNombre);
  
         if (porJugar.isEmpty()) {
-            tablaTuTurno.add(new Label("No hay duelos esperando tu turno.", skin)).pad(5);
+            tablaTuTurno.add(new Label(Textos.get("duelos.sinTurno"), skin)).pad(5);
         } else {
             for (SolicitudDuelo d : porJugar) {
                 String rival = d.getRival(miNombre);
                 String tiempoRival = SolicitudDuelo.formatearTiempo(d.getTiempoRetado());
-                Label lbl = new Label(rival + "  |  Nivel " + d.getNivel()
-                        + "  |  Tiempo rival: " + tiempoRival, skin);
-                TextButton btnJugar = new TextButton("Jugar", skin);
+                Label lbl = new Label(rival + "  |  "+Textos.get("duelos.nivel")+" " + d.getNivel()
+                        + "  |  "+Textos.get("duelos.tiempoRival")+" " + tiempoRival, skin);
+                TextButton btnJugar = new TextButton(Textos.get("duelos.jugar"), skin);
  
                 btnJugar.addListener(new ClickListener() {
                     @Override
@@ -108,14 +108,14 @@ public class DuelosScreen implements Screen {
         table.add(scrollTuTurno).width(500).height(110).padBottom(20);
         table.row();
  
-        table.add(new Label("Resultados", skin)).padBottom(8);
+        table.add(new Label(Textos.get("duelos.resultados"), skin)).padBottom(8);
         table.row();
  
         Table tablaCompletados = new Table();
         ArrayList<SolicitudDuelo> completados = yo.getDuelosCompetados(miNombre);
  
         if (completados.isEmpty()) {
-            tablaCompletados.add(new Label("Aun no has completado ningun duelo.", skin)).pad(5);
+            tablaCompletados.add(new Label(Textos.get("duelos.sinResultados"), skin)).pad(5);
         } else {
             for (int i = completados.size() - 1; i >= 0; i--) {
                 SolicitudDuelo d = completados.get(i);
@@ -129,11 +129,11 @@ public class DuelosScreen implements Screen {
                         miNombre.equals(d.getRetador()) ? d.getTiempoRetado() : d.getTiempoRetador());
  
                 Label lblInfo = new Label(
-                        "Nivel " + d.getNivel() + "  vs " + rival
+                        Textos.get("duelos.nivel") + d.getNivel() + "  vs " + rival
                         + "  |  Tu: " + miTiempo + "  |  " + rival + ": " + tiempoRival,
                         skin);
  
-                Label lblResultado = new Label(gane ? "Ganaste" : "Perdiste", skin);
+                Label lblResultado = new Label(gane ? Textos.get("duelos.ganaste") : Textos.get("duelos.perdiste"), skin);
                 lblResultado.setColor(gane ? Color.GREEN : Color.RED);
  
                 tablaCompletados.add(lblInfo).left().padRight(20).pad(5);
@@ -147,7 +147,7 @@ public class DuelosScreen implements Screen {
         table.add(scrollCompletados).width(500).height(130).padBottom(20);
         table.row();
  
-        TextButton btnVolver = new TextButton("Volver", skin);
+        TextButton btnVolver = new TextButton(Textos.get("duelos.volver"), skin);
         btnVolver.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {

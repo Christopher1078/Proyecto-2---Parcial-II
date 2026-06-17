@@ -17,14 +17,14 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import java.io.IOException;
-
+ 
 public class LoginScreen implements Screen{
-
+ 
     private final Game game;
     private Stage stage;
     private Skin skin;
     private final GestorUsuarios gestor;
-
+ 
     public LoginScreen(Game game, GestorUsuarios gestor) {
         this.game = game;
         this.gestor=gestor;
@@ -35,24 +35,24 @@ public class LoginScreen implements Screen{
     public void show() {
         stage=new Stage(new ScreenViewport());
         skin=new Skin(Gdx.files.internal("uiskin.json"));       
-        CheckBox chkMostrar=new CheckBox("  Mostrar password",skin);        
+        CheckBox chkMostrar=new CheckBox("  "+Textos.get("login.mostrar"),skin);        
         
         Table table=new Table();
         table.setFillParent(true);
         stage.addActor(table);
         
-        Label titulo=new Label("Inicio de Sesion",skin);
+        Label titulo=new Label(Textos.get("login.titulo"),skin);
         
         TextField txtUsuario=new TextField("",skin);
-        txtUsuario.setMessageText("Usuario");
+        txtUsuario.setMessageText(Textos.get("login.usuario"));
         
         TextField txtPassword=new TextField("",skin);
         txtPassword.setPasswordMode(true);
         txtPassword.setPasswordCharacter('*');
         
-        TextButton btnLogin=new TextButton("Iniciar Sesion",skin);
+        TextButton btnLogin=new TextButton(Textos.get("login.btn"),skin);
         
-        TextButton btnRegresar=new TextButton("Regresar",skin);
+        TextButton btnRegresar=new TextButton(Textos.get("login.regresar"),skin);
         
         table.add(titulo).padBottom(40);
         table.row(); 
@@ -86,7 +86,7 @@ public class LoginScreen implements Screen{
                         Dialog dialog;
                         String mensaje;
                         if(usuario.isBlank() || password.isBlank()){
-                            mensaje="Parametros en blanco";
+                            mensaje=Textos.get("login.vacio");
                             dialog=new Dialog(mensaje, skin){
                                 @Override
                                 protected void result(Object obj){
@@ -99,7 +99,7 @@ public class LoginScreen implements Screen{
                             dialog.show(stage);
                         }
                         else if(!gestor.existeUsuario(usuario)){
-                            mensaje="No existe este nombre de usuario";
+                            mensaje=Textos.get("login.noExiste");
                             dialog=new Dialog(mensaje,skin){
                                 @Override
                                 protected void result(Object obj){
@@ -115,7 +115,7 @@ public class LoginScreen implements Screen{
                             try{
                                 Usuario u=gestor.buscarUsuario(usuario);
                                 if(u.isCuentaDeshabilitada() && u.getPassword().equals(password)){
-                                    Dialog dialogReactivar=new Dialog("Cuenta Deshabilitada",skin){
+                                    Dialog dialogReactivar=new Dialog(Textos.get("login.deshabilitada"),skin){
                                         @Override
                                         protected void result(Object obj){
                                             if((boolean)obj){
@@ -128,15 +128,15 @@ public class LoginScreen implements Screen{
                                             }
                                         }
                                     };
-                                    dialogReactivar.text("Tu cuenta esta deshabilitada \nDeseas reactivarla?");
-                                    dialogReactivar.button("Cancelar",false);
-                                    dialogReactivar.button("Reactivar",true);
+                                    dialogReactivar.text(Textos.get("login.reactivar"));
+                                    dialogReactivar.button(Textos.get("login.cancelar"),false);
+                                    dialogReactivar.button(Textos.get("login.reactivarBtn"),true);
                                     dialogReactivar.setMovable(false);
                                     dialogReactivar.pack();
                                     dialogReactivar.show(stage);
                                 }
                                 else{
-                                    mensaje="Password incorrecto";
+                                    mensaje=Textos.get("");
                                     dialog=new Dialog(mensaje,skin){
                                         @Override
                                         protected void result(Object obj){
@@ -149,7 +149,7 @@ public class LoginScreen implements Screen{
                                     dialog.show(stage);
                                 }
                             }catch(Exception ex){
-                                dialog=new Dialog("Password incorrecto",skin){
+                                dialog=new Dialog(Textos.get("login.incorrecto"),skin){
                                     @Override
                                     protected void result(Object obj){
                                         this.hide();
@@ -163,7 +163,7 @@ public class LoginScreen implements Screen{
                         }
                     }
                 }catch(IOException|ClassNotFoundException e){
-                    Dialog dialog=new Dialog("Hubo un error al iniciar sesion: "+e.getMessage(),skin);
+                    Dialog dialog=new Dialog("Error: "+e.getMessage(),skin);
                     dialog.show(stage);
                 } 
             }
@@ -189,33 +189,31 @@ public class LoginScreen implements Screen{
         
         Gdx.input.setInputProcessor(stage);
     }
-
+ 
     @Override
     public void render(float f) {
         ScreenUtils.clear(0,0,0,1);
         stage.act(f);
         stage.draw();
     }
-
+ 
     @Override
     public void resize(int i, int i1) {
     }
-
+ 
     @Override
     public void pause() {
     }
-
+ 
     @Override
     public void resume() {
     }
-
+ 
     @Override
     public void hide() {
     }
-
+ 
     @Override
     public void dispose() {
     }
-    
-    
 }

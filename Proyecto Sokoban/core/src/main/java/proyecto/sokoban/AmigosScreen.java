@@ -27,12 +27,12 @@ public class AmigosScreen implements Screen{
     private Table tablaResultados;
     private Label lblMensaje;
     private TextField txtBuscar;
-
+ 
     public AmigosScreen(Game game, GestorUsuarios gestor) {
         this.game = game;
         this.gestor = gestor;
     }
-
+ 
     @Override
     public void show() {
         stage=new Stage(new ScreenViewport());
@@ -43,7 +43,7 @@ public class AmigosScreen implements Screen{
         table.top();
         stage.addActor(table);
         
-        Label titulo=new Label("Amigos",skin);
+        Label titulo=new Label(Textos.get("amigos.titulo"),skin);
         table.add(titulo);
         table.row();
         
@@ -54,9 +54,9 @@ public class AmigosScreen implements Screen{
         Table buscarTable=new Table();
         
         txtBuscar=new TextField("",skin);
-        txtBuscar.setMessageText("Buscar usuario...");
+        txtBuscar.setMessageText(Textos.get("amigos.buscar"));
         
-        TextButton btnBuscar=new TextButton("Buscar",skin);
+        TextButton btnBuscar=new TextButton(Textos.get("amigos.btnBuscar"),skin);
         
         buscarTable.add(txtBuscar).width(250).height(40).padRight(5);
         buscarTable.add(btnBuscar).width(100).height(40);
@@ -77,7 +77,7 @@ public class AmigosScreen implements Screen{
             }
         });
         
-        Label tituloSolicitudes=new Label("Solicitudes recibidas",skin);
+        Label tituloSolicitudes=new Label(Textos.get("amigos.solicitudes"),skin);
         table.add(tituloSolicitudes);
         table.row();
         
@@ -87,7 +87,7 @@ public class AmigosScreen implements Screen{
         table.add(scrollSolicitudes).width(400).height(120);
         table.row();
         
-        Label tituloAmigos=new Label("Mis amigos",skin);
+        Label tituloAmigos=new Label(Textos.get("amigos.misAmigos"),skin);
         table.add(tituloAmigos);
         table.row();
         
@@ -97,7 +97,7 @@ public class AmigosScreen implements Screen{
         table.add(scrollAmigos).width(400).height(150);
         table.row();
         
-        TextButton btnVolver=new TextButton("Volver",skin);
+        TextButton btnVolver=new TextButton(Textos.get("amigos.volver"),skin);
         btnVolver.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y){
@@ -119,13 +119,13 @@ public class AmigosScreen implements Screen{
         lblMensaje.setText("");
         
         if(texto==null || texto.isBlank()){
-            tablaResultados.add(new Label("Escribe un nombre de usuario para buscar",skin)).pad(5);
+            tablaResultados.add(new Label(Textos.get("amigos.escribir"),skin)).pad(5);
             return;
         }
         try{
             ArrayList<Usuario> resultados=gestor.buscarUsuarioPorNombre(texto);
             if(resultados.isEmpty()){
-                tablaResultados.add(new Label("No se encontraron coincidencias",skin));
+                tablaResultados.add(new Label(Textos.get("amigos.sinResultados"),skin));
                 return;
             }
             Usuario loggedIn=gestor.getLoggedIn();
@@ -136,11 +136,11 @@ public class AmigosScreen implements Screen{
                 
                 String estado;
                 if(loggedIn.isAmigo(username))
-                    estado="Ya son amigos";
+                    estado=Textos.get("amigos.yaAmigos");
                 else if(loggedIn.tieneSolicitudesEnviadasA(username))
-                    estado="Ya hay una solicitud enviada";
+                    estado=Textos.get("amigos.yaEnviada");
                 else if(loggedIn.tieneSolicitudesRecibidasDe(username))
-                    estado="Te envio solicitud";
+                    estado=Textos.get("amigos.teEnvio");
                 else 
                     estado=null;
                 tablaResultados.add(lbl).left().padRight(20).pad(5);
@@ -148,7 +148,7 @@ public class AmigosScreen implements Screen{
                 if(estado!=null)
                     tablaResultados.add(new Label(estado,skin));
                 else{
-                    TextButton btnAgregar=new TextButton("Agregar",skin);
+                    TextButton btnAgregar=new TextButton(Textos.get("amigos.agregar"),skin);
                     btnAgregar.addListener(new ClickListener(){
                         @Override
                         public void clicked(InputEvent event, float x, float y){
@@ -160,7 +160,7 @@ public class AmigosScreen implements Screen{
                 tablaResultados.row();
             }
         }catch(IOException | ClassNotFoundException e){
-            Dialog dialog=new Dialog("Error al buscar usuarios: "+e.getMessage(),skin);
+            Dialog dialog=new Dialog("Error: "+e.getMessage(),skin);
             dialog.show(stage);
         }
     }
@@ -174,7 +174,7 @@ public class AmigosScreen implements Screen{
             buscarUsuarios(txtBuscar.getText());
             cargarSolicitudes();
         }catch(IOException|ClassNotFoundException e){
-            Dialog dialog=new Dialog("Error al enviar solicitud: "+e.getMessage(),skin);
+            Dialog dialog=new Dialog("Error: "+e.getMessage(),skin);
             dialog.show(stage);
         }
     }
@@ -186,14 +186,14 @@ public class AmigosScreen implements Screen{
         ArrayList<String> solicitudes=usuario.getSolicitudesRecibidas();
         
         if(solicitudes.isEmpty()){
-            tablaSolicitudes.add(new Label("No tienes solicitudes pendientes",skin));
+            tablaSolicitudes.add(new Label(Textos.get("amigos.sinSolicitudes"),skin));
             return;
         }
         
         for(String username: solicitudes){
             Label lbl=new Label(username,skin);
-            TextButton btnAceptar=new TextButton("Aceptar",skin);
-            TextButton btnRechazar=new TextButton("Rechazar",skin);
+            TextButton btnAceptar=new TextButton(Textos.get("amigos.aceptar"),skin);
+            TextButton btnRechazar=new TextButton(Textos.get("amigos.rechazar"),skin);
             
             btnAceptar.addListener(new ClickListener(){
                 @Override
@@ -220,11 +220,11 @@ public class AmigosScreen implements Screen{
         try{
             if(aceptar){
                 gestor.aceptarSolicitudAmistad(remitente);
-                lblMensaje.setText("Ahora eres amigo de "+remitente);
+                lblMensaje.setText(Textos.get("amigos.ahoraAmigos")+remitente);
             }
             else{
                 gestor.rechazarSolicitudAmistad(remitente);
-                lblMensaje.setText("Solicitud de "+remitente+" rechazada");
+                lblMensaje.setText(Textos.get("amigos.rechazado")+remitente);
             }
             
             cargarSolicitudes();
@@ -234,7 +234,7 @@ public class AmigosScreen implements Screen{
                 buscarUsuarios(txtBuscar.getText());
             
         }catch(IOException | ClassNotFoundException e){
-            Dialog dialog=new Dialog("Error al procesar solicitud: "+e.getMessage(),skin);
+            Dialog dialog=new Dialog("Error: "+e.getMessage(),skin);
             dialog.show(stage);
         }
     }
@@ -246,15 +246,15 @@ public class AmigosScreen implements Screen{
             ArrayList<String> amigos=gestor.getAmigosActivos();
         
             if(amigos.isEmpty()){
-                tablaAmigos.add(new Label("Aun no tienes amigos",skin)).pad(5);
+                tablaAmigos.add(new Label(Textos.get("amigos.sinAmigos"),skin)).pad(5);
                 return;
             }
         
             for(String username: amigos){
                 Label lbl=new Label(username,skin);
-                TextButton btnEstadisticas=new TextButton("Estadisticas",skin);
-                TextButton btnRetar=new TextButton("Retar",skin);
-                TextButton btnEliminar=new TextButton("Eliminar",skin);
+                TextButton btnEstadisticas=new TextButton(Textos.get("amigos.estadisticas"),skin);
+                TextButton btnRetar=new TextButton(Textos.get("amigos.retar"),skin);
+                TextButton btnEliminar=new TextButton(Textos.get("amigos.eliminar"),skin);
             
                 btnEliminar.addListener(new ClickListener(){
                     @Override
@@ -284,17 +284,17 @@ public class AmigosScreen implements Screen{
                 tablaAmigos.row();
             }
         }catch(IOException|ClassNotFoundException e){
-            tablaAmigos.add(new Label("Error al cargar amigos: "+e.getMessage(),skin)).pad(5);
+            tablaAmigos.add(new Label("Error: "+e.getMessage(),skin)).pad(5);
         }
     }
     
     private void eliminarAmigo(String amigo){
         try{
             gestor.eliminarAmigo(amigo);
-            lblMensaje.setText(amigo+" fue eliminado de tu lista de amigos");
+            lblMensaje.setText(amigo+Textos.get("amigos.eliminado"));
             cargarAmigos();
         }catch(IOException | ClassNotFoundException e){
-            Dialog dialog=new Dialog("Error al eliminar amigo: "+e.getMessage(),skin);
+            Dialog dialog=new Dialog("Error: "+e.getMessage(),skin);
             dialog.show(stage);
         }
     }
@@ -304,27 +304,27 @@ public class AmigosScreen implements Screen{
             Usuario amigo=gestor.buscarUsuario(username);
             game.setScreen(new EstadisticasAmigoScreen(game, gestor, amigo));
         }catch(IOException | ClassNotFoundException e){
-            Dialog dialog=new Dialog("Error al ver estadisticas: "+e.getMessage(),skin);
+            Dialog dialog=new Dialog("Error: "+e.getMessage(),skin);
             dialog.show(stage);
         }
     }
     
     private void mostrarDialogoNivel(String rivalUsername){
-        Dialog dialogo=new Dialog("Elegir nivel del duelo",skin){
+        Dialog dialogo=new Dialog(Textos.get("amigos.elegir"),skin){
             @Override
             protected void result(Object obj){
                 if(obj instanceof Integer)
                     enviarReto(rivalUsername, (Integer) obj);
             }
         };
-        dialogo.getContentTable().add(new Label("En que nivel quieres retar a "+rivalUsername+"?",skin)).padTop(10).padBottom(10).padLeft(15).padRight(15);
+        dialogo.getContentTable().add(new Label(Textos.get("amigos.elegirNivel")+rivalUsername+"?",skin)).padTop(10).padBottom(10).padLeft(15).padRight(15);
         dialogo.getContentTable().row();
         
         
         Table botonesNivel=new Table();
         for(int n=1;n<=5;n++){
             final int nivel=n;
-            TextButton btn=new TextButton("Nivel "+n,skin);
+            TextButton btn=new TextButton(Textos.get("amigos.btnNivel")+n,skin);
             btn.addListener(new ClickListener(){
                 public void clicked(InputEvent event, float x, float y){
                     dialogo.hide();
@@ -334,7 +334,7 @@ public class AmigosScreen implements Screen{
             botonesNivel.add(btn).width(100).height(35).pad(5);
         }
         
-        TextButton btnAleatorio=new TextButton("Aleatorio",skin);
+        TextButton btnAleatorio=new TextButton(Textos.get("amigos.nivelAleatorio"),skin);
         btnAleatorio.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y){
@@ -346,7 +346,7 @@ public class AmigosScreen implements Screen{
         botonesNivel.add(btnAleatorio).width(110).height(35).pad(5);
         
         dialogo.getContentTable().add(botonesNivel).padBottom(10);
-        dialogo.button("Cancelar");
+        dialogo.button("Textos.get(\"amigos.retoCancelar\")");
         dialogo.setMovable(false);
         dialogo.show(stage);
     }
@@ -356,37 +356,37 @@ public class AmigosScreen implements Screen{
             String resultado=gestor.enviarRetoDuelo(rival, nivel);
             
             if(resultado.equals("OK"))
-                lblMensaje.setText("Reto enviado a "+rival+" en Nivel "+nivel);
+                lblMensaje.setText(Textos.get("amigos.enviado")+rival+Textos.get("amigos.enNivel")+nivel);
             else
                 lblMensaje.setText(resultado);
         }catch(Exception e){
-            lblMensaje.setText("Error al enviar reto: "+e.getMessage());
+            lblMensaje.setText("Error: "+e.getMessage());
         }
     }
-
+ 
     @Override
     public void render(float f) {
         ScreenUtils.clear(0,0,0,1);
         stage.act(f);
         stage.draw();
     }
-
+ 
     @Override
     public void resize(int i, int i1) {
     }
-
+ 
     @Override
     public void pause() {
     }
-
+ 
     @Override
     public void resume() {
     }
-
+ 
     @Override
     public void hide() {
     }
-
+ 
     @Override
     public void dispose() {
         stage.dispose();

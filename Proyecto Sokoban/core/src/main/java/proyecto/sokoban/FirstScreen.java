@@ -1,5 +1,5 @@
 package proyecto.sokoban;
-
+ 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -12,14 +12,14 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-
+ 
 public class FirstScreen implements Screen {
     
     private final Game game;
     private Stage stage;
     private Skin skin;
     private final GestorUsuarios gestor;
-
+ 
     public FirstScreen(Game game, GestorUsuarios gestor) {
         this.game = game;
         this.gestor=gestor;
@@ -34,9 +34,9 @@ public class FirstScreen implements Screen {
         table.setFillParent(true);
         stage.addActor(table);
         
-        Label titulo=new Label("Sokoban", skin);
+        Label titulo=new Label(Textos.get("first.titulo"), skin);
         
-        TextButton btnInicio=new TextButton("Inicio de Sesion",skin);
+        TextButton btnInicio=new TextButton(Textos.get("first.login"),skin);
         btnInicio.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y){
@@ -44,7 +44,7 @@ public class FirstScreen implements Screen {
             }
         });
         
-        TextButton btnRegistro=new TextButton("Registro",skin);
+        TextButton btnRegistro=new TextButton(Textos.get("first.registro"),skin);
         btnRegistro.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y){
@@ -52,7 +52,7 @@ public class FirstScreen implements Screen {
             }
         });
         
-        TextButton btnSalir=new TextButton("Salir",skin);
+        TextButton btnSalir=new TextButton(Textos.get("first.salir"),skin);
         btnSalir.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y){
@@ -70,30 +70,30 @@ public class FirstScreen implements Screen {
         table.row();
         Gdx.input.setInputProcessor(stage);
     }
-
+ 
     @Override
     public void render(float delta) {
         ScreenUtils.clear(0,0,0,1);
         stage.act(delta);
         stage.draw();        
     }
-
+ 
     @Override
     public void resize(int width, int height) {
     }
-
+ 
     @Override
     public void pause() {
     }
-
+ 
     @Override
     public void resume() {
     }
-
+ 
     @Override
     public void hide() {
     }
-
+ 
     @Override
     public void dispose() { 
     }

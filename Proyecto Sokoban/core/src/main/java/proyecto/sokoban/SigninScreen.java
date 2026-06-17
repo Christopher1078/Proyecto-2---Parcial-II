@@ -28,7 +28,7 @@ public class SigninScreen implements Screen {
     private Label lblMayuscula;
     private Label lblMinuscula;
     private Label lblNumero;
-
+ 
     public SigninScreen(Game game, GestorUsuarios gestor) {
         this.game = game;
         this.gestor=gestor;
@@ -38,39 +38,39 @@ public class SigninScreen implements Screen {
     public void show() {
         stage=new Stage(new ScreenViewport());
         skin=new Skin(Gdx.files.internal("uiskin.json"));        
-        CheckBox chkMostrar=new CheckBox("  Mostrar password",skin);
+        CheckBox chkMostrar=new CheckBox("  "+Textos.get("login.mostrar"),skin);
         
         Table table=new Table();
         table.setFillParent(true);
         stage.addActor(table);
         
-        Label titulo=new Label("Registrarse",skin);
+        Label titulo=new Label(Textos.get("signin.titulo"),skin);
         
         TextField txtNombre=new TextField("",skin);
-        txtNombre.setMessageText("Nombre Completo");
+        txtNombre.setMessageText(Textos.get("signin.nombre"));
         
         TextField txtUsuario=new TextField("",skin);
-        txtUsuario.setMessageText("Usuario");
+        txtUsuario.setMessageText(Textos.get("signin.usuario"));
         
         TextField txtPassword=new TextField("",skin);
         txtPassword.setPasswordMode(true);
         txtPassword.setPasswordCharacter('*');
         
-        lblLongitud=new Label("Exactamente 5 caracteres",skin);
+        lblLongitud=new Label(Textos.get("signin.longitud"),skin);
         lblLongitud.setColor(Color.RED);
         
-        lblMayuscula=new Label("Al menos una mayuscula",skin);
+        lblMayuscula=new Label(Textos.get("signin.mayuscula"),skin);
         lblMayuscula.setColor(Color.RED);
         
-        lblMinuscula=new Label("Al menos una minuscula",skin);
+        lblMinuscula=new Label(Textos.get("signin.minuscula"),skin);
         lblMinuscula.setColor(Color.RED);
          
-        lblNumero=new Label("Al menos un numero",skin);
+        lblNumero=new Label(Textos.get("signin.numero"),skin);
         lblNumero.setColor(Color.RED);
         
-        TextButton btnSignIn=new TextButton("Registrarse",skin);
+        TextButton btnSignIn=new TextButton(Textos.get("signin.btn"),skin);
         
-        TextButton btnRegresar=new TextButton("Regresar",skin);
+        TextButton btnRegresar=new TextButton(Textos.get("signin.regresar"),skin);
         
         table.add(titulo).padBottom(40);
         table.row(); 
@@ -120,13 +120,13 @@ public class SigninScreen implements Screen {
                         Dialog dialog;
                         String mensaje="";
                         if(usuario.isBlank() || password.isBlank() || nombreCompleto.isBlank()){
-                            mensaje="Parametros en blanco";
+                            mensaje=Textos.get("signin.vacio");
                         }
                         else if(gestor.existeUsuario(usuario)){
-                            mensaje="Ya existe ese nombre de usuario";
+                            mensaje=Textos.get("signin.existe");
                         }
                         else if(!gestor.passwordValido(password)){
-                            mensaje="Password no valido";
+                            mensaje=Textos.get("signin.passInvalido");
                         }
                         if(!mensaje.isBlank()){
                             dialog=new Dialog(mensaje, skin){
@@ -144,7 +144,7 @@ public class SigninScreen implements Screen {
                         }
                     }
                 } catch (IOException | ClassNotFoundException e) {
-                    Dialog dialog=new Dialog("Error al iniciar sesion: "+e.getMessage(),skin);
+                    Dialog dialog=new Dialog("Error: "+e.getMessage(),skin);
                     dialog.show(stage);
                 }
             }
@@ -190,7 +190,7 @@ public class SigninScreen implements Screen {
             if(!numero)
                 numero=Character.isDigit(letra);
         }
-
+ 
         if(longitud)
             lblLongitud.setColor(Color.GREEN);
         else lblLongitud.setColor(Color.RED);
@@ -206,32 +206,32 @@ public class SigninScreen implements Screen {
         if(numero)
             lblNumero.setColor(Color.GREEN);
         else lblNumero.setColor(Color.RED);
-
+ 
     }
-
+ 
     @Override
     public void render(float f) {
         ScreenUtils.clear(0,0,0,1);
         stage.act(f);
         stage.draw();        
     }
-
+ 
     @Override
     public void resize(int i, int i1) {
     }
-
+ 
     @Override
     public void pause() {
     }
-
+ 
     @Override
     public void resume() {
     }
-
+ 
     @Override
     public void hide() {
     }
-
+ 
     @Override
     public void dispose() {
     }
