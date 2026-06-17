@@ -119,52 +119,80 @@ public class Textos {
  
             case "perfil.titulo":           
                 return "Mi Perfil";
-            case "perfil.username":         
+            case "perfil.username":        
                 return "Username: ";
-            case "perfil.nombre":           
+            case "perfil.nombre":          
                 return "Nombre: ";
-            case "perfil.amigos":           
+            case "perfil.amigos":         
                 return "Amigos: ";
-            case "perfil.cambiarAvatar":    
+            case "perfil.cambiarAvatar":   
                 return "Cambiar Avatar";
-            case "perfil.verAmigos":        
+            case "perfil.verAmigos":      
                 return "Ver Amigos";
-            case "perfil.historial":        
+            case "perfil.historial":       
                 return "Ver Historial";
-            case "perfil.duelos":           
+            case "perfil.duelos":         
                 return "Mis Duelos";
-            case "perfil.estadisticas":     
+            case "perfil.estadisticas":    
                 return "Estadisticas";
-            case "perfil.partidas":         
+            case "perfil.partidas":        
                 return "Partidas jugadas: ";
             case "perfil.niveles":          
                 return "Niveles completados: ";
-            case "perfil.tiempoTotal":      
+            case "perfil.tiempoTotal":     
                 return "Tiempo total: ";
-            case "perfil.mejorTiempo":      
+            case "perfil.mejorTiempo":    
                 return "Mejor tiempo: ";
-            case "perfil.deshabilitar":     
-                return "Deshabilitar cuenta";
-            case "perfil.eliminar":         
-                return "Eliminar cuenta";
-            case "perfil.volver":           
-                return "Volver";
-            case "perfil.deshabConfirm":    
-                return "Tu cuenta quedara deshabilitada.\nNo podras iniciar sesion hasta reactivarla.\n\n¿Confirmas?";
-            case "perfil.elimConfirm":      
-                return "Esta accion es PERMANENTE.\nSe borraran todos tus datos.\n\n¿Estas seguro?";
-            case "perfil.confirmarBtn":     
-                return "Confirmar";
-            case "perfil.cancelarBtn":      
-                return "Cancelar";
-            case "perfil.deshabBtn":        
-                return "Deshabilitar";
-            case "perfil.elimBtn":          
-                return "Eliminar";
-            case "perfil.registro":        
+            case "perfil.registro":       
                 return "Registro: ";
-            case "perfil.ultimaSesion":     
+            case "perfil.ultimaSesion":   
                 return "Ultima sesion: ";
+            case "perfil.deshabilitar":  
+                return "Deshabilitar cuenta";
+            case "perfil.eliminar":        
+                return "Eliminar cuenta";
+            case "perfil.volver":          
+                return "Volver";
+            case "perfil.deshabConfirm":   
+                return "Tu cuenta quedara deshabilitada.\nNo podras iniciar sesion hasta reactivarla.\n\n¿Confirmas?";
+            case "perfil.elimConfirm":     
+                return "Esta accion es PERMANENTE.\nSe borraran todos tus datos.\n\n¿Estas seguro?";
+            case "perfil.confirmarBtn":    
+                return "Confirmar";
+            case "perfil.cancelarBtn":     
+                return "Cancelar";
+            case "perfil.deshabBtn":       
+                return "Deshabilitar";
+            case "perfil.elimBtn":         
+                return "Eliminar";
+            case "perfil.cambiarUsername":  
+                return "Cambiar usuario";
+            case "perfil.cambiarPassword":  
+                return "Cambiar password";
+            case "perfil.usernameActual":  
+                return "Nuevo usuario:";
+            case "perfil.passActual":      
+                return "Password actual:";
+            case "perfil.passNuevo":       
+                return "Nuevo password:";
+            case "perfil.passConfirmar":   
+                return "Confirmar password:";
+            case "perfil.cambiarBtn":     
+                return "Cambiar";
+            case "perfil.err.vacio":     
+                return "Los campos no pueden estar vacios";
+            case "perfil.err.existe":     
+                return "Ese nombre de usuario ya existe";
+            case "perfil.err.incorrecto": 
+                return "Password actual incorrecto";
+            case "perfil.err.invalido":    
+                return "El nuevo password no cumple los requisitos";
+            case "perfil.err.noCoincide":  
+                return "Los passwords no coinciden";
+            case "perfil.ok.username":     
+                return "Usuario cambiado correctamente";
+            case "perfil.ok.password":     
+                return "Password cambiado correctamente";
                 
             case "amigos.titulo":           
                 return "Amigos";
@@ -542,30 +570,34 @@ public class Textos {
  
             case "perfil.titulo":           
                 return "My Profile";
-            case "perfil.username":         
+            case "perfil.username":       
                 return "Username: ";
-            case "perfil.nombre":           
+            case "perfil.nombre":         
                 return "Name: ";
-            case "perfil.amigos":           
+            case "perfil.amigos":         
                 return "Friends: ";
-            case "perfil.cambiarAvatar":    
+            case "perfil.cambiarAvatar":  
                 return "Change Avatar";
-            case "perfil.verAmigos":        
+            case "perfil.verAmigos":      
                 return "View Friends";
-            case "perfil.historial":        
+            case "perfil.historial":      
                 return "Match History";
-            case "perfil.duelos":           
+            case "perfil.duelos":         
                 return "My Duels";
-            case "perfil.estadisticas":     
+            case "perfil.estadisticas":   
                 return "Statistics";
-            case "perfil.partidas":         
+            case "perfil.partidas":       
                 return "Matches played: ";
-            case "perfil.niveles":          
+            case "perfil.niveles":         
                 return "Levels completed: ";
-            case "perfil.tiempoTotal":      
+            case "perfil.tiempoTotal":    
                 return "Total time: ";
             case "perfil.mejorTiempo":      
                 return "Best time: ";
+            case "perfil.registro":         
+                return "Registered: ";
+            case "perfil.ultimaSesion":    
+                return "Last session: ";
             case "perfil.deshabilitar":     
                 return "Disable account";
             case "perfil.eliminar":         
@@ -576,18 +608,42 @@ public class Textos {
                 return "Your account will be disabled.\nYou won't be able to log in until you reactivate it.\n\nConfirm?";
             case "perfil.elimConfirm":      
                 return "This action is PERMANENT.\nAll your data will be deleted.\n\nAre you sure?";
-            case "perfil.confirmarBtn":     
+            case "perfil.confirmarBtn":    
                 return "Confirm";
-            case "perfil.cancelarBtn":      
+            case "perfil.cancelarBtn":     
                 return "Cancel";
             case "perfil.deshabBtn":        
                 return "Disable";
             case "perfil.elimBtn":          
                 return "Delete";
-            case "perfil.registro":        
-                return "Registro: ";
-            case "perfil.ultimaSesion":     
-                return "Ultima sesion: ";                
+            case "perfil.cambiarUsername":  
+                return "Change username";
+            case "perfil.cambiarPassword": 
+                return "Change password";
+            case "perfil.usernameActual":  
+                return "New username:";
+            case "perfil.passActual":      
+                return "Current password:";
+            case "perfil.passNuevo":      
+                return "New password:";
+            case "perfil.passConfirmar":   
+                return "Confirm password:";
+            case "perfil.cambiarBtn":      
+                return "Change";
+            case "perfil.err.vacio":       
+                return "Fields cannot be blank";
+            case "perfil.err.existe":      
+                return "That username already exists";
+            case "perfil.err.incorrecto":  
+                return "Current password is incorrect";
+            case "perfil.err.invalido":    
+                return "New password does not meet requirements";
+            case "perfil.err.noCoincide":  
+                return "Passwords do not match";
+            case "perfil.ok.username":    
+                return "Username changed successfully";
+            case "perfil.ok.password":    
+                return "Password changed successfully";               
  
             case "amigos.titulo":           
                 return "Friends";

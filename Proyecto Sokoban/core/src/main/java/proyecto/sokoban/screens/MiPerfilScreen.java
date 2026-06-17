@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -53,10 +54,7 @@ public class MiPerfilScreen implements Screen{
         Label lblUsuario=new Label(Textos.get("perfil.username")+usuario.getUsername(),skin);
         Label lblNombre=new Label(Textos.get("perfil.nombre")+usuario.getNombreCompleto(),skin);
         Label lblAmigos=new Label(Textos.get("perfil.amigos")+usuario.getAmigos().size(),skin);
-        Label lblFechas=new Label(
-            Textos.get("perfil.registro")+usuario.getFechaRegistro()
-            +"  |  "+Textos.get("perfil.ultimaSesion")+usuario.getUltimaSesion(),
-            skin);
+        Label lblFechas=new Label(Textos.get("perfil.registro")+usuario.getFechaRegistro()+"  |  "+Textos.get("perfil.ultimaSesion")+usuario.getUltimaSesion(),skin);
         
         datosTable.add(lblUsuario).left();
         datosTable.row();
@@ -146,12 +144,101 @@ public class MiPerfilScreen implements Screen{
         table.add(statsTable).colspan(2);
         table.row();
         
+        TextButton btnCambiarUser=new TextButton(Textos.get("perfil.cambiarUsername"),skin);
+        TextButton btnCambiarPass=new TextButton(Textos.get("perfil.cambiarPassword"),skin);
         TextButton btnDeshabilitar=new TextButton(Textos.get("perfil.deshabilitar"),skin);
         TextButton btnEliminar=new TextButton(Textos.get("perfil.eliminar"),skin);
-        
-        btnDeshabilitar.getLabel().setColor(Color.YELLOW);
-        btnEliminar.getLabel().setColor(Color.RED);
-        
+ 
+        btnCambiarUser.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                Dialog dialogo=new Dialog(Textos.get("perfil.cambiarUsername"),skin){
+                    @Override
+                    protected void result(Object obj){}
+                };
+                TextField txtNuevoUser=new TextField("",skin);
+                txtNuevoUser.setMessageText(Textos.get("perfil.usernameActual"));
+                dialogo.getContentTable().add(txtNuevoUser).width(220).height(35).pad(10);
+                TextButton btnOk=new TextButton(Textos.get("perfil.cambiarBtn"),skin);
+                btnOk.addListener(new ClickListener(){
+                    @Override
+                    public void clicked(InputEvent event, float x, float y){
+                        try{
+                            String resultado=gestor.cambiarUsername(txtNuevoUser.getText().trim());
+                            dialogo.hide();
+                            switch(resultado){
+                                case "OK":
+                                    mostrarInfo(Textos.get("perfil.ok.username"));
+                                    game.setScreen(new MiPerfilScreen(game,gestor));
+                                    break;
+                                case "VACIO":   mostrarInfo(Textos.get("perfil.err.vacio"));   break;
+                                case "EXISTE":  mostrarInfo(Textos.get("perfil.err.existe"));  break;
+                                default:        mostrarInfo(Textos.get("comun.error"));         break;
+                            }
+                        }catch(Exception e){
+                            mostrarInfo("Error: "+e.getMessage());
+                        }
+                    }
+                });
+                dialogo.button(Textos.get("perfil.cancelarBtn"));
+                dialogo.getButtonTable().add(btnOk).width(120).height(35).padLeft(10);
+                dialogo.setMovable(false);
+                dialogo.show(stage);
+            }
+        });
+ 
+        btnCambiarPass.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                Dialog dialogo=new Dialog(Textos.get("perfil.cambiarPassword"),skin){
+                    @Override
+                    protected void result(Object obj){}
+                };
+                TextField txtActual=new TextField("",skin);
+                txtActual.setPasswordMode(true); txtActual.setPasswordCharacter('*');
+                txtActual.setMessageText(Textos.get("perfil.passActual"));
+ 
+                TextField txtNuevo=new TextField("",skin);
+                txtNuevo.setPasswordMode(true); txtNuevo.setPasswordCharacter('*');
+                txtNuevo.setMessageText(Textos.get("perfil.passNuevo"));
+ 
+                TextField txtConfirmar=new TextField("",skin);
+                txtConfirmar.setPasswordMode(true); txtConfirmar.setPasswordCharacter('*');
+                txtConfirmar.setMessageText(Textos.get("perfil.passConfirmar"));
+ 
+                Table ct=dialogo.getContentTable();
+                ct.add(txtActual).width(220).height(35).pad(5); ct.row();
+                ct.add(txtNuevo).width(220).height(35).pad(5);  ct.row();
+                ct.add(txtConfirmar).width(220).height(35).pad(5);
+ 
+                TextButton btnOk=new TextButton(Textos.get("perfil.cambiarBtn"),skin);
+                btnOk.addListener(new ClickListener(){
+                    @Override
+                    public void clicked(InputEvent event, float x, float y){
+                        try{
+                            String resultado=gestor.cambiarPassword(
+                                txtActual.getText(), txtNuevo.getText(), txtConfirmar.getText());
+                            dialogo.hide();
+                            switch(resultado){
+                                case "OK":          mostrarInfo(Textos.get("perfil.ok.password"));    break;
+                                case "VACIO":       mostrarInfo(Textos.get("perfil.err.vacio"));       break;
+                                case "INCORRECTO":  mostrarInfo(Textos.get("perfil.err.incorrecto"));  break;
+                                case "INVALIDO":    mostrarInfo(Textos.get("perfil.err.invalido"));    break;
+                                case "NO_COINCIDE": mostrarInfo(Textos.get("perfil.err.noCoincide"));  break;
+                                default:            mostrarInfo(Textos.get("comun.error"));             break;
+                            }
+                        }catch(Exception e){
+                            mostrarInfo("Error: "+e.getMessage());
+                        }
+                    }
+                });
+                dialogo.button(Textos.get("perfil.cancelarBtn"));
+                dialogo.getButtonTable().add(btnOk).width(120).height(35).padLeft(10);
+                dialogo.setMovable(false);
+                dialogo.show(stage);
+            }
+        });
+ 
         btnDeshabilitar.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y){
@@ -201,9 +288,11 @@ public class MiPerfilScreen implements Screen{
         });
         
         Table botonesGestion=new Table();
-        botonesGestion.add(btnDeshabilitar).width(220).height(40).padRight(15);
-        botonesGestion.add(btnEliminar).width(200).height(40);
-        table.add(botonesGestion).padTop(10).padBottom(10).colspan(2);
+        botonesGestion.add(btnCambiarUser).width(190).height(35).padRight(10);
+        botonesGestion.add(btnCambiarPass).width(190).height(35).padRight(10);
+        botonesGestion.add(btnDeshabilitar).width(190).height(35).padRight(10);
+        botonesGestion.add(btnEliminar).width(190).height(35);
+        table.add(botonesGestion).padTop(8).padBottom(8).colspan(2);
         table.row();
         
         TextButton btnVolver=new TextButton(Textos.get("perfil.volver"),skin);
@@ -217,6 +306,17 @@ public class MiPerfilScreen implements Screen{
         table.add(btnVolver).width(200).height(40).padTop(5).colspan(2);
         
         Gdx.input.setInputProcessor(stage);
+    }
+ 
+    private void mostrarInfo(String mensaje){
+        Dialog d=new Dialog(mensaje,skin){
+            @Override
+            protected void result(Object obj){ this.hide(); }
+        };
+        d.button(Textos.get("comun.ok"),true);
+        d.setMovable(false);
+        d.pack();
+        d.show(stage);
     }
  
     @Override
@@ -245,5 +345,4 @@ public class MiPerfilScreen implements Screen{
     @Override
     public void dispose() {
     }
-    
 }

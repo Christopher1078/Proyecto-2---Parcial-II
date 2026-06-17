@@ -510,4 +510,66 @@ public class GestorUsuarios {
         }
         return mejor==Long.MAX_VALUE? -1 : mejor;
     }
+    
+    public String cambiarUsername(String nuevoUsername) throws IOException, ClassNotFoundException {
+        if(loggedIn==null)
+            return "ERROR";
+        if(nuevoUsername==null || nuevoUsername.isBlank()) 
+            return "VACIO";
+        if(existeUsuario(nuevoUsername)) 
+            return "EXISTE";
+ 
+        String usernameAntiguo = loggedIn.getUsername();
+ 
+        for(Usuario otro : getUsuarios()){
+            if(otro.getUsername().equals(usernameAntiguo)) 
+                continue;
+            boolean modificado = false;
+ 
+            if(otro.isAmigo(usernameAntiguo)){
+                otro.eliminarAmigo(usernameAntiguo);
+                otro.agregarAmigo(nuevoUsername);
+                modificado = true;
+            }
+            if(otro.tieneSolicitudesRecibidasDe(usernameAntiguo)){
+                otro.eliminarSolicitudRecibida(usernameAntiguo);
+                otro.agregarSolicitudRecibida(nuevoUsername);
+                modificado = true;
+            }
+            if(otro.tieneSolicitudesEnviadasA(usernameAntiguo)){
+                otro.eliminarSolicitudEnviada(usernameAntiguo);
+                otro.agregarSolicitudEnviada(nuevoUsername);
+                modificado = true;
+            }
+            if(modificado) 
+                guardarUsuario(otro);
+        }
+ 
+        File carpetaAntigua = new File("Usuarios/" + usernameAntiguo);
+        File carpetaNueva = new File("Usuarios/" + nuevoUsername);
+        carpetaAntigua.renameTo(carpetaNueva);
+ 
+        loggedIn.setUsername(nuevoUsername);
+        guardarUsuario(loggedIn);
+        ConfiguracionJuego.cargar(nuevoUsername);
+ 
+        return "OK";
+    }
+
+    public String cambiarPassword(String passwordActual, String nuevoPassword, String confirmarPassword)throws IOException, ClassNotFoundException {
+        if(loggedIn==null) 
+            return "ERROR";
+        if(passwordActual.isBlank() || nuevoPassword.isBlank() || confirmarPassword.isBlank()) 
+            return "VACIO";
+        if(!loggedIn.getPassword().equals(passwordActual)) 
+            return "INCORRECTO";
+        if(!nuevoPassword.equals(confirmarPassword)) 
+            return "NO_COINCIDE";
+        if(!passwordValido(nuevoPassword)) 
+            return "INVALIDO";
+ 
+        loggedIn.setPassword(nuevoPassword);
+        guardarUsuario(loggedIn);
+        return "OK";
+    }    
 }
