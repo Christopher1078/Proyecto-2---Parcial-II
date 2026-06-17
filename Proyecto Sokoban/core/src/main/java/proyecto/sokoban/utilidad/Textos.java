@@ -194,8 +194,18 @@ public class Textos {
             case "perfil.ok.password":     
                 return "Password cambiado correctamente";
             case "perfil.tiempoPromedio":   
-                return "Tiempo promedio: ";                
-                
+                return "Tiempo promedio: ";  
+            case "perfil.subirFoto":       
+                return "Subir foto";
+            case "perfil.usarPredefinido":  
+                return "Usar predefinido";
+            case "perfil.rutaFoto":        
+                return "Ruta de la imagen...";
+            case "perfil.rutaFotoInfo":   
+                return "Escribe la ruta del archivo (ej: fotos/mifoto.png):";
+            case "perfil.fotoNoEncontrada":
+                return "Imagen no encontrada en la ruta";                
+             
             case "amigos.titulo":           
                 return "Amigos";
             case "amigos.buscar":           
@@ -649,7 +659,17 @@ public class Textos {
             case "perfil.ok.username":    
                 return "Username changed successfully";
             case "perfil.ok.password":    
-                return "Password changed successfully";               
+                return "Password changed successfully";   
+            case "perfil.subirFoto":       
+                return "Upload picture";
+            case "perfil.usarPredefinido":  
+                return "Use default";
+            case "perfil.rutaFoto":        
+                return "Image path...";
+            case "perfil.rutaFotoInfo":   
+                return "Enter the file path (e.g: photos/myphoto.png):"; 
+            case "perfil.fotoNoEncontrada":
+                return "Image not found at that path";
  
             case "amigos.titulo":           
                 return "Friends";

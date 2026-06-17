@@ -44,65 +44,130 @@ public class MiPerfilScreen implements Screen{
         Label titulo=new Label(Textos.get("perfil.titulo"),skin);
         table.add(titulo).padTop(5).padBottom(5).colspan(2);
         table.row();
-        
-        String rutaAvatar=usuario.getGenero().getRuta()+"1.PNG";
-        avatarTexture=new Texture(rutaAvatar);
+ 
+        try {
+            avatarTexture=new Texture(Gdx.files.internal(usuario.getRutaFotoPerfil()));
+        } catch(Exception e) {
+            avatarTexture=new Texture(Gdx.files.internal(usuario.getGenero().getRuta()+"1.PNG"));
+        }
         Image avatar=new Image(avatarTexture);
-        
+ 
+        TextButton btnCambiarAvatar=new TextButton(Textos.get("perfil.cambiarAvatar"),skin);
+        TextButton btnSubirFoto=new TextButton(Textos.get("perfil.subirFoto"),skin);
+        TextButton btnVerAmigos=new TextButton(Textos.get("perfil.verAmigos"),skin);
+        TextButton btnHistorial=new TextButton(Textos.get("perfil.historial"),skin);
+        TextButton btnDuelos=new TextButton(Textos.get("perfil.duelos"),skin);
+ 
+        Table avatarTable=new Table();
+        avatarTable.add(avatar).size(100,200);
+        avatarTable.row();
+        avatarTable.add(btnCambiarAvatar).width(130).height(32).padTop(5);
+        avatarTable.row();
+        avatarTable.add(btnSubirFoto).width(130).height(32).padTop(4);
+        avatarTable.row();
+        if(usuario.hayFotoPerfil()){
+            TextButton btnPredefinido=new TextButton(Textos.get("perfil.usarPredefinido"),skin);
+            avatarTable.add(btnPredefinido).width(130).height(32).padTop(4);
+            avatarTable.row();
+            btnPredefinido.addListener(new ClickListener(){
+                @Override
+                public void clicked(InputEvent event, float x, float y){
+                    try{
+                        usuario.setRutaFotoPerfil(null);
+                        gestor.guardarUsuario(usuario);
+                        game.setScreen(new MiPerfilScreen(game,gestor));
+                    }catch(Exception ex){
+                        mostrarInfo("Error: "+ex.getMessage());
+                    }
+                }
+            });
+        }
+ 
         Table datosTable=new Table();
         Label lblUsuario=new Label(Textos.get("perfil.username")+usuario.getUsername(),skin);
         Label lblNombre=new Label(Textos.get("perfil.nombre")+usuario.getNombreCompleto(),skin);
         Label lblAmigos=new Label(Textos.get("perfil.amigos")+usuario.getAmigos().size(),skin);
         Label lblFechas=new Label(Textos.get("perfil.registro")+usuario.getFechaRegistro()+"  |  "+Textos.get("perfil.ultimaSesion")+usuario.getUltimaSesion(),skin);
-        
+ 
         datosTable.add(lblUsuario).left();
         datosTable.row();
-        
         datosTable.add(lblNombre).left().padTop(5);
         datosTable.row();
-        
         datosTable.add(lblAmigos).left().padTop(5);
         datosTable.row();
-        
         datosTable.add(lblFechas).left().padTop(5);
-        
-        table.add(avatar).size(100,200).padRight(30).padLeft(200);
-        table.add(datosTable).left();
-        table.row();
-        
-        TextButton btnCambiarAvatar=new TextButton(Textos.get("perfil.cambiarAvatar"),skin);
-        TextButton btnVerAmigos=new TextButton(Textos.get("perfil.verAmigos"),skin);
-        TextButton btnHistorial=new TextButton(Textos.get("perfil.historial"),skin);
-        TextButton btnDuelos=new TextButton(Textos.get("perfil.duelos"),skin);
-        
-        Table botonesTable=new Table();
-        botonesTable.add(btnCambiarAvatar).width(180).height(40).padRight(20);
-        botonesTable.add(btnVerAmigos).width(180).height(40).padRight(20);
-        
-        table.add(botonesTable).padTop(5).padBottom(10).colspan(2);
-        table.row();
-        
-        Table botonesTable2=new Table();
-        botonesTable2.add(btnHistorial).width(180).height(40).padRight(20);
-        botonesTable2.add(btnDuelos).width(180).height(40);
-        
-        table.add(botonesTable2).padBottom(15).colspan(2);
-        table.row();
-        
+        datosTable.row();
+ 
+        Table botonesDerechaTable=new Table();
+        botonesDerechaTable.add(btnVerAmigos).width(150).height(32).padRight(8).padTop(8);
+        botonesDerechaTable.add(btnHistorial).width(150).height(32).padTop(8);
+        botonesDerechaTable.row();
+        botonesDerechaTable.add(btnDuelos).width(150).height(32).padRight(8).padTop(5);
+        datosTable.add(botonesDerechaTable).left();
+ 
+        table.add(avatarTable).top().padRight(20);
+        table.add(datosTable).left().top();
+ 
         btnCambiarAvatar.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y){
                 game.setScreen(new SeleccionarAvatarScreen(game,gestor));
             }
         });
-        
+ 
+        btnSubirFoto.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                Dialog dialogo=new Dialog(Textos.get("perfil.subirFoto"),skin){
+                    @Override protected void result(Object obj){}
+                };
+                TextField txtRuta=new TextField("",skin);
+                txtRuta.setMessageText(Textos.get("perfil.rutaFoto"));
+                if(usuario.hayFotoPerfil())
+                    txtRuta.setText(usuario.getRutaFotoPerfil());
+ 
+                dialogo.getContentTable().add(new Label(Textos.get("perfil.rutaFotoInfo"),skin))
+                        .padTop(8).padLeft(10).padRight(10);
+                dialogo.getContentTable().row();
+                dialogo.getContentTable().add(txtRuta).width(280).height(35).pad(10);
+ 
+                TextButton btnOk=new TextButton(Textos.get("perfil.cambiarBtn"),skin);
+                btnOk.addListener(new ClickListener(){
+                    @Override
+                    public void clicked(InputEvent event, float x, float y){
+                        String ruta=txtRuta.getText().trim();
+                        if(ruta.isBlank()){
+                            mostrarInfo(Textos.get("perfil.err.vacio"));
+                            return;
+                        }
+                        if(!Gdx.files.internal(ruta).exists()){
+                            mostrarInfo(Textos.get("perfil.fotoNoEncontrada"));
+                            return;
+                        }
+                        try{
+                            usuario.setRutaFotoPerfil(ruta);
+                            gestor.guardarUsuario(usuario);
+                            dialogo.hide();
+                            game.setScreen(new MiPerfilScreen(game,gestor));
+                        }catch(Exception ex){
+                            mostrarInfo("Error: "+ex.getMessage());
+                        }
+                    }
+                });
+                dialogo.button(Textos.get("perfil.cancelarBtn"));
+                dialogo.getButtonTable().add(btnOk).width(120).height(35).padLeft(10);
+                dialogo.setMovable(false);
+                dialogo.show(stage);
+            }
+        });
+ 
         btnVerAmigos.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y){
                 game.setScreen(new AmigosScreen(game,gestor));
             }
         });
-        
+ 
         btnHistorial.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y){
@@ -117,6 +182,7 @@ public class MiPerfilScreen implements Screen{
             }
         });
         
+        table.row();
         Label tituloStats=new Label(Textos.get("perfil.estadisticas"),skin);
         table.add(tituloStats).padBottom(5).colspan(2);
         table.row();

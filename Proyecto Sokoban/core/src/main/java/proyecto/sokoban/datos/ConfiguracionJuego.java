@@ -47,7 +47,7 @@ public class ConfiguracionJuego implements Serializable {
             }
         }
  
-        instancia      = new ConfiguracionJuego();
+        instancia = new ConfiguracionJuego();
         usuarioCargado = username;
         return instancia;
     }

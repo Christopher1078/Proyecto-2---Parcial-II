@@ -10,6 +10,7 @@ public class Usuario implements Serializable {
     private String username;
     private String password;
     private String nombreCompleto;
+    private String rutaFotoPerfil;
 
     private Idioma idioma;
     private GeneroAvatar genero;
@@ -38,6 +39,8 @@ public class Usuario implements Serializable {
         this.username = username;
         this.password = password;
         this.nombreCompleto = nombreCompleto;
+        
+        rutaFotoPerfil=null;
 
         fechaRegistro = LocalDate.now();
         ultimaSesion = LocalDate.now();
@@ -509,6 +512,21 @@ public class Usuario implements Serializable {
         return String.format("%02d:%02d", minutos, segundos);
     }
 
+    public boolean hayFotoPerfil(){
+        return rutaFotoPerfil!=null && !rutaFotoPerfil.isBlank();
+    }
+    
+    public String getRutaFotoPerfil() {
+        if(hayFotoPerfil())
+            return rutaFotoPerfil;
+        return getGenero().getRuta()+"1.PNG";
+    }
+
+    public void setRutaFotoPerfil(String rutaFotoPerfil) {
+        this.rutaFotoPerfil = rutaFotoPerfil;
+    }
+    
+    
     @Override
     public String toString() {
         revisarDatos();

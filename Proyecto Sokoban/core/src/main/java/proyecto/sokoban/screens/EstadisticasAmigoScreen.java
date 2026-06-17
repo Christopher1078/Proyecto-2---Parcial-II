@@ -2,9 +2,11 @@ package proyecto.sokoban.screens;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -23,6 +25,7 @@ public class EstadisticasAmigoScreen implements Screen{
     private final Usuario amigo;
     private Stage stage;
     private Skin skin;
+    private Texture fotoTexture;
  
     public EstadisticasAmigoScreen(Game game, GestorUsuarios gestor, Usuario amigo) {
         this.game = game;
@@ -42,7 +45,18 @@ public class EstadisticasAmigoScreen implements Screen{
         stage.addActor(table);
         
         Label titulo=new Label(Textos.get("estAmigo.titulo"),skin);
-        table.add(titulo).padTop(15).padBottom(20).colspan(3);
+        table.add(titulo).padTop(15).padBottom(10).colspan(3);
+        table.row();
+ 
+        try {
+            fotoTexture=new Texture(Gdx.files.internal(amigo.getRutaFotoPerfil()));
+        } catch(Exception e) {
+            fotoTexture=new Texture(Gdx.files.internal(amigo.getGenero().getRuta()+"1.PNG"));
+        }
+        Image fotoAmigo=new Image(fotoTexture);
+        table.add(fotoAmigo).size(70,70).colspan(3).padBottom(5);
+        table.row();
+        table.add(new Label(amigo.getUsername(),skin)).colspan(3).padBottom(12);
         table.row();
         
         table.add(new Label(Textos.get("estAmigo.columna"),skin)).left().padRight(30).padBottom(10);
@@ -163,6 +177,7 @@ public class EstadisticasAmigoScreen implements Screen{
     public void dispose() {
         stage.dispose();
         skin.dispose();
+        if(fotoTexture!=null) fotoTexture.dispose();
     }
     
 }
